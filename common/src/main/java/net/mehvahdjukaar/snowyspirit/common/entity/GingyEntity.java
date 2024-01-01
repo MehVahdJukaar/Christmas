@@ -14,6 +14,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -33,6 +34,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -81,6 +83,10 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
             compound.putUUID("Owner", this.getOwnerUUID());
         }
         compound.putBoolean("Sitting", this.isOrderedToSit());
+        BodyIntegrity bodyIntegrity = this.getBodyIntegrity();
+        if (bodyIntegrity != BodyIntegrity.FULL) {
+            compound.putInt("Bites", bodyIntegrity.ordinal());
+        }
     }
 
     @Override
@@ -95,6 +101,16 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
             this.setColor(DyeColor.byId(compound.getInt("Color")));
         }
         this.setOrderedToSit(compound.getBoolean("Sitting"));
+        if (compound.contains("Bites", 99)) {
+            this.setBodyIntegrity(BodyIntegrity.values()[(compound.getInt("Bites"))]);
+        }
+    }
+
+    @Nullable
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+        this.setColor(DyeColor.values()[level.getRandom().nextInt(DyeColor.values().length)]);
+        return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
 
     @Override

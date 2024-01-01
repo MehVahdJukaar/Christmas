@@ -113,6 +113,10 @@ public class ModCreativeTabs {
         before(e, Items.BOOKSHELF, CreativeModeTabs.FUNCTIONAL_BLOCKS,
                 ModRegistry.WREATH_NAME,
                 ModRegistry.WREATH);
+
+        add(e, CreativeModeTabs.SPAWN_EGGS,
+                ModRegistry.GINGERBREAD_GOLEM_NAME,
+                ModRegistry.GINGERBREAD_GOLEM_EGG);
     }
 
 

@@ -21,6 +21,8 @@ public class CommonConfigs {
     }
 
 
+
+
     static{
         ConfigBuilder builder = ConfigBuilder.create(SnowySpirit.res("common"), ConfigType.COMMON);
 
@@ -64,7 +66,7 @@ public class CommonConfigs {
         EGGNOG = feature(builder, ModRegistry.EGGNOG_NAME);
         WREATH = feature(builder, ModRegistry.WREATH_NAME);
         SNOW_GLOBE = feature(builder, ModRegistry.SNOW_GLOBE_NAME);
-
+        GINGERBREAD_MAN = feature(builder.comment("Only make sense to turn off with both ginger and gumdrops off"), ModRegistry.GINGERBREAD_GOLEM_NAME);
         builder.pop();
 
 
@@ -169,6 +171,7 @@ public class CommonConfigs {
     public static final Supplier<Boolean> EGGNOG;
     public static final Supplier<Boolean> WREATH;
     public static final Supplier<Boolean> SNOW_GLOBE;
+    public static final Supplier<Boolean> GINGERBREAD_MAN;
 
 
     private static Supplier<Boolean> feature(ConfigBuilder builder) {

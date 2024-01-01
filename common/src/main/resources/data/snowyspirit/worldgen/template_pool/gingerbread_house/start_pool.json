@@ -23,6 +23,8 @@
         // The Jigsaw block in the structure will point to side_pool.json to spawn the other half of the house.
         "location": "snowyspirit:gingerbread_house",
 
+        "processors": "minecraft:empty",
+
         // If set to 'terrain_matching', the house would be deformed to fit the change in land.
         // That's best for roads so lets stay 'rigid' for now.
         "projection": "rigid",

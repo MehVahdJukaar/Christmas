@@ -74,9 +74,9 @@ public class ModRegistry {
 
     public static final BlockSetType GINGER_TYPE = BlockSetType.register(new BlockSetType(SnowySpirit.res("ginger").toString()));
 
-    public static final String GINGERBREAD_MAN_NAME = "gingerbread_golem";
+    public static final String GINGERBREAD_GOLEM_NAME = "gingerbread_golem";
 
-    public static final Supplier<EntityType<GingyEntity>> GINGERBREAD_GOLEM = regEntity(GINGERBREAD_MAN_NAME,
+    public static final Supplier<EntityType<GingyEntity>> GINGERBREAD_GOLEM = regEntity(GINGERBREAD_GOLEM_NAME,
             () -> EntityType.Builder.of(GingyEntity::new, MobCategory.MISC)
                     .immuneTo(Blocks.POWDER_SNOW)
                     .sized(6 / 16F, 1)

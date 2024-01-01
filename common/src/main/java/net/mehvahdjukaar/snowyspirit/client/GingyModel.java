@@ -1,5 +1,6 @@
 package net.mehvahdjukaar.snowyspirit.client;
 
+import com.google.common.collect.ImmutableList;
 import net.mehvahdjukaar.snowyspirit.common.entity.GingyEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -9,8 +10,11 @@ import net.minecraft.util.Mth;
 
 public class GingyModel extends HumanoidModel<GingyEntity> {
 
+    private final ModelPart bodyEaten;
+
     public GingyModel(ModelPart modelPart) {
         super(modelPart);
+        this.bodyEaten = modelPart.getChild("body_eaten");
     }
 
     @Override
@@ -21,7 +25,8 @@ public class GingyModel extends HumanoidModel<GingyEntity> {
         this.leftArm.visible = b < 1;
         this.rightArm.visible = b < 2;
         this.head.visible = b < 3;
-        this.body.visible = true;
+        this.body.visible = b < 4;
+        this.bodyEaten.visible = !this.body.visible;
     }
 
     @Override
@@ -84,20 +89,35 @@ public class GingyModel extends HumanoidModel<GingyEntity> {
         }
     }
 
+    @Override
+    protected Iterable<ModelPart> bodyParts() {
+        return ImmutableList.of(this.body, this.rightArm, this.leftArm, this.rightLeg, this.leftLeg, this.bodyEaten);
+    }
+
     public static LayerDefinition createBodyLayer() {
         CubeDeformation cubeDeformation = CubeDeformation.NONE;
         float hOffset = 11;
         MeshDefinition meshDefinition = HumanoidModel.createMesh(cubeDeformation, hOffset);
         PartDefinition partDefinition = meshDefinition.getRoot();
         partDefinition.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
-        partDefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0)
-                .addBox(-3.0F, -5.0F, -1.5F, 6.0F, 5.0F, 3.0F, new CubeDeformation(0, 0, 0)), PartPose.offset(0.0F, 0.0F + hOffset, 0.0F));
-        partDefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 8)
+       var head = partDefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0)
+                .addBox(-3.0F, -5.0F, -1.5F, 6.0F, 5.0F, 3.0F, cubeDeformation), PartPose.offset(0.0F, 0.0F + hOffset, 0.0F));
+
+       head.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(11, 10)
+               .addBox(-4.0F, -4.0F, -2.5F, 8.0F, 0.0F, 5.0F), PartPose.ZERO);
+
+       var body = partDefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 8)
                 .addBox(-3.0F, 0.0F, -1.0F, 6.0F, 7.0F, 2.0F, cubeDeformation), PartPose.offset(0.0F, 0.0F + hOffset, 0.0F));
+
+       body.addOrReplaceChild("skirt", CubeListBuilder.create().texOffs(12, 28)
+               .addBox(-4.0F, 7, -2.0F, 8.0F, 0.0F, 4.0F), PartPose.ZERO);
+
+       partDefinition.addOrReplaceChild("body_eaten", CubeListBuilder.create().texOffs(0, 27)
+                .addBox(-3.0F, 0.0F, -1.0F, 6.0F, 3.0F, 2.0F, cubeDeformation), PartPose.offset(0.0F, 4.0F + hOffset, 0.0F));
         partDefinition.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(0, 17)
-                .addBox(-1.5F, 0.0F, -1.0F, 3.0F, 6.0F, 2.0F, cubeDeformation), PartPose.offset(-1.5F, 7.0F + hOffset, 0.0F));
+                .addBox(-1.5F, 0.0F, -1.0F, 3.0F, 6.0F, 2.0F, new CubeDeformation(0,0,-0.001f)), PartPose.offset(-1.5F, 7.0F + hOffset, 0.0F));
         partDefinition.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(10, 17)
-                .addBox(-1.5F, 0.0F, -1.0F, 3.0F, 6.0F, 2.0F, cubeDeformation), PartPose.offset(1.5F, 7.0F + hOffset, 0.0F));
+                .addBox(-1.5F, 0.0F, -1.0F, 3.0F, 6.0F, 2.0F, new CubeDeformation(0,0,-0.001f)), PartPose.offset(1.5F, 7.0F + hOffset, 0.0F));
 
         partDefinition.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(20, 0)
                 .addBox(-4.0F, -1.5F, -1.0F, 4.0F, 3.0F, 2.0F, cubeDeformation), PartPose.offset(-3.0F, 1.5F + hOffset, 0.0F));

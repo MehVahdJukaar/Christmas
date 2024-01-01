@@ -23,8 +23,6 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
     private static final Map<DyeColor, ResourceLocation> GINGY_TEXTURES =
             Arrays.stream(DyeColor.values()).collect(Collectors.toMap(Function.identity(), d ->
                     SnowySpirit.res("textures/entity/gingerbread_golem/" + d.getName() + ".png")));
-    private static final ResourceLocation GINGY_TEXTURES_EATEN =
-            SnowySpirit.res("textures/entity/gingerbread_golem/eaten.png");
 
     public GingyEntityRenderer(EntityRendererProvider.Context context) {
         super(context, new GingyModel(context.bakeLayer(ClientRegistry.GINGY_MODEL)), 0.25f);
@@ -37,9 +35,7 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
 
     @Override
     public ResourceLocation getTextureLocation(GingyEntity entity) {
-        if (entity.getBodyIntegrity() == GingyEntity.BodyIntegrity.NO_BODY) {
-            return GINGY_TEXTURES_EATEN;
-        } else return GINGY_TEXTURES.get(entity.getColor());
+        return GINGY_TEXTURES.get(entity.getColor());
     }
 
     @Override

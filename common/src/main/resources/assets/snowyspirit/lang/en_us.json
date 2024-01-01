@@ -88,7 +88,8 @@
 
   "entity.snowyspirit.gingerbread_golem": "Gingerbread Golem",
   "item.snowyspirit.gingerbread_golem_spawn_egg": "Gingerbread Golem Spawn Egg",
-
+  "advancements.husbandry.eat_gingerbread_golem.description": "Take a bite off a Gingerbread Golem",
+  "advancements.husbandry.eat_gingerbread_golem.title": "You're a Monster!",
   "message.snowyspirit.container_entity_name": "Sled %s",
 
   "subtitle.snowyspirit.music_disc.a_carol": "A Carol",

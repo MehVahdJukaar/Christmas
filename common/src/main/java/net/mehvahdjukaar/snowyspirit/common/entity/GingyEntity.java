@@ -2,9 +2,11 @@ package net.mehvahdjukaar.snowyspirit.common.entity;
 
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.util.Utils;
+import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.common.ai.GingyFollowOwnerGoal;
 import net.mehvahdjukaar.snowyspirit.common.ai.GingySitWhenOrderedToGoal;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -13,6 +15,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -51,11 +54,6 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return PlatHelper.getEntitySpawnPacket(this);
-    }
-
-    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new GingySitWhenOrderedToGoal(this));
@@ -76,9 +74,7 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         DyeColor d = getColor();
-        if (d != DyeColor.WHITE) {
-            compound.putInt("Color", d.getId());
-        }
+        compound.putInt("Color", d.getId());
         if (this.getOwnerUUID() != null) {
             compound.putUUID("Owner", this.getOwnerUUID());
         }
@@ -101,6 +97,7 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
             this.setColor(DyeColor.byId(compound.getInt("Color")));
         }
         this.setOrderedToSit(compound.getBoolean("Sitting"));
+
         if (compound.contains("Bites", 99)) {
             this.setBodyIntegrity(BodyIntegrity.values()[(compound.getInt("Bites"))]);
         }
@@ -275,6 +272,14 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
             itemStack.shrink(1);
             return InteractionResult.sidedSuccess(level.isClientSide);
         } else if (player.canEat(player.isCreative())) {
+            if(player instanceof ServerPlayer sp){
+                Advancement advancement = level.getServer().getAdvancements().getAdvancement(SnowySpirit.res("husbandry/eat_gingerbread_golem"));
+                if (advancement != null) {
+                    if (!sp.getAdvancements().getOrStartProgress(advancement).isDone()) {
+                        sp.getAdvancements().award(advancement, "unlock");
+                    }
+                }
+            }
             if (!this.decreaseIntegrity()) {
                 this.discard();
             }

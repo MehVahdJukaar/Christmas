@@ -1,0 +1,29 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "criteria": {
+    "unlock": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.husbandry.eat_gingerbread_golem.description"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "snowyspirit:gingerbread_cookie"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.husbandry.eat_gingerbread_golem.title"
+    }
+  },
+  "requirements": [
+    [
+      "unlock"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

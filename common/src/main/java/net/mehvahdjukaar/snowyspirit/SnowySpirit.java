@@ -14,6 +14,7 @@ import net.mehvahdjukaar.snowyspirit.dynamicpack.ServerDynamicResourcesHandler;
 import net.mehvahdjukaar.snowyspirit.integration.FDCompat;
 import net.mehvahdjukaar.snowyspirit.integration.SeasonModCompat;
 import net.mehvahdjukaar.snowyspirit.reg.*;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -82,12 +83,9 @@ public class SnowySpirit {
         }
     }
     //flute pacifies
-    //you're a monster advancement
-    //sled advancement
-    //map markers
-    //Do this shit next christmas
+    //hostile gingeerbread golems
+    //mongo
     //sleds loose their chest
-    //TODO: add advancements
     //TODO: sync xRot, chest weight, tweak values
     //TODO: nerf sled acceleration without wolf to make wolf more relevant. can still be used for downhill descent
     //TODO: maybe make friction delend also on xRot to better handle slope descent
@@ -180,6 +178,15 @@ public class SnowySpirit {
                     level.addFreshEntity(golem);
 
                 }
+            }
+        }
+    }
+
+    public static void giveAdvancement( ServerPlayer sp, String name) {
+        Advancement advancement = sp.getServer().getAdvancements().getAdvancement(SnowySpirit.res(name));
+        if (advancement != null) {
+            if (!sp.getAdvancements().getOrStartProgress(advancement).isDone()) {
+                sp.getAdvancements().award(advancement, "unlock");
             }
         }
     }

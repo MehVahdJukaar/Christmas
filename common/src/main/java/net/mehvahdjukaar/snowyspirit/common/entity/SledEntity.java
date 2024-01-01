@@ -8,6 +8,7 @@ import net.mehvahdjukaar.moonlight.api.platform.network.NetworkHelper;
 import net.mehvahdjukaar.moonlight.api.set.BlocksColorAPI;
 import net.mehvahdjukaar.moonlight.api.set.wood.WoodType;
 import net.mehvahdjukaar.moonlight.api.set.wood.WoodTypeRegistry;
+import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.client.SledSoundInstance;
 import net.mehvahdjukaar.snowyspirit.common.network.ServerBoundUpdateSledState;
 import net.mehvahdjukaar.snowyspirit.configs.CommonConfigs;
@@ -29,6 +30,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
@@ -319,9 +321,9 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
 
     //public double additionalY = 0;
 
-    //used only for renderer
     public float cachedAdditionalY = 0;
     public double prevAdditionalY = 0;
+    //used only for renderer
     public Vec3 projectedPos = Vec3.ZERO;
     public Vec3 prevProjectedPos = Vec3.ZERO;
     public Vec3 prevDeltaMovement = Vec3.ZERO;
@@ -465,6 +467,15 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
 
     @Override
     public void tick() {
+        Level level = this.level();
+        if (!level.isClientSide && boost
+                && this.getSyncedMovement().lengthSqr() > 0.09) {
+            for (var p : getPassengers()) {
+                if (p instanceof ServerPlayer sp) {
+                    SnowySpirit.giveAdvancement(sp, "adventure/ride_sled_fast");
+                }
+            }
+        }
 
         if (this.chest != null && chest.isRemoved()) this.chest = null;
         this.updatePuller();
@@ -512,7 +523,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
 
         boolean controlledByLocalInstance = this.isControlledByLocalInstance();
         //local player controlling code
-        Level level = this.level();
+
         if (controlledByLocalInstance) {
 
             this.applyFriction();
@@ -1046,6 +1057,9 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
                     return InteractionResult.sidedSuccess(level.isClientSide);
                 }
             } else if (this.tryAddingChest(stack) != null) {
+                if (this.sledPuller != null && player instanceof ServerPlayer sp) {
+                    SnowySpirit.giveAdvancement(sp, "adventure/sled_with_wolf");
+                }
                 return InteractionResult.sidedSuccess(level.isClientSide);
             }
             if (!this.hasPuller()) {
@@ -1069,6 +1083,9 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
                             found instanceof Fox fox && fox.trusts(player.getUUID());
                     if (owned && this.tryConnectingPuller(found)) {
                         this.playSound(SoundEvents.LEASH_KNOT_PLACE, 1.0F, 1.0F);
+                        if (this.chest != null && player instanceof ServerPlayer sp) {
+                            SnowySpirit.giveAdvancement(sp, "adventure/sled_with_wolf");
+                        }
                         return InteractionResult.sidedSuccess(level.isClientSide);
                     }
                     return InteractionResult.FAIL;

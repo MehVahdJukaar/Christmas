@@ -1,21 +1,16 @@
 package net.mehvahdjukaar.snowyspirit.common.entity;
 
-import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.util.Utils;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.common.ai.GingyFollowOwnerGoal;
 import net.mehvahdjukaar.snowyspirit.common.ai.GingySitWhenOrderedToGoal;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
-import net.minecraft.advancements.Advancement;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -272,13 +267,8 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
             itemStack.shrink(1);
             return InteractionResult.sidedSuccess(level.isClientSide);
         } else if (player.canEat(player.isCreative())) {
-            if(player instanceof ServerPlayer sp){
-                Advancement advancement = level.getServer().getAdvancements().getAdvancement(SnowySpirit.res("husbandry/eat_gingerbread_golem"));
-                if (advancement != null) {
-                    if (!sp.getAdvancements().getOrStartProgress(advancement).isDone()) {
-                        sp.getAdvancements().award(advancement, "unlock");
-                    }
-                }
+            if (player instanceof ServerPlayer sp) {
+                SnowySpirit.giveAdvancement(sp, "husbandry/eat_gingerbread_golem");
             }
             if (!this.decreaseIntegrity()) {
                 this.discard();

@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "snowyspirit:gumdrop_yellow"
+          "name": "snowyspirit:gumdrop_light_gray"
         }
       ],
       "conditions": [

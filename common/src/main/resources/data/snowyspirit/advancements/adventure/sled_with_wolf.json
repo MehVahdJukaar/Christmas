@@ -1,0 +1,29 @@
+{
+  "parent": "snowyspirit:adventure/ride_sled_fast",
+  "criteria": {
+    "unlock": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.adventure.sled_with_wolf.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "snowyspirit:sled_spruce"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.adventure.sled_with_wolf.title"
+    }
+  },
+  "requirements": [
+    [
+      "unlock"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

@@ -2,20 +2,23 @@
   "type": "minecraft:entity",
   "pools": [
     {
+      "rolls": 1.0,
       "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "chance": 0.25,
-          "condition": "minecraft:random_chance"
-        }
-      ],
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "snowyspirit:gingerbread"
+          "weight": 60,
+          "quality": -5,
+          "name": "minecraft:air"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "weight": 40,
+          "quality": -2,
+          "name": "snowyspirit:entities/gingerbread_golem_loot/gingerbread_golem_loot"
         }
-      ],
-      "rolls": 1.0
+      ]
     }
-  ]
+  ],
+  "random_sequence": "snowyspirit:entities/gingerbread_golem"
 }

@@ -6,6 +6,7 @@
   "client": [
   ],
   "mixins": [
+    "CarvedPumpkinMixin"
   ],
   "injectors": {
     "defaultRequire": 1

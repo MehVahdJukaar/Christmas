@@ -12,6 +12,7 @@ import net.mehvahdjukaar.moonlight.api.set.wood.WoodType;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.common.block.*;
 import net.mehvahdjukaar.snowyspirit.common.entity.ContainerHolderEntity;
+import net.mehvahdjukaar.snowyspirit.common.entity.GingyEntity;
 import net.mehvahdjukaar.snowyspirit.common.entity.SledEntity;
 import net.mehvahdjukaar.snowyspirit.common.items.CandyCaneItem;
 import net.mehvahdjukaar.snowyspirit.common.items.EggnogItem;
@@ -52,6 +53,11 @@ public class ModRegistry {
 
     public static void init() {
         BlockSetAPI.addDynamicItemRegistration(ModRegistry::registerSledItems, WoodType.class);
+        RegHelper.addAttributeRegistration(ModRegistry::registerAttributes);
+    }
+
+    private static void registerAttributes(RegHelper.AttributeEvent event) {
+        event.register(GINGERBREAD_GOLEM.get(), GingyEntity.createAttributes());
     }
 
     private static void registerSledItems(Registrator<Item> event, Collection<WoodType> woodTypes) {
@@ -67,6 +73,17 @@ public class ModRegistry {
     }
 
     public static final BlockSetType GINGER_TYPE = BlockSetType.register(new BlockSetType(SnowySpirit.res("ginger").toString()));
+
+    public static final String GINGERBREAD_MAN_NAME = "gingerbread_golem";
+
+    public static final Supplier<EntityType<GingyEntity>> GINGERBREAD_GOLEM = regEntity(GINGERBREAD_MAN_NAME,
+            () -> EntityType.Builder.of(GingyEntity::new, MobCategory.MISC)
+                    .immuneTo(Blocks.POWDER_SNOW)
+                    .sized(6 / 16F, 1)
+                    .clientTrackingRange(8));
+
+    public static final Supplier<SpawnEggItem> GINGERBREAD_GOLEM_EGG = regItem("gingerbread_golem_spawn_egg",
+            () -> PlatHelper.newSpawnEgg(GINGERBREAD_GOLEM, 0xb96d15, 0xe6ebe3, new Item.Properties()));
 
     public static final String SLED_NAME = "sled";
     public static final Supplier<EntityType<SledEntity>> SLED = regEntity(SLED_NAME,

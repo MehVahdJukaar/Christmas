@@ -4,6 +4,8 @@ package net.mehvahdjukaar.snowyspirit;
 import net.mehvahdjukaar.moonlight.api.platform.ClientHelper;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.platform.RegHelper;
+import net.mehvahdjukaar.snowyspirit.common.block.GumdropButton;
+import net.mehvahdjukaar.snowyspirit.common.entity.GingyEntity;
 import net.mehvahdjukaar.snowyspirit.common.network.ModMessages;
 import net.mehvahdjukaar.snowyspirit.configs.ClientConfigs;
 import net.mehvahdjukaar.snowyspirit.configs.CommonConfigs;
@@ -12,13 +14,24 @@ import net.mehvahdjukaar.snowyspirit.dynamicpack.ServerDynamicResourcesHandler;
 import net.mehvahdjukaar.snowyspirit.integration.FDCompat;
 import net.mehvahdjukaar.snowyspirit.integration.SeasonModCompat;
 import net.mehvahdjukaar.snowyspirit.reg.*;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.CarvedPumpkinBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Calendar;
 import java.util.Date;
+
 
 /**
  * Author: MehVahdJukaar
@@ -68,6 +81,7 @@ public class SnowySpirit {
             ClientHelper.addClientSetup(ClientRegistry::setup);
         }
     }
+    //flute pacifies
     //Do this shit next christmas
     //sleds loose their chest
     //TODO: add advancements
@@ -137,5 +151,33 @@ public class SnowySpirit {
     public static boolean isChristmasSeason(Level level) {
         if (USES_SEASON_MOD) return SeasonModCompat.isWinter(level);
         return IS_CHRISTMAS_REAL_TIME;
+    }
+
+    public static void trySpawningGingy(BlockState pumpkinState, LevelAccessor level, BlockPos pumpkinPos, @Nullable Entity entity) {
+        BlockPos below = pumpkinPos.below();
+        if (level instanceof ServerLevel serverLevel && level.getBlockState(below).is(ModTags.GINGERBREADS)) {
+            Direction dir = pumpkinState.getValue(CarvedPumpkinBlock.FACING);
+            BlockPos button = below.relative(dir);
+            BlockState state = level.getBlockState(button);
+            if (state.getBlock() instanceof GumdropButton b && state.getValue(GumdropButton.FACING) == dir) {
+                GingyEntity golem = ModRegistry.GINGERBREAD_GOLEM.get().create(serverLevel);
+                if (golem != null) {
+                    level.removeBlock(pumpkinPos, false);
+                    level.removeBlock(button, false);
+                    level.removeBlock(below, false);
+                    golem.moveTo(pumpkinPos.getX() + 0.5, pumpkinPos.getY() + 0.05 - 1, pumpkinPos.getZ() + 0.5, dir.toYRot(), 0.0F);
+                    if (entity instanceof ServerPlayer serverPlayer) {
+                        CriteriaTriggers.SUMMONED_ENTITY.trigger(serverPlayer, golem);
+                        golem.setOwnerUUID(serverPlayer.getUUID());
+                        golem.setPersistenceRequired();
+                    }
+                    golem.setColor(b.color);
+                    golem.setYHeadRot(dir.toYRot());
+
+                    level.addFreshEntity(golem);
+
+                }
+            }
+        }
     }
 }

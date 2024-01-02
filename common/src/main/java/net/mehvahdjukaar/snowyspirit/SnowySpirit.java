@@ -182,6 +182,7 @@ public class SnowySpirit {
         }
     }
 
+    @Deprecated(forRemoval = true)
     public static void giveAdvancement( ServerPlayer sp, String name) {
         Advancement advancement = sp.getServer().getAdvancements().getAdvancement(SnowySpirit.res(name));
         if (advancement != null) {

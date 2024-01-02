@@ -58,13 +58,14 @@ public class ClientRegistry {
         }
 
         ItemProperties.register(ModRegistry.GINGERBREAD_COOKIE.get(), ResourceLocation.parse("shape"),
-                (stack, world, entity, s) -> (System.identityHashCode(stack) % 4)/3f);
+                (stack, world, entity, s) -> (System.identityHashCode(stack) % 4) / 3f);
     }
 
     private static void registerEntityRenderers(ClientHelper.EntityRendererEvent event) {
         event.register(ModRegistry.SLED.get(), SledEntityRenderer::new);
         event.register(ModRegistry.CONTAINER_ENTITY.get(), ContainerHolderEntityRenderer::new);
-        event.register(ModRegistry.GINGERBREAD_GOLEM.get(), GingyEntityRenderer::new);
+        event.register(ModRegistry.GINGERBREAD_GOLEM.get(), c -> new GingyEntityRenderer(c, 1));
+        event.register(ModRegistry.GINGERBREAD_GIANT.get(), c -> new GingyEntityRenderer(c, 10));
     }
 
     private static void registerModelLayers(ClientHelper.ModelLayerEvent event) {
@@ -75,7 +76,7 @@ public class ClientRegistry {
     }
 
     private static void registerModelLoaders(ClientHelper.ModelLoaderEvent event) {
-        event.register(SnowySpirit.res("glow_lights"),  new NestedModelLoader("overlay", GlowLightsBakedModel::new));
+        event.register(SnowySpirit.res("glow_lights"), new NestedModelLoader("overlay", GlowLightsBakedModel::new));
     }
 
     private static void registerBlockColors(ClientHelper.BlockColorEvent event) {

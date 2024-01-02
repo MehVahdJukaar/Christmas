@@ -5,12 +5,18 @@ import com.mojang.math.Axis;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.common.entity.GingyEntity;
 import net.mehvahdjukaar.snowyspirit.reg.ClientRegistry;
+import net.minecraft.client.model.GiantZombieModel;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
+import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
+import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.monster.Giant;
 import net.minecraft.world.item.DyeColor;
 
 import java.util.Arrays;
@@ -24,8 +30,15 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
             Arrays.stream(DyeColor.values()).collect(Collectors.toMap(Function.identity(), d ->
                     SnowySpirit.res("textures/entity/gingerbread_golem/" + d.getName() + ".png")));
 
-    public GingyEntityRenderer(EntityRendererProvider.Context context) {
-        super(context, new GingyModel(context.bakeLayer(ClientRegistry.GINGY_MODEL)), 0.25f);
+    private final float scale;
+
+    public GingyEntityRenderer(EntityRendererProvider.Context context, float scale) {
+        super(context, new GingyModel(context.bakeLayer(ClientRegistry.GINGY_MODEL), scale), 0.25f * scale);
+        this.scale = scale;
+    }
+
+    protected void scale(GingyEntity livingEntity, PoseStack matrixStack, float partialTickTime) {
+        matrixStack.scale(this.scale, this.scale, this.scale);
     }
 
     @Override
@@ -52,7 +65,7 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
             matrixStack.mulPose(Axis.XP.rotationDegrees(f * deg));
         }
 
-        float period = 2.5f * Mth.PI;
+        float period = 2.5f * Mth.PI * scale;
         float limbSwingAmount = 0.0F;
         float walkAnim = 0.0F;
         boolean orderedToSit = entity.isOrderedToSit();

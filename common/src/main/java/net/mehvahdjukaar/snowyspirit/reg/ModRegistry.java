@@ -31,6 +31,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.monster.Giant;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.*;
@@ -58,6 +59,7 @@ public class ModRegistry {
 
     private static void registerAttributes(RegHelper.AttributeEvent event) {
         event.register(GINGERBREAD_GOLEM.get(), GingyEntity.createAttributes());
+        event.register(GINGERBREAD_GIANT.get(), GingyEntity.createGiantAttributes());
     }
 
     private static void registerSledItems(Registrator<Item> event, Collection<WoodType> woodTypes) {
@@ -81,6 +83,12 @@ public class ModRegistry {
                     .immuneTo(Blocks.POWDER_SNOW)
                     .sized(6 / 16F, 1)
                     .clientTrackingRange(8));
+
+    public static final Supplier<EntityType<GingyEntity>> GINGERBREAD_GIANT = regEntity("gingerbread_giant",
+            () -> EntityType.Builder.of(GingyEntity::new, MobCategory.MISC)
+                    .immuneTo(Blocks.POWDER_SNOW)
+                    .sized(6/16f * 10f, 10.0F)
+                    .clientTrackingRange(10));
 
     public static final Supplier<SpawnEggItem> GINGERBREAD_GOLEM_EGG = regItem("gingerbread_golem_spawn_egg",
             () -> PlatHelper.newSpawnEgg(GINGERBREAD_GOLEM, 0xb96d15, 0xe6ebe3, new Item.Properties()));

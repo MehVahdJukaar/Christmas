@@ -11,10 +11,12 @@ import net.minecraft.util.Mth;
 public class GingyModel extends HumanoidModel<GingyEntity> {
 
     private final ModelPart bodyEaten;
+    private final float scale;
 
-    public GingyModel(ModelPart modelPart) {
+    public GingyModel(ModelPart modelPart, float scale) {
         super(modelPart);
         this.bodyEaten = modelPart.getChild("body_eaten");
+        this.scale = scale;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class GingyModel extends HumanoidModel<GingyEntity> {
             f = 1.0F;
         }
 
-        float period = 2.5f * Mth.PI;
+        float period = 2.5f * Mth.PI * scale;
         float angle = walkAnimation * (Mth.TWO_PI / period);
 
         float armSwingPower = 2;

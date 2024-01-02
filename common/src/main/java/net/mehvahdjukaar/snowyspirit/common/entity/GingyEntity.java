@@ -106,6 +106,11 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
     }
 
     @Override
+    protected float getStandingEyeHeight(Pose pose, EntityDimensions dimensions) {
+        return super.getStandingEyeHeight(pose, dimensions);
+    }
+
+    @Override
     public boolean isSensitiveToWater() {
         return true;
     }
@@ -298,6 +303,11 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 5.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.25);
+    }
+
+    public static AttributeSupplier.Builder createGiantAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 50.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.5);
     }
 
 

@@ -1,5 +1,7 @@
 package net.mehvahdjukaar.snowyspirit.mixins;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.mehvahdjukaar.snowyspirit.common.entity.SledEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -11,6 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import traben.entity_model_features.models.animation.EMFAnimation;
 
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> {
@@ -25,15 +28,18 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
 
     //animations for sled pullers
     //injects in all calls, so it works with optishit code. needs redirect
-    @Redirect(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+    @WrapOperation(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(value = "INVOKE",
                     target = "net/minecraft/world/entity/LivingEntity.isPassenger ()Z"))
-    private boolean isPassenger(LivingEntity instance) {
+    private boolean isPassenger(LivingEntity instance, Operation<Boolean> original) {
         Entity vehicle = instance.getVehicle();
         if (vehicle instanceof SledEntity sledEntity) {
-            if (sledEntity.isMyPuller(instance)) return false;
+            if (sledEntity.isMyPuller(instance)){
+                model.riding = false;
+                return false;
+            }
         }
-        return instance.isPassenger();
+        return original.call(instance);
     }
 
 

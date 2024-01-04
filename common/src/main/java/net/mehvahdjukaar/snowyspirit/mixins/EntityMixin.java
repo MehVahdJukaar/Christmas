@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class EntityMixin extends Entity{
 
-    public EntityMixin(EntityType<?> pEntityType, Level pLevel) {
+    protected EntityMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 

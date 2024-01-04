@@ -37,6 +37,7 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
         this.scale = scale;
     }
 
+    @Override
     protected void scale(GingyEntity livingEntity, PoseStack matrixStack, float partialTickTime) {
         matrixStack.scale(this.scale, this.scale, this.scale);
     }
@@ -55,6 +56,7 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
     protected void setupRotations(GingyEntity entity, PoseStack matrixStack, float ageInTicks, float rotationYaw, float partialTicks) {
         super.setupRotations(entity, matrixStack, ageInTicks, rotationYaw, partialTicks);
 
+        // dealth anim
         if (entity.deathTime > 0) {
             float f = ((float) entity.deathTime + partialTicks - 1.0F) / 20.0F * 1.6F;
             f = Mth.sqrt(f);
@@ -88,7 +90,7 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
 
         if (limbSwingAmount > 0.001) {
             float angle = walkAnim * (Mth.TWO_PI / period);
-            int sideSwayPower = 20;
+            float sideSwayPower = 20/scale;
             matrixStack.mulPose(Axis.ZP.rotationDegrees(Mth.cos(angle) * sideSwayPower * limbSwingAmount));
         }
     }

@@ -83,6 +83,7 @@ public class SnowySpirit {
         }
     }
     //flute pacifies
+    //TODO: mongo screen rotation
     //hostile gingeerbread golems
     //mongo
     //sleds loose their chest
@@ -154,33 +155,7 @@ public class SnowySpirit {
         return IS_CHRISTMAS_REAL_TIME;
     }
 
-    public static void trySpawningGingy(BlockState pumpkinState, LevelAccessor level, BlockPos pumpkinPos, @Nullable Entity entity) {
-        BlockPos below = pumpkinPos.below();
-        if (level instanceof ServerLevel serverLevel && level.getBlockState(below).is(ModTags.GINGERBREADS)) {
-            Direction dir = pumpkinState.getValue(CarvedPumpkinBlock.FACING);
-            BlockPos button = below.relative(dir);
-            BlockState state = level.getBlockState(button);
-            if (state.getBlock() instanceof GumdropButton b && state.getValue(GumdropButton.FACING) == dir) {
-                GingyEntity golem = ModRegistry.GINGERBREAD_GOLEM.get().create(serverLevel);
-                if (golem != null) {
-                    level.removeBlock(pumpkinPos, false);
-                    level.removeBlock(button, false);
-                    level.removeBlock(below, false);
-                    golem.moveTo(pumpkinPos.getX() + 0.5, pumpkinPos.getY() + 0.05 - 1, pumpkinPos.getZ() + 0.5, dir.toYRot(), 0.0F);
-                    if (entity instanceof ServerPlayer serverPlayer) {
-                        CriteriaTriggers.SUMMONED_ENTITY.trigger(serverPlayer, golem);
-                        golem.setOwnerUUID(serverPlayer.getUUID());
-                        golem.setPersistenceRequired();
-                    }
-                    golem.setColor(b.color);
-                    golem.setYHeadRot(dir.toYRot());
 
-                    level.addFreshEntity(golem);
-
-                }
-            }
-        }
-    }
 
     @Deprecated(forRemoval = true)
     public static void giveAdvancement( ServerPlayer sp, String name) {

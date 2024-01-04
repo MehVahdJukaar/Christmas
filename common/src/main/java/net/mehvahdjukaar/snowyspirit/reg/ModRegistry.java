@@ -13,6 +13,7 @@ import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.common.block.*;
 import net.mehvahdjukaar.snowyspirit.common.entity.ContainerHolderEntity;
 import net.mehvahdjukaar.snowyspirit.common.entity.GingyEntity;
+import net.mehvahdjukaar.snowyspirit.common.entity.MongoEntity;
 import net.mehvahdjukaar.snowyspirit.common.entity.SledEntity;
 import net.mehvahdjukaar.snowyspirit.common.items.CandyCaneItem;
 import net.mehvahdjukaar.snowyspirit.common.items.EggnogItem;
@@ -59,7 +60,7 @@ public class ModRegistry {
 
     private static void registerAttributes(RegHelper.AttributeEvent event) {
         event.register(GINGERBREAD_GOLEM.get(), GingyEntity.createAttributes());
-        event.register(GINGERBREAD_GIANT.get(), GingyEntity.createGiantAttributes());
+        event.register(GINGERBREAD_GIANT.get(), MongoEntity.createGiantAttributes());
     }
 
     private static void registerSledItems(Registrator<Item> event, Collection<WoodType> woodTypes) {
@@ -84,10 +85,10 @@ public class ModRegistry {
                     .sized(6 / 16F, 1)
                     .clientTrackingRange(8));
 
-    public static final Supplier<EntityType<GingyEntity>> GINGERBREAD_GIANT = regEntity("gingerbread_giant",
-            () -> EntityType.Builder.of(GingyEntity::new, MobCategory.MISC)
+    public static final Supplier<EntityType<MongoEntity>> GINGERBREAD_GIANT = regEntity("gingerbread_giant",
+            () -> EntityType.Builder.of(MongoEntity::new, MobCategory.MISC)
                     .immuneTo(Blocks.POWDER_SNOW)
-                    .sized(6/16f * 10f, 10.0F)
+                    .sized(6/16f * 10f, 11.0F)
                     .clientTrackingRange(10));
 
     public static final Supplier<SpawnEggItem> GINGERBREAD_GOLEM_EGG = regItem("gingerbread_golem_spawn_egg",

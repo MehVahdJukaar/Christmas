@@ -3,6 +3,7 @@ package net.mehvahdjukaar.snowyspirit.common.block;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.mehvahdjukaar.snowyspirit.common.entity.GolemHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -90,8 +91,9 @@ public class GumdropButton extends DirectionalBlock {
         BlockPos relative = pos.above().relative(state.getValue(FACING).getOpposite());
         BlockState pumpkin = level.getBlockState(relative);
         if (pumpkin.getBlock() instanceof CarvedPumpkinBlock) {
-            SnowySpirit.trySpawningGingy(pumpkin, level, relative, placer);
+            GolemHelper.trySpawningGingy(pumpkin, level, relative, placer);
         }
+        GolemHelper.trySpawningMongo(state, level, pos, placer);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.mehvahdjukaar.snowyspirit.common.entity;
 
+import net.mehvahdjukaar.moonlight.api.entity.IControllableVehicle;
 import net.mehvahdjukaar.moonlight.api.util.Utils;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.common.ai.GingyFollowOwnerGoal;
@@ -12,6 +13,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -43,6 +45,7 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
     protected static final EntityDataAccessor<Optional<UUID>> DATA_OWNERUUID_ID = SynchedEntityData.defineId(GingyEntity.class, EntityDataSerializers.OPTIONAL_UUID);
     protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(GingyEntity.class, EntityDataSerializers.BYTE);
     protected static final EntityDataAccessor<Integer> DATA_COLOR_ID = SynchedEntityData.defineId(GingyEntity.class, EntityDataSerializers.INT);
+
 
     public GingyEntity(EntityType<? extends AbstractGolem> entityType, Level level) {
         super(entityType, level);
@@ -232,6 +235,8 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
         }
     }
 
+
+
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
@@ -252,40 +257,46 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
             }
         }
 
-        if (itemStack.is(Items.MILK_BUCKET)) {
-            if (!player.getAbilities().instabuild) {
+        if(this.getBbHeight()>2){
+            player.startRiding(this);
+            return InteractionResult.sidedSuccess(level.isClientSide);
+
+        }else {
+            if (itemStack.is(Items.MILK_BUCKET)) {
+                if (!player.getAbilities().instabuild) {
+                    itemStack.shrink(1);
+                    Utils.swapItem(player, hand, itemStack, Items.MILK_BUCKET.getCraftingRemainingItem().getDefaultInstance());
+                }
+                this.addEffect(new MobEffectInstance(MobEffects.POISON, 900));
+                if (player.isCreative() || !this.isInvulnerable()) {
+                    var oldMov = this.getDeltaMovement();
+                    this.hurt(this.damageSources().playerAttack(player), Float.MAX_VALUE);
+                    this.setDeltaMovement(oldMov);
+                    setForwardDeathAnim(true);
+                }
+                return InteractionResult.sidedSuccess(level.isClientSide);
+            } else if (itemStack.is(ModRegistry.GINGERBREAD_COOKIE.get())) {
+                this.increaseIntegrity();
+                this.playSound(ModRegistry.GINGERBREAD_BLOCK.get()
+                        .getSoundType(ModRegistry.GINGERBREAD_BLOCK.get().defaultBlockState()).getPlaceSound(), 1, 0.2f);
                 itemStack.shrink(1);
-                Utils.swapItem(player, hand, itemStack, Items.MILK_BUCKET.getCraftingRemainingItem().getDefaultInstance());
+                return InteractionResult.sidedSuccess(level.isClientSide);
+            } else if (player.canEat(player.isCreative())) {
+                if (player instanceof ServerPlayer sp) {
+                    SnowySpirit.giveAdvancement(sp, "husbandry/eat_gingerbread_golem");
+                }
+                if (!this.decreaseIntegrity()) {
+                    this.discard();
+                }
+                player.playSound(player.getEatingSound(ModRegistry.GINGERBREAD_COOKIE.get().getDefaultInstance()));
+                player.getFoodData().eat(1, 0.1F);
+                level.gameEvent(player, GameEvent.EAT, this.blockPosition());
+                for (int j = 0; j < 15; j++) {
+                    level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, ModRegistry.GINGERBREAD_FROSTED_BLOCK.get().defaultBlockState()),
+                            this.getRandomX(1), this.getRandomY() + 0.2, this.getRandomZ(1.0), 0, 0, 0);
+                }
+                return InteractionResult.sidedSuccess(level.isClientSide);
             }
-            this.addEffect(new MobEffectInstance(MobEffects.POISON, 900));
-            if (player.isCreative() || !this.isInvulnerable()) {
-                var oldMov = this.getDeltaMovement();
-                this.hurt(this.damageSources().playerAttack(player), Float.MAX_VALUE);
-                this.setDeltaMovement(oldMov);
-                setForwardDeathAnim(true);
-            }
-            return InteractionResult.sidedSuccess(level.isClientSide);
-        } else if (itemStack.is(ModRegistry.GINGERBREAD_COOKIE.get())) {
-            this.increaseIntegrity();
-            this.playSound(ModRegistry.GINGERBREAD_BLOCK.get()
-                    .getSoundType(ModRegistry.GINGERBREAD_BLOCK.get().defaultBlockState()).getPlaceSound(), 1, 0.2f);
-            itemStack.shrink(1);
-            return InteractionResult.sidedSuccess(level.isClientSide);
-        } else if (player.canEat(player.isCreative())) {
-            if (player instanceof ServerPlayer sp) {
-                SnowySpirit.giveAdvancement(sp, "husbandry/eat_gingerbread_golem");
-            }
-            if (!this.decreaseIntegrity()) {
-                this.discard();
-            }
-            player.playSound(player.getEatingSound(ModRegistry.GINGERBREAD_COOKIE.get().getDefaultInstance()));
-            player.getFoodData().eat(1, 0.1F);
-            level.gameEvent(player, GameEvent.EAT, this.blockPosition());
-            for (int j = 0; j < 15; j++) {
-                level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, ModRegistry.GINGERBREAD_FROSTED_BLOCK.get().defaultBlockState()),
-                        this.getRandomX(1), this.getRandomY() + 0.2, this.getRandomZ(1.0), 0, 0, 0);
-            }
-            return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
         InteractionResult interactionResult = super.mobInteract(player, hand);
@@ -303,11 +314,6 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 5.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.25);
-    }
-
-    public static AttributeSupplier.Builder createGiantAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 50.0)
-                .add(Attributes.MOVEMENT_SPEED, 0.5);
     }
 
 

@@ -1,6 +1,7 @@
 package net.mehvahdjukaar.snowyspirit.mixins.fabric;
 
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
+import net.mehvahdjukaar.snowyspirit.common.entity.GolemHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +23,7 @@ public abstract class CarvedPumpkinMixin extends Block {
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
 
-        SnowySpirit.trySpawningGingy(state, level, pos, placer);
+        GolemHelper.trySpawningGingy(state, level, pos, placer);
 
     }
 }

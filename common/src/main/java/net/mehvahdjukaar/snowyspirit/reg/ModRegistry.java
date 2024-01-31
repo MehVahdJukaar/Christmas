@@ -3,6 +3,7 @@ package net.mehvahdjukaar.snowyspirit.reg;
 import com.google.common.collect.ImmutableMap;
 import net.mehvahdjukaar.moonlight.api.block.ModStairBlock;
 import net.mehvahdjukaar.moonlight.api.item.WoodBasedBlockItem;
+import net.mehvahdjukaar.moonlight.api.misc.ModItemListing;
 import net.mehvahdjukaar.moonlight.api.misc.Registrator;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.platform.RegHelper;
@@ -19,6 +20,7 @@ import net.mehvahdjukaar.snowyspirit.common.items.CandyCaneItem;
 import net.mehvahdjukaar.snowyspirit.common.items.EggnogItem;
 import net.mehvahdjukaar.snowyspirit.common.items.GlowLightsItem;
 import net.mehvahdjukaar.snowyspirit.common.items.SledItem;
+import net.mehvahdjukaar.snowyspirit.configs.CommonConfigs;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentMap;
@@ -33,6 +35,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.monster.Giant;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.*;
@@ -42,10 +45,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.material.MapColor;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -56,6 +56,13 @@ public class ModRegistry {
     public static void init() {
         BlockSetAPI.addDynamicItemRegistration(ModRegistry::registerSledItems, WoodType.class);
         RegHelper.addAttributeRegistration(ModRegistry::registerAttributes);
+        RegHelper.registerWanderingTraderTrades(0, ModRegistry::addTrades);
+    }
+
+    private static void addTrades(List<VillagerTrades.ItemListing> itemListings) {
+        if (CommonConfigs.GINGER.get()) {
+            itemListings.add(new ModItemListing(2, ModRegistry.GINGER_FLOWER.get().getDefaultInstance(), 12, 1));
+        }
     }
 
     private static void registerAttributes(RegHelper.AttributeEvent event) {
@@ -135,7 +142,7 @@ public class ModRegistry {
     public static final Supplier<Block> GINGERBREAD_BLOCK = regWithItem("gingerbread", () ->
             new Block(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.TERRACOTTA_ORANGE)
-                    .sound(SoundType.WOOD).strength(1F)));
+                    .sound(ModSounds.GINGERBREAD).strength(1F)));
 
     //slab
     public static final Supplier<Block> GINGERBREAD_STAIRS = regWithItem("gingerbread_stairs", () -> new ModStairBlock(

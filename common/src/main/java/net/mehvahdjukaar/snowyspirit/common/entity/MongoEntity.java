@@ -1,7 +1,5 @@
 package net.mehvahdjukaar.snowyspirit.common.entity;
 
-import com.google.common.base.Suppliers;
-import net.mehvahdjukaar.snowyspirit.reg.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -12,20 +10,13 @@ import net.minecraft.world.entity.animal.AbstractGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.pattern.BlockInWorld;
-import net.minecraft.world.level.block.state.pattern.BlockPattern;
-import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
-import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public class MongoEntity extends GingyEntity implements PlayerRideableJumping {
 
@@ -188,7 +179,6 @@ public class MongoEntity extends GingyEntity implements PlayerRideableJumping {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 50.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.5);
     }
-
 
 
 }

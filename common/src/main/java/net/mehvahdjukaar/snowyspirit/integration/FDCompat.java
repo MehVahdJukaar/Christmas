@@ -5,8 +5,18 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 
 public class FDCompat {
 
-    @ExpectPlatform
     public static void init() {
-        throw new AssertionError();
+        RegHelper.addItemsToTabsRegistration(FDCompatImpl::addItemsToTabs);
     }
+
+    public static void addItemsToTabs(RegHelper.ItemToTabEvent event){
+        //event.add(FarmersDelight.CREATIVE_TAB, GINGER_CRATE.get());
+    }
+
+    public static final Supplier<Block> GINGER_CRATE = regWithItem(
+            "ginger_crate", () ->
+                    new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
+                            .strength(2.0F, 3.0F)
+                            .sound(SoundType.WOOD))
+    );
 }

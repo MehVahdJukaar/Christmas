@@ -73,6 +73,14 @@ public class ModCreativeTabs {
                 ModRegistry.GUMDROPS_BUTTONS.values().toArray(Supplier[]::new));
 
 
+        before(e, ItemTags.BANNERS, CreativeModeTabs.FUNCTIONAL_BLOCKS,
+                ModRegistry.GLOW_LIGHTS_NAME,
+                ModRegistry.GLOW_LIGHTS_ITEMS.values().toArray(Supplier[]::new));
+
+        before(e, ItemTags.BANNERS, CreativeModeTabs.FUNCTIONAL_BLOCKS,
+                ModRegistry.GUMDROP_NAME,
+                ModRegistry.GUMDROPS_BUTTONS.values().toArray(Supplier[]::new));
+
         before(e, Items.GLOW_BERRIES, CreativeModeTabs.NATURAL_BLOCKS,
                 ModRegistry.GINGER_NAME,
                 ModRegistry.GINGER_FLOWER);

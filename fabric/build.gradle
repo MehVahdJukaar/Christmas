@@ -41,9 +41,7 @@ dependencies {
 
     modImplementation("curse.maven:fabric-seasons-413523:3841956")
     modImplementation("net.mehvahdjukaar:moonlight-fabric:${project.moonlight_version}")
-    modCompileOnly("net.mehvahdjukaar:supplementaries-fabric:${project.supplementaries_version}") {
-        exclude group: 'com.nhoryzon'
-    }
+    modCompileOnly("net.mehvahdjukaar:supplementaries-fabric:${project.supplementaries_version}")
     modImplementation("curse.maven:farmers-delight-fabric-482834:4061213")
 
 }

@@ -118,7 +118,8 @@ dependencies {
     modImplementation("curse.maven:farmers-delight-398521:3999157")
     modCompileOnly("curse.maven:serene-seasons-291874:3926300")
     modImplementation("net.mehvahdjukaar:moonlight-forge:${project.moonlight_version}")
-    modCompileOnly("net.mehvahdjukaar:supplementaries-forge:${project.supplementaries_version}")
+    modImplementation("curse.maven:supplementaries-412082:5152602")
+
     modCompileOnly ("curse.maven:jei-238222:3884337")
     modImplementation ("curse.maven:configured-457570:4462837")
 }

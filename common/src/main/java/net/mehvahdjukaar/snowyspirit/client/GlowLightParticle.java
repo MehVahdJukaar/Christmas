@@ -139,6 +139,7 @@ public class GlowLightParticle extends TextureSheetParticle {
                 .endVertex();
     }
 
+
     @Override
     public ParticleRenderType getRenderType() {
         return ParticleUtil.ADDITIVE_TRANSLUCENCY_RENDER_TYPE;

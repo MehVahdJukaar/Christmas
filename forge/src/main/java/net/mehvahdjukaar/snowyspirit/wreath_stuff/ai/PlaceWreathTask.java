@@ -106,7 +106,7 @@ public class PlaceWreathTask extends Behavior<Villager> {
     }
 
     //check if villager is at correct y level befoire calling this
-    @Nullable
+    
     private static BlockPos getValidPlacementPos(ServerLevel pLevel, LivingEntity pWalker) {
         RandomSource random = pWalker.getRandom();
 

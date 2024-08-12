@@ -18,8 +18,6 @@ import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import javax.annotation.Nullable;
-
 public class ThrowSnowballsTask extends Behavior<Villager> {
     private int cooldownBetweenAttacks;
     private int eggs;
@@ -112,7 +110,7 @@ public class ThrowSnowballsTask extends Behavior<Villager> {
         clearInteractionTarget(pEntity);
     }
 
-    @Nullable
+    
     private LivingEntity getLookTarget(LivingEntity pMob) {
         var v = pMob.getBrain().getMemory(MemoryModuleType.LOOK_TARGET).orElse(null);
         if (v instanceof EntityTracker entityTracker) {

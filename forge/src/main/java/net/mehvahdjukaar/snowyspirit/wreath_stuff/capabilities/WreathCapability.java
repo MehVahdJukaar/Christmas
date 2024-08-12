@@ -40,7 +40,7 @@ public class WreathCapability implements ICapabilitySerializable<CompoundTag> {
 
     @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap,  Direction side) {
         return cap == ModCapabilities.WREATH_CAPABILITY ?
                 lazyOptional.cast() : LazyOptional.empty();
     }

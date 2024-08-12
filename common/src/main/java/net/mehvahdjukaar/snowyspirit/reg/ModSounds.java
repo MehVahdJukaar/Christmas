@@ -2,9 +2,6 @@ package net.mehvahdjukaar.snowyspirit.reg;
 
 import net.mehvahdjukaar.moonlight.api.platform.RegHelper;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
-import net.mehvahdjukaar.snowyspirit.client.SledSoundInstance;
-import net.mehvahdjukaar.snowyspirit.common.entity.SledEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundEvent;
 
 import java.util.function.Supplier;

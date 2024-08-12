@@ -14,7 +14,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -85,7 +84,7 @@ public class ClientRegistry {
     private static class MimicBlockColor implements BlockColor {
 
         @Override
-        public int getColor(BlockState state, @Nullable BlockAndTintGetter world, @Nullable BlockPos pos, int tint) {
+        public int getColor(BlockState state,  BlockAndTintGetter world,  BlockPos pos, int tint) {
             return col(state, world, pos, tint);
         }
 
@@ -103,7 +102,7 @@ public class ClientRegistry {
 
         public static class NoParticle implements BlockColor {
             @Override
-            public int getColor(BlockState state, @Nullable BlockAndTintGetter world, @Nullable BlockPos pos, int tint) {
+            public int getColor(BlockState state,  BlockAndTintGetter world,  BlockPos pos, int tint) {
                 if (tint == 0) return -1;
                 return col(state, world, pos, tint);
             }

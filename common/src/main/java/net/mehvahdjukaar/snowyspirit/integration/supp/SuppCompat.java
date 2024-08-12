@@ -3,7 +3,6 @@ package net.mehvahdjukaar.snowyspirit.integration.supp;
 import net.mehvahdjukaar.snowyspirit.common.entity.ContainerHolderEntity;
 import net.mehvahdjukaar.supplementaries.common.inventories.SackContainerMenu;
 import net.mehvahdjukaar.supplementaries.common.items.CandyItem;
-import net.mehvahdjukaar.supplementaries.common.items.SackItem;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;

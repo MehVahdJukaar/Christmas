@@ -28,7 +28,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -41,9 +40,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
@@ -98,7 +95,7 @@ public class GlowLightsBlock extends WaterBlock implements EntityBlock, IColored
                         !Block.isFaceFull(neighborState.getCollisionShape(level, neighborPos), direction.getOpposite()));
     }
 
-    @Nullable
+    
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState state = super.getStateForPlacement(context);
@@ -112,7 +109,7 @@ public class GlowLightsBlock extends WaterBlock implements EntityBlock, IColored
         return state;
     }
 
-    @Nullable
+    
     @Override
     public DyeColor getColor() {
         return color;
@@ -123,9 +120,9 @@ public class GlowLightsBlock extends WaterBlock implements EntityBlock, IColored
         return true;
     }
 
-    @Nullable
+    
     @Override
-    public Item changeItemColor(@Nullable DyeColor color) {
+    public Item changeItemColor( DyeColor color) {
         return ModRegistry.GLOW_LIGHTS_ITEMS.get(color).get();
     }
 
@@ -152,7 +149,7 @@ public class GlowLightsBlock extends WaterBlock implements EntityBlock, IColored
         return false;
     }
 
-    @Nullable
+    
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new GlowLightsBlockTile(pPos, pState);
@@ -221,7 +218,7 @@ public class GlowLightsBlock extends WaterBlock implements EntityBlock, IColored
         return super.use(pState, level, pos, pPlayer, pHand, pHit);
     }
 
-    private List<ItemStack> shearAction(@Nullable Player player, @Nonnull ItemStack item, Level world, BlockPos pos, int fortune) {
+    private List<ItemStack> shearAction( Player player, ItemStack item, Level world, BlockPos pos, int fortune) {
         if (world.getBlockEntity(pos) instanceof GlowLightsBlockTile tile) {
             if (!world.isClientSide()) {
                 world.setBlockAndUpdate(pos, tile.getHeldBlock());

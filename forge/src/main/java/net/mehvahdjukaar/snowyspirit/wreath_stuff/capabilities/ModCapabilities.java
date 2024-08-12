@@ -23,7 +23,7 @@ public class ModCapabilities {
     }
 
     @SuppressWarnings("ConstantConditions")
-    @Nullable
+    
     public static <T> T get(ICapabilityProvider provider,Capability<T> cap){
         return provider.getCapability(cap).orElse(null);
     }

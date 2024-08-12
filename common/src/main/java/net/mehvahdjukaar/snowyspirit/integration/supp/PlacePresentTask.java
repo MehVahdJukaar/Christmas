@@ -29,7 +29,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import org.jetbrains.annotations.Nullable;
 
 public class PlacePresentTask extends Behavior<Villager> {
 
@@ -130,7 +129,7 @@ public class PlacePresentTask extends Behavior<Villager> {
     }
 
     //check if villager is at correct y level befoire calling this
-    @Nullable
+    
     private static BlockPos getValidPlacementPos(ServerLevel pLevel, LivingEntity pWalker) {
         RandomSource random = pWalker.getRandom();
         var v = pWalker.getBrain().getMemory(MemoryModuleType.MEETING_POINT);

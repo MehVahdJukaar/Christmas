@@ -19,7 +19,6 @@
       "net.mehvahdjukaar.snowyspirit.fabric.SnowySpiritFabric"
     ],
     "modmenu": [
-      "net.mehvahdjukaar.snowyspirit.integration.fabric.mod_menu.ModMenuCompat"
     ]
   },
   "mixins": [

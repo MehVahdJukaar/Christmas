@@ -26,7 +26,6 @@ import net.minecraft.world.level.block.CarvedPumpkinBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -120,7 +119,7 @@ public class SnowySpirit {
         return IS_CHRISTMAS_REAL_TIME;
     }
 
-    public static void trySpawningGingy(BlockState pumpkinState, LevelAccessor level, BlockPos pumpkinPos, @Nullable Entity entity) {
+    public static void trySpawningGingy(BlockState pumpkinState, LevelAccessor level, BlockPos pumpkinPos,  Entity entity) {
         BlockPos below = pumpkinPos.below();
         if (level instanceof ServerLevel serverLevel && level.getBlockState(below).is(ModTags.GINGERBREADS)) {
             Direction dir = pumpkinState.getValue(CarvedPumpkinBlock.FACING);

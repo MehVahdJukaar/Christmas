@@ -19,7 +19,7 @@ public abstract class CarvedPumpkinMixin extends Block {
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state,  LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
 
         SnowySpirit.trySpawningGingy(state, level, pos, placer);

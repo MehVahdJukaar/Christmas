@@ -23,7 +23,7 @@ public abstract class SelfGlowLightsBlockMixin extends Block implements IForgeSh
     }
 
     @Shadow
-    public abstract List<ItemStack> shearAction(@Nullable Player player, @Nonnull ItemStack item, Level world, BlockPos pos, int fortune);
+    public abstract List<ItemStack> shearAction( Player player, @Nonnull ItemStack item, Level world, BlockPos pos, int fortune);
 
     @Override
     public boolean isShearable(@NotNull ItemStack item, Level level, BlockPos pos) {
@@ -31,7 +31,7 @@ public abstract class SelfGlowLightsBlockMixin extends Block implements IForgeSh
     }
 
     @Override
-    public @NotNull List<ItemStack> onSheared(@Nullable Player player, @NotNull ItemStack item, Level level, BlockPos pos, int fortune) {
+    public @NotNull List<ItemStack> onSheared( Player player, @NotNull ItemStack item, Level level, BlockPos pos, int fortune) {
         return shearAction(player, item, level, pos, fortune);
     }
 }

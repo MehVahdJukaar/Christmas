@@ -33,7 +33,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class GumdropButton extends DirectionalBlock {
@@ -75,7 +74,7 @@ public class GumdropButton extends DirectionalBlock {
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state,  LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
         BlockPos relative = pos.above().relative(state.getValue(FACING).getOpposite());
         BlockState pumpkin = level.getBlockState(relative);
@@ -92,7 +91,7 @@ public class GumdropButton extends DirectionalBlock {
     }
 
     @Override
-    @Nullable
+    
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
         Direction direction = pContext.getClickedFace();
         BlockState blockstate = this.defaultBlockState().setValue(FACING, direction);
@@ -144,7 +143,7 @@ public class GumdropButton extends DirectionalBlock {
         pLevel.scheduleTick(pPos, this, this.getPressDuration());
     }
 
-    protected void playSound(@Nullable Player pPlayer, LevelAccessor pLevel, BlockPos pPos, boolean pHitByArrow) {
+    protected void playSound( Player pPlayer, LevelAccessor pLevel, BlockPos pPos, boolean pHitByArrow) {
         pLevel.playSound(pHitByArrow ? pPlayer : null, pPos, this.getSound(pHitByArrow), SoundSource.BLOCKS, 0.3F, pHitByArrow ? 0.6F : 0.5F);
     }
 

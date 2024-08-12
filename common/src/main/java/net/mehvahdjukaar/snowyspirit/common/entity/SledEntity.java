@@ -58,7 +58,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -293,7 +292,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
         return this.entityData.get(DATA_ADDITIONAL_Y);
     }
 
-    @Nullable
+    
     public void setDataAdditionalY(float additionalY) {
         this.entityData.set(DATA_ADDITIONAL_Y, additionalY);
     }
@@ -1072,15 +1071,15 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
         return WoodTypeRegistry.fromNBT(this.entityData.get(DATA_ID_TYPE));
     }
 
-    @Nullable
+    
     public DyeColor getSeatType() {
         int d = this.entityData.get(DATA_SEAT_TYPE);
         if (d == 0) return null;
         return DyeColor.byId(d - 1);
     }
 
-    @Nullable
-    public void setSeatType(@Nullable DyeColor seatColor) {
+    
+    public void setSeatType( DyeColor seatColor) {
         this.entityData.set(DATA_SEAT_TYPE, seatColor == null ? 0 : seatColor.getId() + 1);
     }
 
@@ -1091,7 +1090,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
         return 0.2D + this.getAdditionalY() + (this.getSeatType() != null ? 0.0615 : 0);
     }
 
-    @Nullable
+    
     public ContainerHolderEntity tryAddingChest(ItemStack stack) {
         if (ContainerHolderEntity.isValidContainer(stack) && this.canAddChest()) {
             ContainerHolderEntity container = new ContainerHolderEntity(level, this, stack.split(1));
@@ -1203,7 +1202,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
         return !hasChest() || !(entity instanceof ContainerHolderEntity);
     }
 
-    @Nullable
+    
     @Override
     public Entity getControllingPassenger() {
         return this.getFirstPassenger();
@@ -1430,9 +1429,9 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
 
     private float wolfAnimationSpeed = 0;
     private float wolfAnimationPosition = 0;
-    @Nullable
+    
     private Animal wolf = null;
-    @Nullable
+    
     private ContainerHolderEntity chest = null;
 
     public boolean hasWolf() {
@@ -1467,7 +1466,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
         }
     }
 
-    @Nullable
+    
     public Animal getWolf() {
         return wolf;
     }

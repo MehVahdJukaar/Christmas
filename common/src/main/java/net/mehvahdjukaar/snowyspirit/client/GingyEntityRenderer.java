@@ -7,7 +7,6 @@ import net.mehvahdjukaar.snowyspirit.common.entity.GingyEntity;
 import net.mehvahdjukaar.snowyspirit.reg.ClientRegistry;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
-import net.minecraft.client.renderer.entity.IronGolemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.DyeColor;

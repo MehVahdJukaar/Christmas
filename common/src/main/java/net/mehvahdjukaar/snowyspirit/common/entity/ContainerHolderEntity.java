@@ -4,8 +4,8 @@ import dev.architectury.injectables.annotations.PlatformOnly;
 import net.mehvahdjukaar.moonlight.api.entity.IExtraClientSpawnData;
 import net.mehvahdjukaar.moonlight.api.platform.PlatformHelper;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
-import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
 import net.mehvahdjukaar.snowyspirit.integration.supp.SuppCompat;
+import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
 import net.mehvahdjukaar.snowyspirit.reg.ModTags;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.NonNullList;
@@ -25,8 +25,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.Minecart;
-import net.minecraft.world.entity.vehicle.MinecartChest;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.ShulkerBoxMenu;
@@ -44,8 +42,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.HitResult;
-
-import javax.annotation.Nullable;
 
 public class ContainerHolderEntity extends Entity implements Container, MenuProvider, IExtraClientSpawnData {
     private static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(ContainerHolderEntity.class, EntityDataSerializers.INT);
@@ -307,7 +303,7 @@ public class ContainerHolderEntity extends Entity implements Container, MenuProv
     //container
 
     private NonNullList<ItemStack> itemStacks = NonNullList.withSize(36, ItemStack.EMPTY);
-    @Nullable
+    
     private ResourceLocation lootTable;
     private long lootTableSeed;
 
@@ -447,7 +443,7 @@ public class ContainerHolderEntity extends Entity implements Container, MenuProv
     /**
      * Adds loot to the minecart's contents.
      */
-    public void unpackLootTable(@Nullable Player pPlayer) {
+    public void unpackLootTable( Player pPlayer) {
         if (this.lootTable != null && this.level.getServer() != null) {
             LootTable loottable = this.level.getServer().getLootTables().get(this.lootTable);
             if (pPlayer instanceof ServerPlayer serverPlayer) {
@@ -481,7 +477,7 @@ public class ContainerHolderEntity extends Entity implements Container, MenuProv
         this.lootTableSeed = pLootTableSeed;
     }
 
-    @Nullable
+    
     public AbstractContainerMenu createMenu(int pContainerId, Inventory pInventory, Player pPlayer) {
         if (this.lootTable != null && pPlayer.isSpectator()) {
             return null;

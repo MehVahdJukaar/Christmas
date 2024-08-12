@@ -9,12 +9,9 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -38,7 +35,6 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -102,15 +98,15 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
         }
     }
 
-    @Nullable
+    
     public LivingEntity getOwner() {
         UUID uUID = this.getOwnerUUID();
         return uUID == null ? null : this.level.getPlayerByUUID(uUID);
     }
 
-    @Nullable
+    
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason,  SpawnGroupData spawnData,  CompoundTag dataTag) {
         this.setColor(DyeColor.values()[level.getRandom().nextInt(DyeColor.values().length)]);
         return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
@@ -183,12 +179,12 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
         }
     }
 
-    @Nullable
+    
     public UUID getOwnerUUID() {
         return this.entityData.get(DATA_OWNERUUID_ID).orElse(null);
     }
 
-    public void setOwnerUUID(@Nullable UUID uuid) {
+    public void setOwnerUUID( UUID uuid) {
         this.entityData.set(DATA_OWNERUUID_ID, Optional.ofNullable(uuid));
     }
 

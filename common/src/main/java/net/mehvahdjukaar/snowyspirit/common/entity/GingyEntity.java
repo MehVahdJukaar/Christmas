@@ -1,11 +1,11 @@
 package net.mehvahdjukaar.snowyspirit.common.entity;
 
-import net.mehvahdjukaar.moonlight.api.entity.IControllableVehicle;
 import net.mehvahdjukaar.moonlight.api.util.Utils;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.common.ai.GingyFollowOwnerGoal;
 import net.mehvahdjukaar.snowyspirit.common.ai.GingySitWhenOrderedToGoal;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
+import net.mehvahdjukaar.snowyspirit.reg.ModTags;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -13,7 +13,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -25,7 +24,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.AbstractGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -40,11 +41,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class GingyEntity extends AbstractGolem implements OwnableEntity {
-    protected static final EntityDataAccessor<Optional<UUID>> DATA_OWNERUUID_ID = SynchedEntityData.defineId(GingyEntity.class, EntityDataSerializers.OPTIONAL_UUID);
-    protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(GingyEntity.class, EntityDataSerializers.BYTE);
-    protected static final EntityDataAccessor<Integer> DATA_COLOR_ID = SynchedEntityData.defineId(GingyEntity.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Optional<UUID>> DATA_OWNER_UUID = SynchedEntityData.defineId(GingyEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+    protected static final EntityDataAccessor<Byte> DATA_FLAGS = SynchedEntityData.defineId(GingyEntity.class, EntityDataSerializers.BYTE);
+    protected static final EntityDataAccessor<Integer> DATA_COLOR = SynchedEntityData.defineId(GingyEntity.class, EntityDataSerializers.INT);
+
+    public static final Predicate<LivingEntity> TARGET_SELECTOR = (entity) -> entity.getType().is(ModTags.GINGY_TARGETS);
 
 
     public GingyEntity(EntityType<? extends AbstractGolem> entityType, Level level) {
@@ -55,17 +59,21 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new GingySitWhenOrderedToGoal(this));
+        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.5, true));
         this.goalSelector.addGoal(6, new GingyFollowOwnerGoal(this, 1.0, 7.0F, 3.5F, false));
         this.goalSelector.addGoal(11, new WaterAvoidingRandomStrollGoal(this, 0.8, 1.0000001E-5F));
         this.goalSelector.addGoal(12, new LookAtPlayerGoal(this, Player.class, 10.0F));
+
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true, TARGET_SELECTOR));
+
     }
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(DATA_FLAGS_ID, (byte) 0);
-        this.entityData.define(DATA_OWNERUUID_ID, Optional.empty());
-        this.entityData.define(DATA_COLOR_ID, DyeColor.WHITE.ordinal());
+        this.entityData.define(DATA_FLAGS, (byte) 0);
+        this.entityData.define(DATA_OWNER_UUID, Optional.empty());
+        this.entityData.define(DATA_COLOR, DyeColor.WHITE.ordinal());
     }
 
     @Override
@@ -119,24 +127,24 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
     }
 
     public DyeColor getColor() {
-        return DyeColor.byId(this.entityData.get(DATA_COLOR_ID));
+        return DyeColor.byId(this.entityData.get(DATA_COLOR));
     }
 
     public void setColor(DyeColor collarColor) {
-        this.entityData.set(DATA_COLOR_ID, collarColor.getId());
+        this.entityData.set(DATA_COLOR, collarColor.getId());
     }
 
     public boolean isForwardDeathAnim() {
-        return ((this.entityData.get(DATA_FLAGS_ID) & 0b10000000) >> 7) == 1;
+        return ((this.entityData.get(DATA_FLAGS) & 0b10000000) >> 7) == 1;
     }
 
     public void setForwardDeathAnim(boolean forward) {
-        byte b = this.entityData.get(DATA_FLAGS_ID);
-        this.entityData.set(DATA_FLAGS_ID, (byte) ((b & 0b01111111) | ((forward ? 1 : 0) << 7)));
+        byte b = this.entityData.get(DATA_FLAGS);
+        this.entityData.set(DATA_FLAGS, (byte) ((b & 0b01111111) | ((forward ? 1 : 0) << 7)));
     }
 
     public BodyIntegrity getBodyIntegrity() {
-        return BodyIntegrity.values()[(this.entityData.get(DATA_FLAGS_ID) & 0b00001110) >> 1];
+        return BodyIntegrity.values()[(this.entityData.get(DATA_FLAGS) & 0b00001110) >> 1];
     }
 
     public boolean increaseIntegrity() {
@@ -163,31 +171,31 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
 
 
     public void setBodyIntegrity(BodyIntegrity bodyIntegrity) {
-        byte b = this.entityData.get(DATA_FLAGS_ID);
+        byte b = this.entityData.get(DATA_FLAGS);
         int ind = bodyIntegrity.ordinal();
-        this.entityData.set(DATA_FLAGS_ID, (byte) ((b & 0b11110001) | (ind << 1)));
+        this.entityData.set(DATA_FLAGS, (byte) ((b & 0b11110001) | (ind << 1)));
     }
 
     public boolean isOrderedToSit() {
-        return (this.entityData.get(DATA_FLAGS_ID) & 1) != 0;
+        return (this.entityData.get(DATA_FLAGS) & 1) != 0;
     }
 
     public void setOrderedToSit(boolean sitting) {
-        byte b = this.entityData.get(DATA_FLAGS_ID);
+        byte b = this.entityData.get(DATA_FLAGS);
         if (sitting) {
-            this.entityData.set(DATA_FLAGS_ID, (byte) (b | 1));
+            this.entityData.set(DATA_FLAGS, (byte) (b | 1));
         } else {
-            this.entityData.set(DATA_FLAGS_ID, (byte) (b & -2));
+            this.entityData.set(DATA_FLAGS, (byte) (b & -2));
         }
     }
 
     @Nullable
     public UUID getOwnerUUID() {
-        return this.entityData.get(DATA_OWNERUUID_ID).orElse(null);
+        return this.entityData.get(DATA_OWNER_UUID).orElse(null);
     }
 
     public void setOwnerUUID(@Nullable UUID uuid) {
-        this.entityData.set(DATA_OWNERUUID_ID, Optional.ofNullable(uuid));
+        this.entityData.set(DATA_OWNER_UUID, Optional.ofNullable(uuid));
     }
 
     @Override
@@ -236,7 +244,6 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
     }
 
 
-
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
@@ -257,11 +264,11 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
             }
         }
 
-        if(this.getBbHeight()>2){
+        if (this.getBbHeight() > 2) {
             player.startRiding(this);
             return InteractionResult.sidedSuccess(level.isClientSide);
 
-        }else {
+        } else {
             if (itemStack.is(Items.MILK_BUCKET)) {
                 if (!player.getAbilities().instabuild) {
                     itemStack.shrink(1);
@@ -283,7 +290,7 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
                 return InteractionResult.sidedSuccess(level.isClientSide);
             } else if (player.canEat(player.isCreative())) {
                 if (player instanceof ServerPlayer sp) {
-                    SnowySpirit.giveAdvancement(sp, "husbandry/eat_gingerbread_golem");
+                    Utils.awardAdvancement(sp, SnowySpirit.res("husbandry/eat_gingerbread_golem"));
                 }
                 if (!this.decreaseIntegrity()) {
                     this.discard();
@@ -311,8 +318,19 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
         return 30;
     }
 
+    @Override
+    public boolean doHurtTarget(Entity entity) {
+        if (super.doHurtTarget(entity)) {
+            this.heal(0.1f);
+        }
+        return false;
+    }
+
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 5.0)
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 5.0)
+                .add(Attributes.ATTACK_DAMAGE, 0.25)
+                .add(Attributes.ATTACK_KNOCKBACK, 0)
                 .add(Attributes.MOVEMENT_SPEED, 0.25);
     }
 

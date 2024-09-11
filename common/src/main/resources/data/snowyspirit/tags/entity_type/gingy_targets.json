@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id" :"create_confectionery:little_gingerbread_man",
+      "required": false
+    },
+    {
+      "id" :"create_confectionery:gingerbread_man",
+      "required": false
+    },
+    {
+      "id" :"alexscaves:gingerbread_man",
+      "required": false
+    }
+  ]
+}

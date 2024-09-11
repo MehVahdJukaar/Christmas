@@ -7,11 +7,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import traben.entity_model_features.models.animation.EMFAnimationHelper;
+import traben.entity_model_features.models.animation.EMFAnimationEntityContext;
 import traben.entity_model_features.utils.EMFEntity;
 
 @Pseudo
-@Mixin(EMFAnimationHelper.class)
+@Mixin(EMFAnimationEntityContext.class)
 public class CompatEMFMixin {
 
     @Shadow private static EMFEntity emfEntity;

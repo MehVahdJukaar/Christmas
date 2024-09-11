@@ -45,7 +45,6 @@ public class ClientDynamicResourcesHandler extends DynClientResourcesGenerator {
             (c.ordinal() < 16 && c != DyeColor.BROWN && c != DyeColor.BLACK && c != DyeColor.GRAY && c != DyeColor.LIGHT_GRAY)).toList();
 
 
-    @NotNull
     public static float[] getGlowLightColor(DyeColor color, RandomSource randomSource) {
         if (color == null) {
             var c = new HSVColor(randomSource.nextFloat(), 1, 1f, 1).asRGB();

@@ -19,7 +19,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 
-
 public class ThrowSnowballsTask extends Behavior<Villager> {
     private int cooldownBetweenAttacks;
     private int eggs;

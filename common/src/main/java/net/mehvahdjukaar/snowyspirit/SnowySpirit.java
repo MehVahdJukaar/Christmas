@@ -154,16 +154,4 @@ public class SnowySpirit {
         if (USES_SEASON_MOD) return SeasonModCompat.isWinter(level);
         return IS_CHRISTMAS_REAL_TIME;
     }
-
-
-
-    @Deprecated(forRemoval = true)
-    public static void giveAdvancement( ServerPlayer sp, String name) {
-        Advancement advancement = sp.getServer().getAdvancements().getAdvancement(SnowySpirit.res(name));
-        if (advancement != null) {
-            if (!sp.getAdvancements().getOrStartProgress(advancement).isDone()) {
-                sp.getAdvancements().award(advancement, "unlock");
-            }
-        }
-    }
 }

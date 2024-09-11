@@ -3,7 +3,7 @@ modLoader="javafml" #mandatory
 
 loaderVersion="[40,)"
 
-license="All rights reserved"
+license="Supplementaries Team License 1.1"
 
 issueTrackerURL = "https://github.com/MehVahdJukaar/snowyspirit/issues"
 

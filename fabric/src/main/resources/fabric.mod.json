@@ -11,7 +11,7 @@
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/snowy-spirit",
     "sources": "https://github.com/MehVahdJukaar/SnowySpirit"
   },
-  "license": "ARR",
+  "license": "Supplementaries Team License 1.1",
   "icon": "icon.png",
   "environment": "*",
   "entrypoints": {

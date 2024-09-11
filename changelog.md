@@ -1,1 +1,2 @@
-added ginger to wandering trader trades
+- gingerbread men will now attack gingerbread men from other mods (and other entities in their attack tag)
+- fixed a missing translation

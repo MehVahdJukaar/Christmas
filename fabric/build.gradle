@@ -41,8 +41,9 @@ dependencies {
 
     modImplementation ("curse.maven:fabric-seasons-413523:4576886")
     modImplementation("net.mehvahdjukaar:moonlight-fabric:${project.moonlight_version}")
-    modCompileOnly("net.mehvahdjukaar:supplementaries-fabric:${project.supplementaries_version}")
+    //modCompileOnly("net.mehvahdjukaar:supplementaries-fabric:${project.supplementaries_version}")
     modCompileOnly("curse.maven:farmers-delight-fabric-482834:4061213")
+    modCompileOnly("curse.maven:supplementaries-412082:5676066")
 
 }
 
@@ -61,18 +62,18 @@ shadowJar {
     exclude "architectury.common.json"
 
     configurations = [project.configurations.shadowCommon]
-    classifier "dev-shadow"
+    archiveClassifier = "dev-shadow"
 }
 
 remapJar {
     injectAccessWidener = true
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    classifier "fabric"
+    archiveClassifier = "fabric"
 }
 
 jar {
-    classifier "dev"
+    archiveClassifier = "dev"
 }
 
 sourcesJar {

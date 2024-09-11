@@ -17,8 +17,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class ThrowSnowballsTask extends Behavior<Villager> {
     private int cooldownBetweenAttacks;

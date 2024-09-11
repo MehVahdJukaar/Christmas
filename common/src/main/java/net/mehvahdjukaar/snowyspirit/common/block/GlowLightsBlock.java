@@ -42,9 +42,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
@@ -216,7 +216,7 @@ public class GlowLightsBlock extends WaterBlock implements EntityBlock, IColored
         return super.use(pState, level, pos, pPlayer, pHand, pHit);
     }
 
-    private List<ItemStack> shearAction(@Nullable Player player, @Nonnull ItemStack item, Level world, BlockPos pos, int fortune) {
+    private List<ItemStack> shearAction(@Nullable Player player, @NotNull ItemStack item, Level world, BlockPos pos, int fortune) {
         if (world.getBlockEntity(pos) instanceof GlowLightsBlockTile tile) {
             if (!world.isClientSide()) {
                 world.setBlockAndUpdate(pos, tile.getHeldBlock());

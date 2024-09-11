@@ -7,6 +7,7 @@ import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.set.BlocksColorAPI;
 import net.mehvahdjukaar.moonlight.api.set.wood.WoodType;
 import net.mehvahdjukaar.moonlight.api.set.wood.WoodTypeRegistry;
+import net.mehvahdjukaar.moonlight.api.util.Utils;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.client.SledSoundInstance;
 import net.mehvahdjukaar.snowyspirit.common.network.NetworkHandler;
@@ -56,8 +57,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -465,7 +466,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
                 && this.getSyncedMovement().lengthSqr() > 0.09) {
             for (var p : getPassengers()) {
                 if (p instanceof ServerPlayer sp) {
-                    SnowySpirit.giveAdvancement(sp, "adventure/ride_sled_fast");
+                    Utils.awardAdvancement(sp, SnowySpirit.res("adventure/ride_sled_fast"));
                 }
             }
         }
@@ -1043,9 +1044,6 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
                     return InteractionResult.sidedSuccess(level.isClientSide);
                 }
             } else if (this.tryAddingChest(stack) != null) {
-                if (this.sledPuller != null && player instanceof ServerPlayer sp) {
-                    SnowySpirit.giveAdvancement(sp, "adventure/sled_with_wolf");
-                }
                 return InteractionResult.sidedSuccess(level.isClientSide);
             }
             if (!this.hasPuller()) {
@@ -1070,7 +1068,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
                     if (owned && this.tryConnectingPuller(found)) {
                         this.playSound(SoundEvents.LEASH_KNOT_PLACE, 1.0F, 1.0F);
                         if (this.chest != null && player instanceof ServerPlayer sp) {
-                            SnowySpirit.giveAdvancement(sp, "adventure/sled_with_wolf");
+                            Utils.awardAdvancement(sp,SnowySpirit.res( "adventure/sled_with_wolf"));
                         }
                         return InteractionResult.sidedSuccess(level.isClientSide);
                     }

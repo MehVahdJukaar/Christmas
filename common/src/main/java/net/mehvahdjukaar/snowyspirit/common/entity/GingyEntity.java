@@ -298,6 +298,7 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
                 player.playSound(player.getEatingSound(ModRegistry.GINGERBREAD_COOKIE.get().getDefaultInstance()));
                 player.getFoodData().eat(1, 0.1F);
                 level.gameEvent(player, GameEvent.EAT, this.blockPosition());
+                //TODO: make this whole logic server side and use entity event here so other players can see this
                 for (int j = 0; j < 15; j++) {
                     level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, ModRegistry.GINGERBREAD_FROSTED_BLOCK.get().defaultBlockState()),
                             this.getRandomX(1), this.getRandomY() + 0.2, this.getRandomZ(1.0), 0, 0, 0);

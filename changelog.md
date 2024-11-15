@@ -1,2 +1,1 @@
-- gingerbread men will now attack gingerbread men from other mods (and other entities in their attack tag)
-- fixed a missing translation
+- updated to work with latest EMF

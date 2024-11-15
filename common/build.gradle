@@ -12,7 +12,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
     //implementation fileTree(dir: 'mods', include: '*.jar')
-    modImplementation("curse.maven:entity-model-features-844662:5696901")
+    modImplementation("curse.maven:entity-model-features-844662:5717218")
     modImplementation("curse.maven:entity-texture-features-fabric-568563:5000985")
 
     modImplementation("net.mehvahdjukaar:moonlight:${project.moonlight_version}")

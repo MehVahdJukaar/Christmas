@@ -2,16 +2,22 @@ package net.mehvahdjukaar.snowyspirit.common.network;
 
 import net.mehvahdjukaar.moonlight.api.platform.network.Message;
 import net.mehvahdjukaar.moonlight.api.platform.network.NetworkHelper;
+import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 
 public class ClientBoundSyncWreathMessage implements Message {
 
+    public static final TypeAndCodec<RegistryFriendlyByteBuf,ClientBoundSyncWreathMessage> CODEC =
+            Message.makeType(SnowySpirit.res("sync_all_wreaths"), ClientBoundSyncWreathMessage::new);
+
     public final BlockPos pos;
     public final boolean hasWreath;
 
-    public ClientBoundSyncWreathMessage(FriendlyByteBuf buffer) {
+    public ClientBoundSyncWreathMessage(RegistryFriendlyByteBuf buffer) {
         this.pos = buffer.readBlockPos();
         this.hasWreath = buffer.readBoolean();
     }
@@ -22,12 +28,18 @@ public class ClientBoundSyncWreathMessage implements Message {
     }
 
     @Override
-    public void write(FriendlyByteBuf buffer) {
+    public void write(RegistryFriendlyByteBuf buffer) {
         buffer.writeBlockPos(this.pos);
         buffer.writeBoolean(this.hasWreath);
     }
 
-    public void handle(NetworkHelper.Context context) {
+    @Override
+    public void handle(Context context) {
         ClientReceivers.handleSyncWreathPacket(this);
+    }
+
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return CODEC.type();
     }
 }

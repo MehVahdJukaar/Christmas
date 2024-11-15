@@ -16,7 +16,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -52,8 +51,8 @@ public abstract class IglooPiecesMixin extends TemplateStructurePiece {
 
         if (pRandom.nextFloat() > 0.3 && CommonConfigs.SLEDS.get()) {
 
-            ResourceLocation resourcelocation = new ResourceLocation(this.templateName);
-            if (resourcelocation.equals(new ResourceLocation("igloo/top"))) {
+            ResourceLocation resourcelocation = ResourceLocation.parse(this.templateName);
+            if (resourcelocation.equals(ResourceLocation.parse("igloo/top"))) {
 
 
                 StructurePlaceSettings structureplacesettings = makeSettings(this.placeSettings.getRotation(), resourcelocation);
@@ -69,10 +68,10 @@ public abstract class IglooPiecesMixin extends TemplateStructurePiece {
                     server.executeIfPossible(() -> {
                         SledEntity sledEntity = new SledEntity(level, blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ());
                         Item chest = PlatHelper.isModLoaded("quark") ?
-                                BuiltInRegistries.ITEM.get(new ResourceLocation("quark:spruce_chest")) : Items.CHEST;
+                                BuiltInRegistries.ITEM.get(ResourceLocation.parse("quark:spruce_chest")) : Items.CHEST;
                         ContainerHolderEntity c = sledEntity.tryAddingChest(chest.getDefaultInstance());
                         if (c != null) {
-                                c.setLootTable(SnowySpirit.res("chests/igloo_sled"), level.random.nextLong());
+                            c.setLootTable(SnowySpirit.res("chests/igloo_sled"), level.random.nextLong());
                         }
                         level.addFreshEntity(sledEntity);
                     });

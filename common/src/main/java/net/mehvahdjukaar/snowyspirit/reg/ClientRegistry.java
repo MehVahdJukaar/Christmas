@@ -56,7 +56,7 @@ public class ClientRegistry {
             ClientHelper.registerRenderType(v.get(), RenderType.cutout());
         }
 
-        ItemProperties.register(ModRegistry.GINGERBREAD_COOKIE.get(), new ResourceLocation("shape"),
+        ItemProperties.register(ModRegistry.GINGERBREAD_COOKIE.get(), ResourceLocation.parse("shape"),
                 (stack, world, entity, s) -> (System.identityHashCode(stack) % 4)/3f);
     }
 

@@ -1,8 +1,8 @@
 package net.mehvahdjukaar.snowyspirit.configs;
 
 import net.mehvahdjukaar.moonlight.api.platform.configs.ConfigBuilder;
-import net.mehvahdjukaar.moonlight.api.platform.configs.ConfigSpec;
 import net.mehvahdjukaar.moonlight.api.platform.configs.ConfigType;
+import net.mehvahdjukaar.moonlight.api.platform.configs.ModConfigHolder;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 
 import java.util.function.Supplier;
@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 public class ClientConfigs {
 
 
-    public static final ConfigSpec SPEC;
+    public static final ModConfigHolder SPEC;
 
     static {
         ConfigBuilder builder = ConfigBuilder.create(SnowySpirit.res("client"), ConfigType.CLIENT);
@@ -22,7 +22,7 @@ public class ClientConfigs {
                         .define("sled_sound_volume", 1.2, 0, 20);
         builder.pop();
 
-        SPEC = builder.buildAndRegister();
+        SPEC = builder.build();
     }
 
     public static final Supplier<Integer> PARTICLE_MODE;

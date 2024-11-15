@@ -1,8 +1,8 @@
 package net.mehvahdjukaar.snowyspirit.configs;
 
 import net.mehvahdjukaar.moonlight.api.platform.configs.ConfigBuilder;
-import net.mehvahdjukaar.moonlight.api.platform.configs.ConfigSpec;
 import net.mehvahdjukaar.moonlight.api.platform.configs.ConfigType;
+import net.mehvahdjukaar.moonlight.api.platform.configs.ModConfigHolder;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.integration.SeasonModCompat;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 
 public class CommonConfigs {
 
-    public static final ConfigSpec SPEC;
+    public static final ModConfigHolder SPEC;
 
     private static final Map<String, Supplier<Boolean>> FEATURE_TOGGLES = new HashMap<>();
 
@@ -102,7 +102,7 @@ public class CommonConfigs {
         FORWARD_ACCELERATION_WOLF = builder.comment("Same as above but only when sled has a wolf")
                 .define("forward_acceleration_with_wolf", 0.017, 0,1);
         FORWARD_ACCELERATION_WHEN_NOT_ON_SNOW = builder.comment("Acceleration when not on snow. Note that this is noticeably higher since its the higher frictions of those blocks that dont allow the sled to move fast")
-                .define("forward_acceleration_when_not_on_snow", 0.037F, 0, 1);
+                .define("forward_acceleration_when_not_on_snow", 0.037, 0, 1);
         BACKWARDS_ACCELERATION = builder.define("backwards_acceleration", 0.005, 0,1);
         SIDE_ACCELERATION = builder.define("backwards_acceleration", 0.005, 0,1);
 
@@ -124,7 +124,7 @@ public class CommonConfigs {
         builder.onChange(SnowySpirit::onConfigReload);
         SPEC = builder.build();
         //load early
-        SPEC.loadFromFile();
+        SPEC.forceLoad();
     }
 
 

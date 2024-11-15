@@ -1,4 +1,4 @@
-package net.mehvahdjukaar.snowyspirit.forge;
+package net.mehvahdjukaar.snowyspirit.neoforge;
 
 import net.mehvahdjukaar.moonlight.api.platform.ClientHelper;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
@@ -34,7 +34,7 @@ public class SnowySpiritForge {
             ClientHelper.addClientSetup(() -> {
                 if (ModList.get().isLoaded("configured")) {
                     //TODO: add back
-                    //ModConfigSelectScreen.registerConfigScreen(SnowySpirit.MOD_ID, ModConfigSelectScreen::new);
+                    ModConfigSelectScreen.registerConfigScreen(SnowySpirit.MOD_ID, ModConfigSelectScreen::new);
                 }
             });
         }

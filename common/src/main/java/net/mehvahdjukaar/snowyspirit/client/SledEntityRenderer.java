@@ -50,7 +50,7 @@ public class SledEntityRenderer extends EntityRenderer<SledEntity> {
         this.textures = WoodTypeRegistry.getTypes().stream().collect(ImmutableMap.toImmutableMap((e) -> e,
                 (t) -> SnowySpirit.res("textures/entity/sled/" + t.getTexturePath() + ".png")));
         this.quiltTextures = Stream.of(DyeColor.values()).collect(ImmutableMap.toImmutableMap((e) -> e,
-                (t) -> new ResourceLocation(SnowySpirit.MOD_ID + ":textures/entity/sled/quilt/" + t.getName() + ".png")));
+                (t) -> SnowySpirit.res("textures/entity/sled/quilt/" + t.getName() + ".png")));
     }
 
     @Override
@@ -134,34 +134,33 @@ public class SledEntityRenderer extends EntityRenderer<SledEntity> {
 
         Vec3 movement = lerpV(pPartialTicks, pEntity.prevDeltaMovement, pEntity.getDeltaMovement());
 
-        Matrix4f matrix4f = pMatrixStack.last().pose();
-        Matrix3f matrix3f = pMatrixStack.last().normal();
+        PoseStack.Pose pose = pMatrixStack.last();
         float mult = 6;
         float eye = (pEntity.getEyeHeight() + 1 + pEntity.cachedAdditionalY);
-        pBuffer.vertex(matrix4f, 0.0F, eye, 0.0F)
-                .color(0, 255, 0, 255)
-                .normal(matrix3f, (float) movement.x, (float) movement.y, (float) movement.z).endVertex();
-        pBuffer.vertex(matrix4f, (float) (movement.x * mult), (float) (eye + movement.y * mult), (float) (movement.z * mult))
-                .color(0, 255, 0, 255)
-                .normal(matrix3f, (float) movement.x, (float) movement.y, (float) movement.z).endVertex();
+        pBuffer.addVertex(pose, 0.0F, eye, 0.0F)
+                .setColor(0, 255, 0, 255)
+                .setNormal(pose, (float) movement.x, (float) movement.y, (float) movement.z);
+        pBuffer.addVertex(pose, (float) (movement.x * mult), (float) (eye + movement.y * mult), (float) (movement.z * mult))
+                .setColor(0, 255, 0, 255)
+                .setNormal(pose, (float) movement.x, (float) movement.y, (float) movement.z);
 
 
-        pBuffer.vertex(matrix4f, 0.0F, eye + 0.25f, 0.0F)
-                .color(255, 0, 255, 255)
-                .normal(matrix3f, 0, 1, 0).endVertex();
-        pBuffer.vertex(matrix4f, 0, (float) (eye + 0.25f + pEntity.misalignedFrictionFactor), 0)
-                .color(255, 0, 255, 255)
-                .normal(matrix3f, 0, 1, 0).endVertex();
+        pBuffer.addVertex(pose, 0.0F, eye + 0.25f, 0.0F)
+                .setColor(255, 0, 255, 255)
+                .setNormal(pose, 0, 1, 0);
+        pBuffer.addVertex(pose, 0, (float) (eye + 0.25f + pEntity.misalignedFrictionFactor), 0)
+                .setColor(255, 0, 255, 255)
+                .setNormal(pose, 0, 1, 0);
 
 
         if (pEntity.boost) {
             movement = movement.normalize().scale(-1);
-            pBuffer.vertex(matrix4f, 0.0F, eye, 0.0F)
-                    .color(255, 255, 0, 255)
-                    .normal(matrix3f, (float) movement.x, (float) movement.y, (float) movement.z).endVertex();
-            pBuffer.vertex(matrix4f, (float) (movement.x), (float) (eye + movement.y), (float) (movement.z))
-                    .color(255, 255, 0, 255)
-                    .normal(matrix3f, (float) movement.x, (float) movement.y, (float) movement.z).endVertex();
+            pBuffer.addVertex(pose, 0.0F, eye, 0.0F)
+                    .setColor(255, 255, 0, 255)
+                    .setNormal(pose, (float) movement.x, (float) movement.y, (float) movement.z);
+            pBuffer.addVertex(pose, (float) (movement.x), (float) (eye + movement.y), (float) (movement.z))
+                    .setColor(255, 255, 0, 255)
+                    .setNormal(pose, (float) movement.x, (float) movement.y, (float) movement.z);
         }
 
 
@@ -284,10 +283,10 @@ public class SledEntityRenderer extends EntityRenderer<SledEntity> {
         //parable here
         float sy = startY > 0.0F ? startY * segment * segment : startY - startY * (1.0F - segment) * (1.0F - segment);
         float sz = startZ * segment;
-        vertexConsumer.vertex(matrix4f, sx - dx, sy + y1, sz + dz)
-                .color(red, green, blue, 1.0F).uv2(light).endVertex();
-        vertexConsumer.vertex(matrix4f, sx + dx, sy + y0 - y1, sz - dz)
-                .color(red, green, blue, 1.0F).uv2(light).endVertex();
+        vertexConsumer.addVertex(matrix4f, sx - dx, sy + y1, sz + dz)
+                .setColor(red, green, blue, 1.0F).setLight(light);
+        vertexConsumer.addVertex(matrix4f, sx + dx, sy + y0 - y1, sz - dz)
+                .setColor(red, green, blue, 1.0F).setLight(light);
     }
 
 }

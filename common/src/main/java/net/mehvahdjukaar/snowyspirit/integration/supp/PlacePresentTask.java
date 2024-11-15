@@ -4,13 +4,15 @@ package net.mehvahdjukaar.snowyspirit.integration.supp;
 import com.google.common.collect.ImmutableMap;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
+import net.mehvahdjukaar.snowyspirit.configs.CommonConfigs;
 import net.mehvahdjukaar.snowyspirit.reg.ModMemoryModules;
 import net.mehvahdjukaar.supplementaries.common.block.blocks.PresentBlock;
 import net.mehvahdjukaar.supplementaries.common.block.tiles.PresentBlockTile;
-import net.mehvahdjukaar.supplementaries.configs.CommonConfigs;
 import net.mehvahdjukaar.supplementaries.reg.ModRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
@@ -118,7 +120,9 @@ public class PlacePresentTask extends Behavior<Villager> {
                         pLevel.playSound(null, targetPos, soundtype.getPlaceSound(), SoundSource.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
                         pOwner.getBrain().setMemory(ModMemoryModules.PLACED_PRESENT.get(), true);
                         if (pLevel.getBlockEntity(targetPos) instanceof PresentBlockTile tile) {
-                            tile.setLootTable(SnowySpirit.res("chests/present_villager"), pLevel.getRandom().nextLong());
+                            tile.setLootTable(ResourceKey.create(Registries.LOOT_TABLE,
+                                            SnowySpirit.res("chests/present_villager")),
+                                    pLevel.getRandom().nextLong());
                             tile.setSender(pOwner.getName().getString());
                         }
                     }

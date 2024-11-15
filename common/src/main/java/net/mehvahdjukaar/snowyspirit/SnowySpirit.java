@@ -27,7 +27,7 @@ public class SnowySpirit {
     public static final String MOD_ID = "snowyspirit";
 
     public static ResourceLocation res(String name) {
-        return new ResourceLocation(MOD_ID, name);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
     }
 
     public static final Logger LOGGER = LogManager.getLogger();

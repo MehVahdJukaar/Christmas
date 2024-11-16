@@ -5,6 +5,7 @@ import com.mojang.math.Axis;
 import net.mehvahdjukaar.moonlight.api.client.util.ParticleUtil;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.util.math.MthUtils;
+import net.mehvahdjukaar.moonlight.core.client.MLRenderTypes;
 import net.mehvahdjukaar.snowyspirit.configs.ClientConfigs;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -119,34 +120,27 @@ public class GlowLightParticle extends TextureSheetParticle {
         u1 = u0 + (u1 - u0) * 7 / 8f;
         v1 = v0 + (v1 - v0) * 7 / 8f;
 
-        buffer.vertex(x + (quadPos[0].x() * size), y + (quadPos[0].y() * size), z + (quadPos[0].z() * size))
-                .uv(u1, v1)
-                .color(rCol, gCol, bCol, alpha)
-                .uv2(lightColor)
-                .endVertex();
-        buffer.vertex(x + (quadPos[1].x() * size), y + (quadPos[1].y() * size), z + (quadPos[1].z() * size))
-                .uv(u1, v0)
-                .color(rCol, gCol, bCol, alpha)
-                .uv2(lightColor)
-                .endVertex();
-        buffer.vertex(x + quadPos[2].x() * size, y + quadPos[2].y() * size, z + quadPos[2].z() * size)
-                .uv(u0, v0)
-                .color(rCol, gCol, bCol, alpha)
-                .uv2(lightColor)
-                .endVertex();
-        buffer.vertex(x + quadPos[3].x() * size, y + quadPos[3].y() * size, z + quadPos[3].z() * size)
-                .uv(u0, v1)
-                .color(rCol, gCol, bCol, alpha)
-                .uv2(lightColor)
-                .endVertex();
+        buffer.addVertex(x + (quadPos[0].x() * size), y + (quadPos[0].y() * size), z + (quadPos[0].z() * size))
+                .setUv(u1, v1)
+                .setColor(rCol, gCol, bCol, alpha)
+                .setLight(lightColor);
+        buffer.addVertex(x + (quadPos[1].x() * size), y + (quadPos[1].y() * size), z + (quadPos[1].z() * size))
+                .setUv(u1, v0)
+                .setColor(rCol, gCol, bCol, alpha)
+                .setLight(lightColor);
+        buffer.addVertex(x + quadPos[2].x() * size, y + quadPos[2].y() * size, z + quadPos[2].z() * size)
+                .setUv(u0, v0)
+                .setColor(rCol, gCol, bCol, alpha)
+                .setLight(lightColor);
+        buffer.addVertex(x + quadPos[3].x() * size, y + quadPos[3].y() * size, z + quadPos[3].z() * size)
+                .setUv(u0, v1)
+                .setColor(rCol, gCol, bCol, alpha)
+                .setLight(lightColor);
     }
-
-    private static final ParticleRenderType RENDER_TYPE = PlatHelper.getPlatform().isForge() ?
-            ParticleUtil.ADDITIVE_TRANSLUCENCY_RENDER_TYPE : ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
 
     @Override
     public ParticleRenderType getRenderType() {
-        return RENDER_TYPE;
+        return MLRenderTypes.PARTICLE_ADDITIVE_TRANSLUCENCY_RENDER_TYPE;
     }
 
     @Override

@@ -81,11 +81,11 @@ public class ModRegistry {
     public static final String CANDY_CANE_NAME = "candy_cane";
     public static final Supplier<Item> CANDY_CANE = regItem(CANDY_CANE_NAME,
             () -> new CandyCaneItem(new Item.Properties()
-                    .food(new FoodProperties.Builder().nutrition(2).saturationMod(0.4f).build())));
+                    .food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.4f).build())));
 
     public static final Supplier<Item> GINGERBREAD_COOKIE = regItem("gingerbread_cookie",
             () -> new Item(new Item.Properties()
-                    .food(new FoodProperties.Builder().nutrition(1).fast().saturationMod(0.4f).build())));
+                    .food(new FoodProperties.Builder().nutrition(1).fast().saturationModifier(0.4f).build())));
 
     public static final String EGGNOG_NAME = "eggnog";
     public static final Supplier<Item> EGGNOG = regItem(EGGNOG_NAME, EggnogItem::new);
@@ -205,18 +205,11 @@ public class ModRegistry {
     }
 
     public static <T extends Block> Supplier<T> regWithItem(String name, Supplier<T> blockFactory) {
-        return regWithItem(name, blockFactory, new Item.Properties(), 0);
+        return RegHelper.registerBlockWithItem(SnowySpirit.res(name), blockFactory);
     }
 
-    public static <T extends Block> Supplier<T> regWithItem(String name, Supplier<T> blockFactory, Item.Properties properties, int burnTime) {
-        Supplier<T> block = regBlock(name, blockFactory);
-        regBlockItem(name, block, properties, burnTime);
-        return block;
-    }
-
-    public static Supplier<BlockItem> regBlockItem(String name, Supplier<? extends Block> blockSup, Item.Properties properties, int burnTime) {
-        return RegHelper.registerItem(SnowySpirit.res(name), () -> burnTime == 0 ? new BlockItem(blockSup.get(), properties) :
-                new WoodBasedBlockItem(blockSup.get(), properties, burnTime));
+    public static <T extends Block> Supplier<T> rewWithItem(String name, Supplier<T> blockSup, Item.Properties properties) {
+        return RegHelper.registerBlockWithItem(SnowySpirit.res(name),blockSup, properties);
     }
 
     public static <T extends Entity> Supplier<EntityType<T>> regEntity(String name, Supplier<EntityType.Builder<T>> builder) {

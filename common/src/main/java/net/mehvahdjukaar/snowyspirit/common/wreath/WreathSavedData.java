@@ -2,9 +2,9 @@ package net.mehvahdjukaar.snowyspirit.common.wreath;
 
 import com.mojang.datafixers.util.Pair;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -18,18 +18,20 @@ import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class WreathSavedData extends SavedData {
     private static final String FILE_ID = "wreaths";
 
     public static final SavedData.Factory<WreathSavedData> FACTORY = new SavedData.Factory<>(
             WreathSavedData::new,
-            (compoundTag) -> {
+            (compoundTag, registries) -> {
                 var data = new WreathSavedData();
-                data.load(compoundTag);
+                data.load(compoundTag, registries);
                 return data;
             },
             null);
@@ -38,7 +40,7 @@ public class WreathSavedData extends SavedData {
     private static final WreathSavedData clientData = new WreathSavedData();
 
     public static WreathSavedData get(Level level) {
-        if(level instanceof ServerLevel serverLevel){
+        if (level instanceof ServerLevel serverLevel) {
             return serverLevel.getDataStorage().computeIfAbsent(FACTORY, FILE_ID);
         }
         return clientData;
@@ -47,7 +49,7 @@ public class WreathSavedData extends SavedData {
     private final Map<BlockPos, Data> wreathBlocks = new HashMap<>();
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
         int i = 0;
         for (BlockPos pos : wreathBlocks.keySet()) {
             NbtUtils.writeBlockPos(pos);
@@ -58,10 +60,9 @@ public class WreathSavedData extends SavedData {
         return tag;
     }
 
-    public void load(CompoundTag total) {
+    public void load(CompoundTag total, HolderLookup.Provider reg) {
         for (int i = 0; i < total.getInt("Count"); i++) {
-            CompoundTag tag = total.getCompound(i + "");
-            BlockPos pos = NbtUtils.readBlockPos(tag);
+            BlockPos pos = NbtUtils.readBlockPos(total, i + "").orElseThrow();
             this.addWreath(pos);
         }
     }

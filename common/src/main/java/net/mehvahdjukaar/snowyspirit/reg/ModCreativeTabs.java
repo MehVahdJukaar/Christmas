@@ -6,6 +6,8 @@ import net.mehvahdjukaar.moonlight.api.set.wood.WoodTypeRegistry;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.configs.CommonConfigs;
 import net.mehvahdjukaar.snowyspirit.integration.supp.SuppCompat;
+import net.mehvahdjukaar.supplementaries.reg.ModConstants;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
@@ -30,9 +32,11 @@ public class ModCreativeTabs {
     }
 
     public static void registerItemsToTabs(RegHelper.ItemToTabEvent e) {
-        after(e, ItemTags.MUSIC_DISCS, CreativeModeTabs.TOOLS_AND_UTILITIES,
+
+        after(e, i -> i.getItem().components().get(DataComponents.JUKEBOX_PLAYABLE) != null, CreativeModeTabs.TOOLS_AND_UTILITIES,
                 ModRegistry.WINTER_DISC_NAME,
                 ModRegistry.WINTER_DISC);
+
         before(e, Items.HONEY_BOTTLE, CreativeModeTabs.FOOD_AND_DRINKS,
                 ModRegistry.EGGNOG_NAME,
                 ModRegistry.EGGNOG);

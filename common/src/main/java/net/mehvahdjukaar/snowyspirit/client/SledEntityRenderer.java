@@ -91,13 +91,13 @@ public class SledEntityRenderer extends EntityRenderer<SledEntity> {
         poseStack.scale(-1.0F, -1.0F, 1.0F);
 
         VertexConsumer vertexconsumer = bufferSource.getBuffer(model.renderType(resourcelocation));
-        var mod = resourcelocation.getPath().equals("textures/entity/sled/bamboo.png") ? modelBamboo : model;
-        mod.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        SledModel<SledEntity> mod = this.getModel(sled);
+        mod.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, -1);
 
         DyeColor color = sled.getSeatType();
         if (color != null) {
             vertexconsumer = bufferSource.getBuffer(model.renderType(this.quiltTextures.get(color)));
-            quiltModel.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            quiltModel.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, -1);
         }
 
         poseStack.popPose();
@@ -120,6 +120,12 @@ public class SledEntityRenderer extends EntityRenderer<SledEntity> {
     @Override
     public ResourceLocation getTextureLocation(SledEntity sled) {
         return this.textures.get(sled.getWoodType());
+    }
+
+    public static final WoodType BAMBOO = WoodTypeRegistry.getValue(ResourceLocation.tryParse("bamboo"));
+
+    public SledModel<SledEntity> getModel(SledEntity sled){
+        return sled.getWoodType() == BAMBOO ? modelBamboo : model;
     }
 
     private void renderDebugHitbox(PoseStack pMatrixStack, VertexConsumer pBuffer, SledEntity pEntity, float pPartialTicks) {

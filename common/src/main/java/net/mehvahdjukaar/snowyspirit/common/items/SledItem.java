@@ -29,7 +29,7 @@ public class SledItem extends WoodBasedItem {
 
 
     public SledItem(WoodType type) {
-        super(new Item.Properties().stacksTo(1), type, 200);
+        super(new Item.Properties().stacksTo(1), type);
     }
 
     @Override

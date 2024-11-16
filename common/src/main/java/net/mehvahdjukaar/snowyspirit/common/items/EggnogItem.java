@@ -1,7 +1,6 @@
 package net.mehvahdjukaar.snowyspirit.common.items;
 
 
-import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -16,13 +15,17 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
-public class EggnogItem extends Item {
-    public EggnogItem() {
-        super(new Item.Properties().food(new FoodProperties
-                .Builder().nutrition(4).saturationMod(2f).build()));
-    }
+import java.util.List;
+import java.util.Optional;
 
-    private static final int DRINK_DURATION = 30;
+public class EggnogItem extends Item {
+
+    public static final FoodProperties EGG_NOG_FOOD = new FoodProperties(
+            4,2, false, 1.5f, Optional.empty(), List.of());
+
+    public EggnogItem() {
+        super(new Item.Properties().food(EGG_NOG_FOOD));
+    }
 
     /**
      * Called when the player finishes using this Item (E.g. finishes eating.). Not called when the player stops using
@@ -52,14 +55,6 @@ public class EggnogItem extends Item {
 
             return pStack;
         }
-    }
-
-    /**
-     * How long it takes to use or consume an item
-     */
-    @Override
-    public int getUseDuration(ItemStack pStack) {
-        return DRINK_DURATION;
     }
 
     /**

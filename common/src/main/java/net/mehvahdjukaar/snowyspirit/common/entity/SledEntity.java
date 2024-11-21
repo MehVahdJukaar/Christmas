@@ -22,11 +22,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
@@ -106,7 +108,11 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
     public SledEntity(EntityType<? extends SledEntity> entityType, Level level) {
         super(entityType, level);
         this.blocksBuilding = true;
-        this.setMaxUpStep(1);
+    }
+
+    @Override
+    public float maxUpStep() {
+        return 1.0f;
     }
 
     public SledEntity(Level level, double x, double y, double z) {
@@ -118,14 +124,10 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return PlatHelper.getEntitySpawnPacket(this);
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity sEntity) {
+        return PlatHelper.getEntitySpawnPacket(this, sEntity);
     }
 
-    @Override
-    protected float getEyeHeight(Pose pose, EntityDimensions dimensions) {
-        return dimensions.height;
-    }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
@@ -167,19 +169,19 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(DATA_ID_TYPE, WoodTypeRegistry.OAK_TYPE.toString());
-        this.entityData.define(DATA_SEAT_TYPE, 0);
-        this.entityData.define(DATA_ID_HURT, 0);
-        this.entityData.define(DATA_ID_HURT_DIR, 1);
-        this.entityData.define(DATA_ID_DAMAGE, 0.0F);
-        this.entityData.define(DATA_WOLF_INDEX, (byte) -1);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(DATA_ID_TYPE, WoodTypeRegistry.OAK_TYPE.toString());
+        builder.define(DATA_SEAT_TYPE, 0);
+        builder.define(DATA_ID_HURT, 0);
+        builder.define(DATA_ID_HURT_DIR, 1);
+        builder.define(DATA_ID_DAMAGE, 0.0F);
+        builder.define(DATA_WOLF_INDEX, (byte) -1);
 
-        this.entityData.define(DATA_ADDITIONAL_Y, 0.0F);
+        builder.define(DATA_ADDITIONAL_Y, 0.0F);
 
-        this.entityData.define(DATA_SYNCED_DX, 0.0F);
-        this.entityData.define(DATA_SYNCED_DY, 0.0F);
-        this.entityData.define(DATA_SYNCED_DZ, 0.0F);
+        builder.define(DATA_SYNCED_DX, 0.0F);
+        builder.define(DATA_SYNCED_DY, 0.0F);
+        builder.define(DATA_SYNCED_DZ, 0.0F);
     }
 
 
@@ -206,7 +208,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
 
     //portal stuff
     @Override
-    protected Vec3 getRelativePortalPosition(Direction.Axis axis, BlockUtil.FoundRectangle rectangle) {
+    public Vec3 getRelativePortalPosition(Direction.Axis axis, BlockUtil.FoundRectangle rectangle) {
         return LivingEntity.resetForwardDirectionOfRelativePortalPosition(super.getRelativePortalPosition(axis, rectangle));
     }
 
@@ -331,7 +333,12 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
     public Vec3 pullerPos = Vec3.ZERO;
     public Vec3 prevPullerPos = Vec3.ZERO;
     public AABB pullerAABB = new AABB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-    private final EntityDimensions pullerDimensions = new EntityDimensions(0.8f, 2.1f, false);
+    private final EntityDimensions pullerDimensions = new EntityDimensions(
+            0.8f, 2.1f,
+            2.1f * 0.5f , // Moved from ContainerHolderEntity to here
+            EntityAttachments.createDefault(0.8f, 2.1f),
+            false
+    );
 
 
     private AABB resetPullerAABB() {
@@ -1016,7 +1023,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
             ContainerHolderEntity container = new ContainerHolderEntity(level, this, stack);
             level.addFreshEntity(container);
             Block b = ((BlockItem) stack.getItem()).getBlock();
-            this.playSound(b.getSoundType(b.defaultBlockState()).getPlaceSound());
+            this.playSound(b.defaultBlockState().getSoundType().getPlaceSound());
             return container;
         }
         return null;
@@ -1033,7 +1040,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
             if (stack.is(ItemTags.WOOL_CARPETS) && this.getSeatType() == null) {
                 DyeColor col = BlocksColorAPI.getColor(stack.getItem());
                 if (col != null) {
-                    this.playSound(SoundEvents.ARMOR_EQUIP_LEATHER, 0.5F, 1.0F);
+                    this.playSound(SoundEvents.ARMOR_EQUIP_LEATHER.value(), 0.5F, 1.0F);
                     this.setSeatType(col);
                     stack.shrink(1);
                     return InteractionResult.sidedSuccess(level.isClientSide);
@@ -1151,7 +1158,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
                 this.updatePullerAnimations();
             } else {
                 float zPos = 0.0F;
-                float yPos = (float) ((this.isRemoved() ? 0.01 : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset(this));
+                float yPos = (float) ((this.isRemoved() ? 0.01 : this.getPassengersRidingOffset()) + /*passenger.getMyRidingOffset()*/0);
 
                 boolean isMoreThanOneOnBoard = false;
                 if (this.isChestEntity(passenger)) {

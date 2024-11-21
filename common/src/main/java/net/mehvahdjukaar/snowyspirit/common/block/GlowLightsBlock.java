@@ -15,6 +15,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -199,8 +201,7 @@ public class GlowLightsBlock extends WaterBlock implements EntityBlock, IColored
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level level, BlockPos pos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        ItemStack stack = pPlayer.getItemInHand(pHand);
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player pPlayer, InteractionHand pHand, BlockHitResult hitResult) {
         if (stack.getItem() instanceof ShearsItem) {
             var drops = this.shearAction(pPlayer, stack, level, pos, 0);
             drops.forEach(d -> {
@@ -210,10 +211,11 @@ public class GlowLightsBlock extends WaterBlock implements EntityBlock, IColored
                 RandomSource r = level.random;
                 ent.setDeltaMovement(ent.getDeltaMovement().add((r.nextFloat() - r.nextFloat()) * 0.1F, r.nextFloat() * 0.05F, (r.nextFloat() - r.nextFloat()) * 0.1F));
             });
-            stack.hurtAndBreak(1, pPlayer, e -> e.broadcastBreakEvent(pHand));
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            stack.hurtAndBreak(1, pPlayer, pHand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
-        return super.use(pState, level, pos, pPlayer, pHand, pHit);
+
+        return super.useItemOn(stack, state, level, pos, pPlayer, pHand, hitResult);
     }
 
     private List<ItemStack> shearAction(@Nullable Player player, ItemStack item, Level world, BlockPos pos, int fortune) {

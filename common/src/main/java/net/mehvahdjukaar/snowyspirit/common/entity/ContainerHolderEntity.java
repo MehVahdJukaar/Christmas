@@ -1,5 +1,7 @@
 package net.mehvahdjukaar.snowyspirit.common.entity;
 
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import dev.architectury.injectables.annotations.PlatformOnly;
 import net.mehvahdjukaar.moonlight.api.entity.IExtraClientSpawnData;
@@ -9,8 +11,11 @@ import net.mehvahdjukaar.snowyspirit.integration.supp.SuppCompat;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
 import net.mehvahdjukaar.snowyspirit.reg.ModTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -18,6 +23,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerPlayer;
@@ -95,9 +101,9 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
         if (innerBlockEntity == null) {
             throw new IllegalStateException("block {} does not provide a valid container block entity");
         }
-        if (isContainerWithNBT(stack) && stack.hasTag()) {
-            CompoundTag tag = stack.getTagElement("BlockEntityTag");
-            if (tag != null) innerBlockEntity.load(tag);
+        if (isContainerWithNBT(stack) && stack.hasFoil()) {
+            CompoundTag tag = stack.get(ModRegistry.CONTAINER_BLOCK_ENTITY_TAG.get());
+            if (tag != null) innerBlockEntity.loadWithComponents(tag, registryAccess());
         }
     }
 
@@ -107,13 +113,13 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
     }
 
     @Override
-    public void writeSpawnData(RegistryFriendlyByteBuf buf) {
-        ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, this.containerStack);
+    public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
+        ItemStack.STREAM_CODEC.encode(buffer, this.containerStack);
     }
 
     @Override
     public void readSpawnData(RegistryFriendlyByteBuf additionalData) {
-        this.setContainerItem(ItemStack.OPTIONAL_STREAM_CODEC.decode(additionalData));
+        this.setContainerItem(ItemStack.STREAM_CODEC.decode(additionalData));
     }
 
     @Override
@@ -121,30 +127,26 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
         this.setContainerItem(ItemStack.OPTIONAL_CODEC.decode(NbtOps.INSTANCE, tag.getCompound("ContainerItem")).getOrThrow().getFirst());
         if (innerBlockEntity == null) {
             int aaa = 1;
-        } else innerBlockEntity.load(tag);
+        } else innerBlockEntity.loadWithComponents(tag, this.registryAccess());
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
-        tag.put("ContainerItem", this.containerStack.save(new CompoundTag()));
-        tag.merge(innerBlockEntity.saveWithoutMetadata());
+        tag.put("ContainerItem", this.containerStack.save(this.registryAccess(), new CompoundTag()));
+        tag.merge(innerBlockEntity.saveWithoutMetadata(this.registryAccess()));
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(DATA_ID_HURT, 0);
-        this.entityData.define(DATA_ID_DAMAGE, 0.0F);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(DATA_ID_HURT, 0);
+        builder.define(DATA_ID_DAMAGE, 0.0F);
     }
-
+/* No longer needed, default fallback is to VEHICLE, (Entity#getVehicleAttachmentPoint)
     @Override
     public float getMyRidingOffset(Entity entity) {
         return 0;
     }
-
-    @Override
-    protected float getEyeHeight(Pose pPose, EntityDimensions pSize) {
-        return pSize.height * 0.5F;
-    }
+  */
 
     @Override
     public boolean canBeCollidedWith() {
@@ -204,11 +206,11 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
     public void spawnDrops() {
         ItemStack stack = this.containerStack.copy();
         if (this.hasCustomName()) {
-            stack.setHoverName(this.getCustomName());
+            stack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
         //sacks and shulker. kind of ugly here
         if (isContainerWithNBT(this.containerStack)) {
-            stack.addTagElement("BlockEntityTag", innerBlockEntity.saveWithoutMetadata());
+            stack.set(ModRegistry.CONTAINER_BLOCK_ENTITY_TAG.get(), innerBlockEntity.saveWithoutMetadata(this.registryAccess()));
         } else {
             Containers.dropContents(this.level(), this, innerBlockEntity);
         }
@@ -249,7 +251,7 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
             }
 
             this.checkBelowWorld();
-            this.handleNetherPortal();
+            this.handlePortal();
 
 
             // this.xRotO = v.xRotO;
@@ -415,7 +417,7 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
 
     public void setLootTable(ResourceLocation res, long seed) {
         if (innerBlockEntity instanceof RandomizableContainerBlockEntity r) {
-            r.setLootTable(res, seed);
+            r.setLootTable(ResourceKey.create(Registries.LOOT_TABLE, res), seed);
         }
     }
 

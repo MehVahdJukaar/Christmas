@@ -19,7 +19,7 @@ issueTrackerURL = "${mod_github}/issues"
     credits = "${mod_credits}"
     description = '''${mod_description}'''
     modUrl = "${mod_homepage}"
-    itemIcon="snowyspirit:sled_oak" #catalogue icon
+    itemIcon = "snowyspirit:sled_oak" #catalogue icon
 
 [modproperties.snowyspirit]
 catalogueItemIcon = "snowyspirit:sled_oak" #catalogue icon

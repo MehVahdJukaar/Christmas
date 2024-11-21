@@ -44,7 +44,7 @@ remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
     archiveClassifier = "neoforge"
-    atAccessWideners.add("${rootProject.mod_id}.accesswidener") // this is a path inside the mod jar
+    atAccessWideners.add("${mod_id}.accesswidener") // this is a path inside the mod jar
 }
 
 jar {
@@ -98,10 +98,11 @@ dependencies {
 
     if (isMyPc) {
         modImplementation("net.mehvahdjukaar:moonlight-neoforge:${moonlight_version}")
-        modImplementation("net.mehvahdjukaar:supplementaries-neoforge:${supplementaries_version}")
+        modCompileOnly("curse.maven:supplementaries-412082:5923343")
+    //    modImplementation("net.mehvahdjukaar:supplementaries-neoforge:${supplementaries_version}")
     } else {
         modImplementation("curse.maven:selene-499980:5878698")
-        modCompileOnly("curse.maven:supplementaries-412082:4707417")
+        modCompileOnly("curse.maven:supplementaries-412082:5923343")
     }
 
     modCompileOnly("curse.maven:farmers-delight-398521:3999157")

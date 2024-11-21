@@ -42,7 +42,8 @@ dependencies {
 
     modCompileOnly ("curse.maven:fabric-seasons-413523:4576886")
     if(isMyPc) {
-        modImplementation("net.mehvahdjukaar:supplementaries:${project.supplementaries_version}")
+       // modImplementation("net.mehvahdjukaar:supplementaries:${project.supplementaries_version}")
+        modImplementation("curse.maven:supplementaries-412082:5923344")
     } else {
         modImplementation("curse.maven:supplementaries-412082:5923344")
     }

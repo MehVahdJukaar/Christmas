@@ -98,19 +98,19 @@ dependencies {
 
     if (isMyPc) {
         modImplementation("net.mehvahdjukaar:moonlight-neoforge:${moonlight_version}")
+        modImplementation("net.mehvahdjukaar:supplementaries-neoforge:${supplementaries_version}")
     } else {
-        // modImplementation("curse.maven:selene-499980:5878698")
+        modImplementation("curse.maven:selene-499980:5878698")
+        modCompileOnly("curse.maven:supplementaries-412082:4707417")
     }
 
     modCompileOnly("curse.maven:farmers-delight-398521:3999157")
     modCompileOnly("curse.maven:serene-seasons-291874:4577617")
     modCompileOnly("curse.maven:biomes-o-plenty-220318:4683058")
     modCompileOnly("curse.maven:terrablender-563928:4647094")
-    modCompileOnly("curse.maven:supplementaries-412082:4707417")
     modImplementation("curse.maven:configured-457570:5180900")
 
     modImplementation("curse.maven:farmers-delight-398521:5772720")
-    modCompileOnly("curse.maven:supplementaries-412082:4707417")
 
 }
 

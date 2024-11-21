@@ -6,20 +6,20 @@ license = "${mod_license}"
 issueTrackerURL = "${mod_github}/issues"
 
 [[mixins]]
-config = "${mod_id}.mixins.json"
+    config = "${mod_id}.mixins.json"
 [[mixins]]
-config = "${mod_id}-common.mixins.json"
+    config = "${mod_id}-common.mixins.json"
 
 [[mods]]
-modId = "${mod_id}"
-version = "${mod_version}"
-displayName = "${mod_name}"
-logoFile = "icon.png"
-authors = "${mod_authors}"
-credits = "${mod_credits}"
-description = '''${mod_description}'''
-modUrl = "${mod_homepage}"
-itemIcon="snowyspirit:sled_oak" #catalogue icon
+    modId = "${mod_id}"
+    version = "${mod_version}"
+    displayName = "${mod_name}"
+    logoFile = "icon.png"
+    authors = "${mod_authors}"
+    credits = "${mod_credits}"
+    description = '''${mod_description}'''
+    modUrl = "${mod_homepage}"
+    itemIcon="snowyspirit:sled_oak" #catalogue icon
 
 [modproperties.snowyspirit]
 catalogueItemIcon = "snowyspirit:sled_oak" #catalogue icon
@@ -27,18 +27,18 @@ configuredBackground = "snowyspirit:textures/blocks/gingerbread_frosted_block.pn
 
 
 [[dependencies.${mod_id}]]
-modId = "neoforge"
-type = "REQUIRED"
-versionRange = "${forge_version_range}"
-ordering = "NONE"
-side = "BOTH"
+    modId = "neoforge"
+    type = "required"
+    versionRange = "${neo_version_range}"
+    ordering = "NONE"
+    side = "BOTH"
 
 [[dependencies.${mod_id}]]
-modId = "minecraft"
-type = "REQUIRED"
-versionRange = "[${minecraft_min_version},${minecraft_max_version})"
-ordering = "NONE"
-side = "BOTH"
+    modId = "minecraft"
+    type = "required"
+    versionRange = "[${minecraft_min_version},${minecraft_max_version})"
+    ordering = "NONE"
+    side = "BOTH"
 
 [[dependencies.${mod_id}]]
 modId = "moonlight"

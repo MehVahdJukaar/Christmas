@@ -12,7 +12,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 public class ClientBoundSyncWreathMessage implements Message {
 
     public static final TypeAndCodec<RegistryFriendlyByteBuf,ClientBoundSyncWreathMessage> CODEC =
-            Message.makeType(SnowySpirit.res("sync_all_wreaths"), ClientBoundSyncWreathMessage::new);
+            Message.makeType(SnowySpirit.res("sync_wreath_msg"), ClientBoundSyncWreathMessage::new);
 
     public final BlockPos pos;
     public final boolean hasWreath;

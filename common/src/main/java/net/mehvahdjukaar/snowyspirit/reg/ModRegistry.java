@@ -18,7 +18,14 @@ import net.mehvahdjukaar.snowyspirit.common.items.EggnogItem;
 import net.mehvahdjukaar.snowyspirit.common.items.GlowLightsItem;
 import net.mehvahdjukaar.snowyspirit.common.items.SledItem;
 import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -37,6 +44,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 @SuppressWarnings("ConstantConditions")
 public class ModRegistry {
@@ -91,10 +99,17 @@ public class ModRegistry {
     public static final Supplier<Item> EGGNOG = regItem(EGGNOG_NAME, EggnogItem::new);
 
     public static final String WINTER_DISC_NAME = "music_disc_winter";
-    public static final Supplier<Item> WINTER_DISC = regItem(WINTER_DISC_NAME,
-            () -> PlatHelper.newMusicDisc(14, ModSounds.WINTER_MUSIC, new Item.Properties()
-                    .rarity(Rarity.RARE).stacksTo(1), 2 * 60 + 41));
+    public static final ResourceLocation WINTER_DISC_JUKEBOX = SnowySpirit.res("winter");
+    //TODO
+    //public static final Supplier<JukeboxSong> WINTER_DISC_IDENTIFIER = RegHelper.register(WINTER_DISC_JUKEBOX, () -> {
+    //    return new JukeboxSong(ModSounds.WINTER_MUSIC.get(), Component.translatable(Util.makeDescriptionId("jukebox_song", WINTER_DISC_JUKEBOX)));
+    //}, Registries.JUKEBOX_SONG);
 
+
+    /* Old code public static final Supplier<Item> WINTER_DISC = regItem(WINTER_DISC_NAME,
+            () -> new MusicDiscItem(14, ModSounds.WINTER_MUSIC, new Item.Properties()
+                    .rarity(Rarity.RARE).stacksTo(1), 2 * 60 + 41));
+*/
     public static final Supplier<Block> GINGERBREAD_BLOCK = regWithItem("gingerbread", () ->
             new Block(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.TERRACOTTA_ORANGE)
@@ -191,6 +206,11 @@ public class ModRegistry {
                     .mapColor(MapColor.NONE)
                     .strength(0.5f)));
 
+    public static final Supplier<DataComponentType<CompoundTag>> CONTAINER_BLOCK_ENTITY_TAG = regDataComponentType("container_block_entity", b -> b.persistent(CompoundTag.CODEC));
+
+    public static <T> Supplier<DataComponentType<T>> regDataComponentType(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
+        return RegHelper.registerDataComponent(SnowySpirit.res(name), () -> builderOperator.apply(DataComponentType.builder()).build());
+    }
 
     public static <T extends Item> Supplier<T> regItem(String name, Supplier<T> sup) {
         return RegHelper.registerItem(SnowySpirit.res(name), sup);
@@ -209,7 +229,7 @@ public class ModRegistry {
     }
 
     public static <T extends Block> Supplier<T> rewWithItem(String name, Supplier<T> blockSup, Item.Properties properties) {
-        return RegHelper.registerBlockWithItem(SnowySpirit.res(name),blockSup, properties);
+        return RegHelper.registerBlockWithItem(SnowySpirit.res(name), blockSup, properties);
     }
 
     public static <T extends Entity> Supplier<EntityType<T>> regEntity(String name, Supplier<EntityType.Builder<T>> builder) {

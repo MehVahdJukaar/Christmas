@@ -30,7 +30,7 @@ dependencies {
     if (isMyPc) {
         modImplementation("net.mehvahdjukaar:moonlight-fabric:${moonlight_version}")
     } else {
-        modImplementation("curse.maven:selene-499980:5890786")
+        modImplementation("curse.maven:selene-499980:5913547")
     }
 
     modImplementation("curse.maven:yacl-667299:4574163")
@@ -41,7 +41,11 @@ dependencies {
 
 
     modCompileOnly ("curse.maven:fabric-seasons-413523:4576886")
-    modCompileOnly("net.mehvahdjukaar:supplementaries-fabric:${project.supplementaries_version}")
+    if(isMyPc) {
+        modImplementation("net.mehvahdjukaar:supplementaries:${project.supplementaries_version}")
+    } else {
+        modImplementation("curse.maven:supplementaries-412082:5923344")
+    }
     modCompileOnly("curse.maven:farmers-delight-fabric-482834:4061213")
     modCompileOnly "com.terraformersmc:modmenu:4.0.6", {
         exclude module: "fabric-api"

@@ -1,7 +1,6 @@
 package net.mehvahdjukaar.snowyspirit.common.entity;
 
 import com.google.common.collect.Lists;
-import com.google.common.graph.Network;
 import net.mehvahdjukaar.moonlight.api.entity.IControllableVehicle;
 import net.mehvahdjukaar.moonlight.api.entity.IExtraClientSpawnData;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
@@ -10,7 +9,6 @@ import net.mehvahdjukaar.moonlight.api.set.BlocksColorAPI;
 import net.mehvahdjukaar.moonlight.api.set.wood.WoodType;
 import net.mehvahdjukaar.moonlight.api.set.wood.WoodTypeRegistry;
 import net.mehvahdjukaar.snowyspirit.client.SledSoundInstance;
-import net.mehvahdjukaar.snowyspirit.common.network.ModMessages;
 import net.mehvahdjukaar.snowyspirit.common.network.ServerBoundUpdateSledState;
 import net.mehvahdjukaar.snowyspirit.configs.CommonConfigs;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
@@ -23,7 +21,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -154,14 +152,14 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
     }
 
     @Override
-    public void writeSpawnData(FriendlyByteBuf buffer) {
+    public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
         //fabric is having issues for some reason... sometimes wood is set sometimes not
-        buffer.writeUtf( this.getWoodType().toString());
+        buffer.writeUtf(this.getWoodType().toString());
     }
 
     //all of this to sync that damn wolf
     @Override
-    public void readSpawnData(FriendlyByteBuf additionalData) {
+    public void readSpawnData(RegistryFriendlyByteBuf additionalData) {
         if (level().isClientSide) {
             SledSoundInstance.playAt(this);
         }
@@ -1000,7 +998,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
     //----passenger stuff-----
 
     //TODO: fix
-   // @Override
+    // @Override
     public double getPassengersRidingOffset() {
         return 0.2D + this.getAdditionalY() + (this.getSeatType() != null ? 0.0615 : 0);
     }
@@ -1200,7 +1198,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
                     this.clampRotation(passenger);
                 }
                 Vec3 vec3 = (new Vec3(zPos, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
-                setPos.accept(passenger,this.getX() + vec3.x, this.getY() + yPos, this.getZ() + vec3.z);
+                setPos.accept(passenger, this.getX() + vec3.x, this.getY() + yPos, this.getZ() + vec3.z);
 
 
                 if (passenger instanceof Animal animal && isMoreThanOneOnBoard) {

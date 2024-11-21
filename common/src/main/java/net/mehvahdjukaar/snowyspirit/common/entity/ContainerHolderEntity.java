@@ -1,5 +1,6 @@
 package net.mehvahdjukaar.snowyspirit.common.entity;
 
+import com.mojang.serialization.JsonOps;
 import dev.architectury.injectables.annotations.PlatformOnly;
 import net.mehvahdjukaar.moonlight.api.entity.IExtraClientSpawnData;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
@@ -7,10 +8,10 @@ import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.integration.supp.SuppCompat;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
 import net.mehvahdjukaar.snowyspirit.reg.ModTags;
-import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -18,6 +19,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
@@ -100,23 +102,23 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return PlatHelper.getEntitySpawnPacket(this);
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
+        return PlatHelper.getEntitySpawnPacket(this, serverEntity);
     }
 
     @Override
-    public void writeSpawnData(FriendlyByteBuf buffer) {
-        buffer.writeItem(this.containerStack);
+    public void writeSpawnData(RegistryFriendlyByteBuf buf) {
+        ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, this.containerStack);
     }
 
     @Override
-    public void readSpawnData(FriendlyByteBuf additionalData) {
-        this.setContainerItem(additionalData.readItem());
+    public void readSpawnData(RegistryFriendlyByteBuf additionalData) {
+        this.setContainerItem(ItemStack.OPTIONAL_STREAM_CODEC.decode(additionalData));
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        this.setContainerItem(ItemStack.of(tag.getCompound("ContainerItem")));
+        this.setContainerItem(ItemStack.OPTIONAL_CODEC.decode(NbtOps.INSTANCE, tag.getCompound("ContainerItem")).getOrThrow().getFirst());
         if (innerBlockEntity == null) {
             int aaa = 1;
         } else innerBlockEntity.load(tag);

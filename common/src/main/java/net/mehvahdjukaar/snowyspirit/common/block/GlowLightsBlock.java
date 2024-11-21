@@ -143,7 +143,7 @@ public class GlowLightsBlock extends WaterBlock implements EntityBlock, IColored
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter worldIn, BlockPos pos, PathComputationType type) {
+    protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
     }
 

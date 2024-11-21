@@ -5,19 +5,17 @@ import net.mehvahdjukaar.snowyspirit.common.wreath.ClientEvents;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.neoforge.event.TickEvent;
 
-@Mod.EventBusSubscriber(modid = SnowySpirit.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = SnowySpirit.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
 public class SnowySpiritForgeClient {
 
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void tickEvent(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            ClientEvents.tickEvent();
-        }
+    public static void tickEvent(ClientTickEvent.Post event) {
+        ClientEvents.tickEvent();
     }
 
     @SuppressWarnings("ConstantConditions")

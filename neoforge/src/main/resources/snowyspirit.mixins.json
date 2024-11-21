@@ -1,12 +1,11 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.mehvahdjukaar.snowyspirit.mixins.forge",
+  "package": "net.mehvahdjukaar.snowyspirit.mixins.neoforge",
   "compatibilityLevel": "JAVA_16",
   "client": [
   ],
   "mixins": [
-    "SelfContainerHolderEntityMixin",
     "SelfGlowLightsBlockMixin"
   ],
   "injectors": {

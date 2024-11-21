@@ -5,7 +5,7 @@
     {"item": "minecraft:glowstone_dust"},
     {"item": "minecraft:diamond"},
     {"item": "amethyst_shard"},
-    {"tag": "forge:string"}
+    {"tag": "c:string"}
   ],
   "result": {
     "id": "snowyspirit:glow_lights_prismatic"

@@ -3,7 +3,7 @@
   "group": "gumdrop",
   "ingredients": [
     {"item": "minecraft:sugar"},
-    {"tag": "forge:dyes/black"}
+    {"tag": "c:dyes/black"}
   ],
   "result": {
     "id": "snowyspirit:gumdrop_black"

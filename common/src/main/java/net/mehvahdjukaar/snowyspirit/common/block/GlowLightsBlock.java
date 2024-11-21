@@ -201,9 +201,10 @@ public class GlowLightsBlock extends WaterBlock implements EntityBlock, IColored
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player pPlayer, InteractionHand pHand, BlockHitResult hitResult) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                              Player pPlayer, InteractionHand pHand, BlockHitResult hitResult) {
         if (stack.getItem() instanceof ShearsItem) {
-            var drops = this.shearAction(pPlayer, stack, level, pos, 0);
+            var drops = this.shearAction(pPlayer, stack, level, pos);
             drops.forEach(d -> {
                 ItemEntity ent = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, d);
                 ent.setDefaultPickUpDelay();
@@ -218,7 +219,7 @@ public class GlowLightsBlock extends WaterBlock implements EntityBlock, IColored
         return super.useItemOn(stack, state, level, pos, pPlayer, pHand, hitResult);
     }
 
-    private List<ItemStack> shearAction(@Nullable Player player, ItemStack item, Level world, BlockPos pos, int fortune) {
+    private List<ItemStack> shearAction(@Nullable Player player, ItemStack item, Level world, BlockPos pos) {
         if (world.getBlockEntity(pos) instanceof GlowLightsBlockTile tile) {
             if (!world.isClientSide()) {
                 world.setBlockAndUpdate(pos, tile.getHeldBlock());

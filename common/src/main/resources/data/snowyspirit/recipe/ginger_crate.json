@@ -17,7 +17,7 @@
   "conditions": [
     {
       "modid": "farmersdelight",
-      "type": "forge:mod_loaded"
+      "type": "fabric:mod_loaded"
     },
     {
       "type": "snowyspirit:flag",

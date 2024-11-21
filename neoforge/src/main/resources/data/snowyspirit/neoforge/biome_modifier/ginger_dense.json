@@ -1,5 +1,5 @@
 {
-  "type": "forge:add_features",
+  "type": "neoforge:add_features",
   "biomes": "#snowyspirit:has_wild_ginger_dense",
   "features": "snowyspirit:wild_ginger_dense",
   "step": "vegetal_decoration"

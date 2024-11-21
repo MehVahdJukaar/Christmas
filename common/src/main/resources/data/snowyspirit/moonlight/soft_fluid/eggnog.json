@@ -1,0 +1,19 @@
+{
+  "color": "#fce7bc",
+  "containers": [
+    {
+      "filled": [
+        "snowyspirit:eggnog"
+      ],
+      "empty": "minecraft:glass_bottle",
+      "capacity": "BOTTLE"
+    }
+  ],
+  "food": {
+    "item": "snowyspirit:eggnog"
+  },
+  "flowing_texture": "moonlight:block/soft_fluids/potion_flow",
+  "from_mod": "neapolitan",
+  "still_texture": "moonlight:block/soft_fluids/soup_liquid",
+  "translation_key": "item.snowyspirit.eggnog"
+}

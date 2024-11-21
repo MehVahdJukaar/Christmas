@@ -1,4 +1,4 @@
-package net.mehvahdjukaar.snowyspirit.mixins.forge;
+package net.mehvahdjukaar.snowyspirit.mixins.neoforge;
 
 import net.mehvahdjukaar.snowyspirit.common.block.GlowLightsBlock;
 import net.minecraft.core.BlockPos;
@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.IShearable;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,6 +33,7 @@ public abstract class SelfGlowLightsBlockMixin extends Block implements IShearab
 
     @Override
     public @NotNull List<ItemStack> onSheared(@Nullable Player player, @NotNull ItemStack item, Level level, BlockPos pos, int fortune) {
+        Tags.Blocks
         return shearAction(player, item, level, pos, fortune);
     }
 }

@@ -1,7 +1,8 @@
 package net.mehvahdjukaar.snowyspirit.integration.configured;
 
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mrcrayfish.configured.api.IModConfig;
+import com.mrcrayfish.configured.client.util.ScreenUtil;
 import net.mehvahdjukaar.moonlight.api.integration.configured.CustomConfigScreen;
 import net.mehvahdjukaar.moonlight.api.integration.configured.CustomConfigSelectScreen;
 import net.mehvahdjukaar.moonlight.api.set.wood.WoodTypeRegistry;
@@ -23,7 +24,7 @@ import java.util.Map;
 //credits to MrCrayfish's Configured Mod
 public class ModConfigScreen extends CustomConfigScreen {
 
-    private static final Map<String, ItemStack> ICONS = new HashMap<>();
+    private static final Map<String, ItemStack> CUSTOM_ICONS = new HashMap<>();
 
     static {
         addIcon("sleds", ModRegistry.SLED_ITEMS.get(WoodTypeRegistry.OAK_TYPE));
@@ -39,18 +40,18 @@ public class ModConfigScreen extends CustomConfigScreen {
 
     public ModConfigScreen(CustomConfigSelectScreen parent, IModConfig config) {
         super(parent, config);
-        this.icons.putAll(ICONS);
+        this.icons.putAll(CUSTOM_ICONS);
     }
 
-    public ModConfigScreen(String modId, ItemStack mainIcon, ResourceLocation background, Component title, Screen parent,
-                           IModConfig config) {
-        super(modId, mainIcon, background, title, parent, config);
-        this.icons.putAll(ICONS);
+    public ModConfigScreen(String modId, ItemStack mainIcon, Component title,
+                           Screen parent, IModConfig config) {
+        super(modId, mainIcon, title, parent, config);
+        this.icons.putAll(CUSTOM_ICONS);
     }
 
 
     private static void addIcon(String s, ItemLike i) {
-        ICONS.put(s, i.asItem().getDefaultInstance());
+        CUSTOM_ICONS.put(s, i.asItem().getDefaultInstance());
     }
 
     @Override
@@ -58,8 +59,8 @@ public class ModConfigScreen extends CustomConfigScreen {
     }
 
     @Override
-    public CustomConfigScreen createSubScreen(Component title) {
-        return new ModConfigScreen(this.modId, this.mainIcon, this.background, title, this, this.config);
+    public Factory getSubScreenFactory() {
+        return ModConfigScreen::new;
     }
 
     @Override

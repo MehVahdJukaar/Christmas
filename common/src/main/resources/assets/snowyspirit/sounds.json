@@ -1,12 +1,12 @@
 {
-  "music.winter": {
+  "music.a_carol": {
     "sounds": [
       {
-        "name": "snowyspirit:music/winter",
+        "name": "snowyspirit:music/a_carol",
         "stream": true
       }
     ],
-    "subtitle": "subtitle.snowyspirit.music.winter"
+    "subtitle": "subtitle.snowyspirit.music.a_carol"
   },
   "entity.sled": {
     "sounds": [

@@ -25,6 +25,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -99,17 +100,12 @@ public class ModRegistry {
     public static final Supplier<Item> EGGNOG = regItem(EGGNOG_NAME, EggnogItem::new);
 
     public static final String WINTER_DISC_NAME = "music_disc_winter";
-    public static final ResourceLocation WINTER_DISC_JUKEBOX = SnowySpirit.res("winter");
-    //TODO
-    //public static final Supplier<JukeboxSong> WINTER_DISC_IDENTIFIER = RegHelper.register(WINTER_DISC_JUKEBOX, () -> {
-    //    return new JukeboxSong(ModSounds.WINTER_MUSIC.get(), Component.translatable(Util.makeDescriptionId("jukebox_song", WINTER_DISC_JUKEBOX)));
-    //}, Registries.JUKEBOX_SONG);
+      public static final Supplier<Item> WINTER_DISC = regItem(WINTER_DISC_NAME,
+            () -> new Item(new Item.Properties()
+                    .rarity(Rarity.RARE)
+                    .jukeboxPlayable(ModSounds.WINTER_DISC_JUKEBOX)
+                    .stacksTo(1)));
 
-
-    /* Old code public static final Supplier<Item> WINTER_DISC = regItem(WINTER_DISC_NAME,
-            () -> new MusicDiscItem(14, ModSounds.WINTER_MUSIC, new Item.Properties()
-                    .rarity(Rarity.RARE).stacksTo(1), 2 * 60 + 41));
-*/
     public static final Supplier<Block> GINGERBREAD_BLOCK = regWithItem("gingerbread", () ->
             new Block(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.TERRACOTTA_ORANGE)

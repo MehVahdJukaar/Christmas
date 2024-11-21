@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "snowyspirit:gingerbread"
+    }
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "snowyspirit:flag",
+      "flag": "ginger"
+    }
+  ],
+  "result": {
+    "id": "snowyspirit:gingerbread_stairs",
+    "count": 4
+  }
+}

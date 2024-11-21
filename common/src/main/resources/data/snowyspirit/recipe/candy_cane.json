@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {"item": "minecraft:sugar"},
+    {"item": "minecraft:honeycomb"}
+  ],
+  "result": {
+    "id": "snowyspirit:candy_cane",
+    "count": 6
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "snowyspirit:flag",
+      "flag": "candy_cane"
+    }
+  ]
+}

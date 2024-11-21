@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "glow_lights",
+  "ingredients": [
+    {"item": "minecraft:glowstone_dust"},
+    {"tag": "forge:dyes/cyan"},
+    {"item": "amethyst_shard"},
+    {"item": "amethyst_shard"},
+    {"tag": "forge:string"}
+  ],
+  "result": {
+    "id": "snowyspirit:glow_lights_cyan"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "snowyspirit:flag",
+      "flag": "glow_lights"
+    }
+  ]
+}

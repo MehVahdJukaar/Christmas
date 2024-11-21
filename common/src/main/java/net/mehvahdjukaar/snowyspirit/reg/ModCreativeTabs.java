@@ -23,7 +23,7 @@ public class ModCreativeTabs {
 
     public static final RegSupplier<CreativeModeTab> MOD_TAB = !CommonConfigs.MOD_TAB.get() ? null :
             RegHelper.registerCreativeModeTab(SnowySpirit.res(SnowySpirit.MOD_ID), builder ->
-                    builder.title(Component.translatable("itemGroup.snowyspirit")).icon(
+                    builder.title(Component.translatable("tab.snowyspirit")).icon(
                             () -> ModRegistry.SLED_ITEMS.get(WoodTypeRegistry.OAK_TYPE).getDefaultInstance()));
 
 

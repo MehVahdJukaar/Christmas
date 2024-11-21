@@ -1,0 +1,8 @@
+{
+  "comparator_output": 9,
+  "description": {
+    "translate": "jukebox_song.snowyspirit.a_carol"
+  },
+  "length_in_seconds": 161,
+  "sound_event": "snowyspirit:music_disc.a_carol"
+}

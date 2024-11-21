@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {"item": "snowyspirit:ginger_crate"}
+  ],
+  "result": {
+    "id": "snowyspirit:ginger",
+    "count": 9
+  },
+  "conditions": [
+    {
+      "modid": "farmersdelight",
+      "type": "forge:mod_loaded"
+    },
+    {
+      "type": "snowyspirit:flag",
+      "flag": "ginger"
+    }
+  ]
+}

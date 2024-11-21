@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {"item": "snowyspirit:candy_cane"},
+    {"item": "snowyspirit:candy_cane"},
+    {"item": "snowyspirit:candy_cane"},
+    {"item": "snowyspirit:candy_cane"}
+  ],
+  "result": {
+    "id": "snowyspirit:candy_cane_block"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "snowyspirit:flag",
+      "flag": "candy_cane"
+    }
+  ]
+}

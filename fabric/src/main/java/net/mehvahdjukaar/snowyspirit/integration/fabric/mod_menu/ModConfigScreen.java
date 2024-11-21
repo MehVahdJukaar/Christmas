@@ -1,7 +1,7 @@
 package net.mehvahdjukaar.snowyspirit.integration.fabric.mod_menu;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.mehvahdjukaar.moonlight.api.client.gui.UrlButton;
+import net.mehvahdjukaar.moonlight.api.client.gui.MediaButton;
 import net.mehvahdjukaar.moonlight.api.platform.configs.fabric.FabricConfigListScreen;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.configs.ClientConfigs;
@@ -34,7 +34,7 @@ public class ModConfigScreen extends FabricConfigListScreen {
             this.minecraft.setScreen(this.parent);
         }).bounds(centerX - 45, y, 90, 20).build());
 
-        UrlButton.addMyMediaButtons(this,centerX, y,"snowy-spirit", "snowyspirit");
+        //TODO
     }
 
     @Override

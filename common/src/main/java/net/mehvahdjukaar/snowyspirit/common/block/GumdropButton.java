@@ -63,7 +63,6 @@ public class GumdropButton extends DirectionalBlock {
     public final DyeColor color;
 
 
-
     public GumdropButton(Properties properties, DyeColor color) {
         super(properties.mapColor(color));
         this.color = color;
@@ -119,7 +118,7 @@ public class GumdropButton extends DirectionalBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+    protected InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult hitResult) {
         if (pState.getValue(POWERED)) {
             return InteractionResult.CONSUME;
         } else {
@@ -130,6 +129,7 @@ public class GumdropButton extends DirectionalBlock {
         }
     }
 
+    
     public void press(BlockState pState, Level pLevel, BlockPos pPos) {
         pLevel.setBlock(pPos, pState.setValue(POWERED, true), 3);
         this.updateNeighbours(pState, pLevel, pPos);

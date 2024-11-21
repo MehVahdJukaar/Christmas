@@ -57,7 +57,7 @@ public class SnowGlobeBlock extends WaterBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+    protected InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player player, BlockHitResult hitResult) {
         if (pState.getValue(SNOWING)) {
             return InteractionResult.CONSUME;
         } else {

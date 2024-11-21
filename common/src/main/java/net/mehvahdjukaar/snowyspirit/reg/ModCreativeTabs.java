@@ -34,8 +34,8 @@ public class ModCreativeTabs {
     public static void registerItemsToTabs(RegHelper.ItemToTabEvent e) {
 
         after(e, i -> i.getItem().components().get(DataComponents.JUKEBOX_PLAYABLE) != null, CreativeModeTabs.TOOLS_AND_UTILITIES,
-                ModRegistry.WINTER_DISC_NAME,
-                ModRegistry.WINTER_DISC);
+                ModRegistry.WINTER_DISC_NAME/*,
+                ModRegistry.WINTER_DISC*/); // TODO
 
         before(e, Items.HONEY_BOTTLE, CreativeModeTabs.FOOD_AND_DRINKS,
                 ModRegistry.EGGNOG_NAME,
@@ -117,12 +117,12 @@ public class ModCreativeTabs {
 
 
     private static void after(RegHelper.ItemToTabEvent event, TagKey<Item> target,
-                              ResourceKey<CreativeModeTab>  tab, String key, Supplier<?>... items) {
+                              ResourceKey<CreativeModeTab> tab, String key, Supplier<?>... items) {
         after(event, i -> i.is(target), tab, key, items);
     }
 
     private static void after(RegHelper.ItemToTabEvent event, Item target,
-                              ResourceKey<CreativeModeTab>  tab, String key, Supplier<?>... items) {
+                              ResourceKey<CreativeModeTab> tab, String key, Supplier<?>... items) {
         after(event, i -> i.is(target), tab, key, items);
     }
 
@@ -137,7 +137,7 @@ public class ModCreativeTabs {
     }
 
     private static void before(RegHelper.ItemToTabEvent event, TagKey<Item> target,
-                               ResourceKey<CreativeModeTab>  tab, String key, Supplier<?>... items) {
+                               ResourceKey<CreativeModeTab> tab, String key, Supplier<?>... items) {
         before(event, i -> i.is(target), tab, key, items);
     }
 
@@ -146,7 +146,7 @@ public class ModCreativeTabs {
     }
 
     private static void before(RegHelper.ItemToTabEvent event, Predicate<ItemStack> targetPred,
-                               ResourceKey<CreativeModeTab>  tab, String key, Supplier<?>... items) {
+                               ResourceKey<CreativeModeTab> tab, String key, Supplier<?>... items) {
         if (CommonConfigs.isEnabled(key)) {
             if (MOD_TAB != null) tab = MOD_TAB.getHolder().unwrapKey().get();
             ItemLike[] entries = Arrays.stream(items).map(s -> (ItemLike) s.get()).toArray(ItemLike[]::new);
@@ -155,7 +155,7 @@ public class ModCreativeTabs {
     }
 
     private static void add(RegHelper.ItemToTabEvent event,
-                            ResourceKey<CreativeModeTab>  tab, String key, Supplier<?>... items) {
+                            ResourceKey<CreativeModeTab> tab, String key, Supplier<?>... items) {
         if (CommonConfigs.isEnabled(key)) {
             if (MOD_TAB != null) tab = MOD_TAB.getHolder().unwrapKey().get();
             ItemLike[] entries = Arrays.stream(items).map((s -> (ItemLike) (s.get()))).toArray(ItemLike[]::new);

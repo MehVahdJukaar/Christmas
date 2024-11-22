@@ -2,9 +2,11 @@ package net.mehvahdjukaar.snowyspirit.common.items;
 
 import net.mehvahdjukaar.snowyspirit.common.block.GlowLightsBlockTile;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -12,6 +14,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class GlowLightsItem extends Item {
@@ -31,16 +34,23 @@ public class GlowLightsItem extends Item {
             BlockPos pos = context.getClickedPos();
             BlockState clicked = level.getBlockState(pos);
             if (GlowLightsBlockTile.isValidBlock(clicked, pos, level)) {
-                level.removeBlock(pos, false);
                 BlockState glowLight = this.block.getStateForPlacement(new BlockPlaceContext(context));
-                if(glowLight != null) {
-                    level.setBlockAndUpdate(pos, glowLight);
+                if (glowLight != null) {
+                    if (level instanceof ServerLevel sLevel) {
+                        BlockEntity blockEntity = sLevel.getBlockEntity(pos);
+                        Clearable.tryClear(blockEntity);
+                    }
+
+                    level.setBlock(pos, glowLight, 2);
+                    if (level instanceof ServerLevel sLevel) {
+                        sLevel.blockUpdated(pos, glowLight.getBlock());
+                    }
 
                     if (level.getBlockEntity(pos) instanceof GlowLightsBlockTile tile) {
 
                         SoundEvent sound = SoundEvents.AMETHYST_CLUSTER_HIT;
                         tile.acceptBlock(clicked);
-                        level.playSound(player, pos, sound, SoundSource.BLOCKS, (0.8f + 1.0F) / 2.0F,1 * 1.3F);
+                        level.playSound(player, pos, sound, SoundSource.BLOCKS, (0.8f + 1.0F) / 2.0F, 1 * 1.3F);
                         if (!player.isCreative() && !level.isClientSide()) {
                             context.getItemInHand().shrink(1);
                         }

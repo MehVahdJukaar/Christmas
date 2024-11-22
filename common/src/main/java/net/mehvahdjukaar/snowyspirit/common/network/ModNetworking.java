@@ -2,7 +2,7 @@ package net.mehvahdjukaar.snowyspirit.common.network;
 
 import net.mehvahdjukaar.moonlight.api.platform.network.NetworkHelper;
 
-public class ModMessages {
+public class ModNetworking {
 
     public static void init() {
         System.out.println("ModMessages init");

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.mehvahdjukaar.moonlight.api.client.util.RenderUtil;
+import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -27,6 +28,8 @@ public class ClientEvents {
         }
     }
 
+    private static final boolean FORGE = PlatHelper.getPlatform().isForge();
+
     public static void renderWreaths(PoseStack poseStack) {
         Minecraft mc = Minecraft.getInstance();
         Level level = mc.player.level();
@@ -38,7 +41,7 @@ public class ClientEvents {
             dist *= dist;
 
             poseStack.pushPose();
-            poseStack.mulPose(new Quaternionf(camera.rotation()).invert());
+            if (FORGE) poseStack.mulPose(new Quaternionf(camera.rotation()).invert());
 
             MultiBufferSource.BufferSource bufferSource = mc.renderBuffers().bufferSource();
             RenderSystem.enableDepthTest();

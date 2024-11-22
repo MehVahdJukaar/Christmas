@@ -3,6 +3,7 @@ package net.mehvahdjukaar.snowyspirit.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.mehvahdjukaar.snowyspirit.common.entity.ContainerHolderEntity;
+import net.mehvahdjukaar.snowyspirit.common.entity.SledEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -30,7 +31,7 @@ public class ContainerHolderEntityRenderer<T extends ContainerHolderEntity> exte
     public void render(T entity, float yRot, float partialTicks, PoseStack poseStack, MultiBufferSource pBuffer, int pPackedLight) {
 
         Entity vehicle = entity.getVehicle();
-        if( vehicle == null || (vehicle.isControlledByLocalInstance()
+        if (vehicle == null || (vehicle.isControlledByLocalInstance()
                 && Minecraft.getInstance().options.getCameraType().isFirstPerson())) return;
 
         poseStack.pushPose();
@@ -39,17 +40,28 @@ public class ContainerHolderEntityRenderer<T extends ContainerHolderEntity> exte
         float xRot = vehicle.getViewXRot(partialTicks);
         yRot = vehicle.getViewYRot(partialTicks);
 
-       poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - yRot));
-       poseStack.mulPose(Axis.XN.rotationDegrees(xRot));
+        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - yRot));
+        poseStack.mulPose(Axis.XN.rotationDegrees(xRot));
 
-        float f = (float) entity.getHurtTime() - partialTicks;
-        float f1 = entity.getDamage() - partialTicks;
-        if (f1 < 0.0F) {
-            f1 = 0.0F;
+        float hurtTime = (float) entity.getHurtTime() - partialTicks;
+        float damage = entity.getDamage() - partialTicks;
+        int dir = 1;
+
+        if (vehicle instanceof SledEntity se) {
+            var sledHurt = se.getHurtTime() - partialTicks;
+            if (sledHurt > hurtTime) {
+                hurtTime = sledHurt;
+                damage = se.getDamage() - partialTicks;
+                dir = se.getHurtDir();
+            }
         }
 
-        if (f > 0.0F) {
-           poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F));
+        if (hurtTime > 0.0F) {
+            if (damage < 0.0F) {
+                damage = 0.0F;
+            }
+            float zRot = Mth.sin(hurtTime) * hurtTime * damage / 10.0F * dir;
+            poseStack.mulPose(Axis.ZP.rotationDegrees(zRot));
         }
 
 

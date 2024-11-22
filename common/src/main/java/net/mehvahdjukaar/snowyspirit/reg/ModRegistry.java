@@ -8,7 +8,6 @@ import net.mehvahdjukaar.moonlight.api.platform.RegHelper;
 import net.mehvahdjukaar.moonlight.api.set.BlockSetAPI;
 import net.mehvahdjukaar.moonlight.api.set.BlocksColorAPI;
 import net.mehvahdjukaar.moonlight.api.set.wood.WoodType;
-import net.mehvahdjukaar.moonlight.api.trades.ModItemListing;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.common.block.*;
 import net.mehvahdjukaar.snowyspirit.common.entity.ContainerHolderEntity;
@@ -19,20 +18,13 @@ import net.mehvahdjukaar.snowyspirit.common.items.CandyCaneItem;
 import net.mehvahdjukaar.snowyspirit.common.items.EggnogItem;
 import net.mehvahdjukaar.snowyspirit.common.items.GlowLightsItem;
 import net.mehvahdjukaar.snowyspirit.common.items.SledItem;
-import net.mehvahdjukaar.snowyspirit.configs.CommonConfigs;
 import net.minecraft.Util;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.monster.Giant;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.*;
@@ -42,7 +34,10 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.material.MapColor;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -80,13 +75,13 @@ public class ModRegistry {
             () -> EntityType.Builder.of(GingyEntity::new, MobCategory.MISC)
                     .immuneTo(Blocks.POWDER_SNOW)
                     .sized(6 / 16F, 1)
-                    .ridingOffset( -6 / 16f)
+                    .ridingOffset(-6 / 16f)
                     .clientTrackingRange(8));
 
     public static final Supplier<EntityType<MongoEntity>> GINGERBREAD_GIANT = regEntity("gingerbread_giant",
             () -> EntityType.Builder.of(MongoEntity::new, MobCategory.MISC)
                     .immuneTo(Blocks.POWDER_SNOW)
-                    .sized(6/16f * 10f, 11.0F)
+                    .sized(6 / 16f * 10f, 11.0F)
                     .passengerAttachments(11.0f)
                     .clientTrackingRange(10));
 
@@ -103,6 +98,7 @@ public class ModRegistry {
     public static final Supplier<EntityType<ContainerHolderEntity>> CONTAINER_ENTITY = regEntity("container_entity",
             () -> EntityType.Builder.of(ContainerHolderEntity::new, MobCategory.MISC)
                     .sized(0.75f, 0.75f)
+                    .ridingOffset(1 / 16f)
                     .clientTrackingRange(8));
 
 
@@ -126,7 +122,7 @@ public class ModRegistry {
     public static final Supplier<Item> EGGNOG = regItem(EGGNOG_NAME, EggnogItem::new);
 
     public static final String WINTER_DISC_NAME = "music_disc_a_carol";
-      public static final Supplier<Item> WINTER_DISC = regItem(WINTER_DISC_NAME,
+    public static final Supplier<Item> WINTER_DISC = regItem(WINTER_DISC_NAME,
             () -> new Item(new Item.Properties()
                     .rarity(Rarity.RARE)
                     .jukeboxPlayable(ModSounds.WINTER_DISC_JUKEBOX)
@@ -223,7 +219,7 @@ public class ModRegistry {
 
     public static final String SNOW_GLOBE_NAME = "snow_globe";
     public static final Supplier<Block> SNOW_GLOBE = regWithItem(SNOW_GLOBE_NAME, () ->
-            new SnowGlobeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+            new SnowGlobeBlock(BlockBehaviour.Properties.of()
                     .sound(SoundType.GLASS)
                     .mapColor(MapColor.NONE)
                     .strength(0.5f)));

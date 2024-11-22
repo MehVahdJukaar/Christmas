@@ -1,5 +1,6 @@
 package net.mehvahdjukaar.snowyspirit.reg;
 
+import net.mehvahdjukaar.moonlight.api.platform.RegHelper;
 import net.mehvahdjukaar.moonlight.api.set.wood.WoodType;
 import net.mehvahdjukaar.snowyspirit.common.ai.WinterVillagerAI;
 import net.mehvahdjukaar.snowyspirit.common.entity.SledEntity;
@@ -9,7 +10,6 @@ import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.block.DispenserBlock;
 
 public class ModSetup {
@@ -18,9 +18,17 @@ public class ModSetup {
     public static void setup() {
 
         WinterVillagerAI.setup();
-
+        registerBurnTimes();
         ModRegistry.SLED_ITEMS.forEach((key, value) ->
                 DispenserBlock.registerBehavior(value, new SledDispenserBehavior(key)));
+    }
+
+
+    private static void registerBurnTimes() {
+        for (var b : ModRegistry.GLOW_LIGHTS_BLOCKS.values()) {
+            RegHelper.registerBlockFlammability(b.get(), 30, 60);
+        }
+        RegHelper.registerBlockFlammability(ModRegistry.GINGER_WILD.get(), 60, 100);
     }
 
 

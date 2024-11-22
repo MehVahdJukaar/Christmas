@@ -1,5 +1,6 @@
 package net.mehvahdjukaar.snowyspirit.integration;
 
+import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.platform.RegHelper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -8,8 +9,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import vectorwing.farmersdelight.FarmersDelight;
-import vectorwing.farmersdelight.common.registry.ModCreativeTabs;
 
 import java.util.function.Supplier;
 
@@ -20,9 +19,12 @@ public class FDCompat {
 
     public static void init() {
         RegHelper.addItemsToTabsRegistration(FDCompat::addItemsToTabs);
+
+        PlatHelper.addCommonSetup(() -> RegHelper.registerBlockFlammability(GINGER_CRATE.get(),
+                5, 20));
     }
 
-    public static void addItemsToTabs(RegHelper.ItemToTabEvent event){
+    public static void addItemsToTabs(RegHelper.ItemToTabEvent event) {
         event.add(ResourceKey.create(Registries.CREATIVE_MODE_TAB,
                 ResourceLocation.parse("farmersdelight:farmersdelight")), GINGER_CRATE.get());
     }

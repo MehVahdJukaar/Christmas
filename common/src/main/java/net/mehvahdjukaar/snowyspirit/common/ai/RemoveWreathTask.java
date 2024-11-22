@@ -5,7 +5,6 @@ import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.platform.network.NetworkHelper;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.common.network.ClientBoundSyncWreathMessage;
-import net.mehvahdjukaar.snowyspirit.common.network.ModMessages;
 import net.mehvahdjukaar.snowyspirit.common.wreath.WreathSavedData;
 import net.mehvahdjukaar.snowyspirit.reg.ModMemoryModules;
 import net.minecraft.core.BlockPos;

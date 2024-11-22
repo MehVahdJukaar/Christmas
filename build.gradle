@@ -109,37 +109,15 @@ subprojects {
                         requiredDependency "fabric-api"
                         requiredDependency "selene"
 
-                        optionalDependency "the-bumblezone-fabric"
-                        optionalDependency "decorative-blocks"
-                        optionalDependency("flan")
-                        optionalDependency("multi-item-lib")
-                        optionalDependency("snowy-spirit")
-                        optionalDependency("haunted-harvest")
-                        optionalDependency("model-gap-fix")
-                        optionalDependency("map-atlases")
-                        optionalDependency("farmers-delight-fabric")
+                        optionalDependency("supplementaries")
+                        optionalDependency("fabric-seasons")
                     }
                 } else {
                     relations {
                         requiredDependency("selene")
 
-                        optionalDependency("create")
-                        optionalDependency("quark")
-                        optionalDependency("cc-tweaked")
-                        optionalDependency("waystones")
-                        optionalDependency("roughly-enough-items")
-                        optionalDependency("jei")
-                        optionalDependency("model-gap-fix")
-                        optionalDependency("flywheel")
-                        optionalDependency("configured")
-                        optionalDependency("flan-forge")
-                        optionalDependency("haunted-harvest")
-                        optionalDependency("snowy-spirit")
-                        optionalDependency("map-atlases-forge")
-                        optionalDependency("decorative-blocks")
-                        optionalDependency("farmers-delight")
-                        optionalDependency("the-bumblezone-forge")
-                        optionalDependency("map-atlases-forge")
+                        optionalDependency("supplementaries")
+                        optionalDependency("serene-seasons")
                     }
                 }
             }

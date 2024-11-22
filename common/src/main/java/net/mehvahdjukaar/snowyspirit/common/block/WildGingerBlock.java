@@ -53,18 +53,6 @@ public class WildGingerBlock extends BushBlock implements BonemealableBlock {
         return false;
     }
 
-   // @Override
-   @PlatformOnly(PlatformOnly.FORGE)
-    public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-        return 60;
-    }
-
-   // @Override
-    @PlatformOnly(PlatformOnly.FORGE)
-    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-        return 100;
-    }
-
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
         return true;

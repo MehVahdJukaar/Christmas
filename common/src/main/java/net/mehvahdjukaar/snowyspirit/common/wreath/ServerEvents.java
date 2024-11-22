@@ -2,7 +2,6 @@ package net.mehvahdjukaar.snowyspirit.common.wreath;
 
 import net.mehvahdjukaar.moonlight.api.platform.network.NetworkHelper;
 import net.mehvahdjukaar.snowyspirit.common.network.ClientBoundSyncAllWreaths;
-import net.mehvahdjukaar.snowyspirit.common.network.ModMessages;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;

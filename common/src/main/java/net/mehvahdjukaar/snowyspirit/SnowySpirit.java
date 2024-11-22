@@ -4,7 +4,7 @@ package net.mehvahdjukaar.snowyspirit;
 import net.mehvahdjukaar.moonlight.api.platform.ClientHelper;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.platform.RegHelper;
-import net.mehvahdjukaar.snowyspirit.common.network.ModMessages;
+import net.mehvahdjukaar.snowyspirit.common.network.ModNetworking;
 import net.mehvahdjukaar.snowyspirit.configs.ClientConfigs;
 import net.mehvahdjukaar.snowyspirit.configs.CommonConfigs;
 import net.mehvahdjukaar.snowyspirit.dynamicpack.ClientDynamicResourcesHandler;
@@ -43,10 +43,8 @@ public class SnowySpirit {
         //TODO: check wolf height
         // add item burntime
         // add block burn time
-        // shear sound
-        // rethink shearable stuff
-        //flute pacifies
         //TODO: mongo screen rotation
+        //
         //hostile gingeerbread golems
         //mongo
         //sleds loose their chest
@@ -57,7 +55,7 @@ public class SnowySpirit {
 
         CommonConfigs.init();
 
-        ModMessages.init();
+        ModNetworking.init();
 
         RegHelper.registerSimpleRecipeCondition(SnowySpirit.res("flag"), CommonConfigs::isEnabled);
 
@@ -88,7 +86,6 @@ public class SnowySpirit {
         if (table.equals("minecraft:gameplay/sniffer_digging")) {
             event.addTableReference(SnowySpirit.res("injects/ginger_sniffer"));
         }
-
     }
 
 

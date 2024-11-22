@@ -1,7 +1,5 @@
-- added missing tags
-- fixed chest offset
-- fixed chest menu crash
-- buffed eggnog values
-- fixed glow light shearing
-- sniffers can sniff ginger flowers
-- ginger pig food
+- fixed wreath render on fabric
+- fixed snow globe loot
+- fixed sleds recipes
+- made some blocks flammable
+- sled chest will now wobble along with the sled

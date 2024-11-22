@@ -4,7 +4,6 @@ import net.mehvahdjukaar.moonlight.api.block.MimicBlockTile;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
 import net.mehvahdjukaar.snowyspirit.reg.ModTags;
 import net.minecraft.core.BlockPos;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;

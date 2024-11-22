@@ -64,7 +64,7 @@ subprojects {
 
     if (env.MODRINTH_TOKEN) {
         modrinth {
-            projectId = rootProject.mod_id
+            projectId = "snowy-spirit"
             uploadFile = tasks.remapJar
             gameVersions = versions
             if (modLoader == "forge") {

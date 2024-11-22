@@ -53,6 +53,8 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ContainerHolderEntity extends Entity implements Container, IExtraClientSpawnData, MenuProvider {
@@ -106,6 +108,12 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
             if (tag != null) innerBlockEntity.loadWithComponents(tag, registryAccess());
         }
     }
+
+    @Override
+    public @NotNull Vec3 getVehicleAttachmentPoint(Entity entity) {
+        return new Vec3(0, 0.3, 0);
+    }
+
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {

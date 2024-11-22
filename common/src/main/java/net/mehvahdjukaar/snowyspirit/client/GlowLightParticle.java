@@ -1,9 +1,7 @@
 package net.mehvahdjukaar.snowyspirit.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
-import net.mehvahdjukaar.moonlight.api.client.util.ParticleUtil;
-import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.util.math.MthUtils;
 import net.mehvahdjukaar.moonlight.core.client.MLRenderTypes;
 import net.mehvahdjukaar.snowyspirit.configs.ClientConfigs;
@@ -13,10 +11,9 @@ import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 public class GlowLightParticle extends TextureSheetParticle {
 
@@ -40,77 +37,57 @@ public class GlowLightParticle extends TextureSheetParticle {
         this.roll = (float) (Math.PI * this.random.nextFloat());
     }
 
+
     @Override
-    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
+    protected void renderRotatedQuad(VertexConsumer buffer, Quaternionf quaternionf,
+                                     float x, float y, float z, float partialTicks) {
         this.setSprite(sprites.get(0, 3));
 
-        Vec3 vec3 = renderInfo.getPosition();
-        float x = (float) (Mth.lerp(partialTicks, this.xo, this.x) - vec3.x());
-        float y = (float) (Mth.lerp(partialTicks, this.yo, this.y) - vec3.y());
-        float z = (float) (Mth.lerp(partialTicks, this.zo, this.z) - vec3.z());
-
         int lightColor = this.getLightColor(partialTicks);
-
-
-        Quaternionf quaternion;
-        if (this.roll == 0.0F) {
-            quaternion = renderInfo.rotation();
-        } else {
-            quaternion = new Quaternionf(renderInfo.rotation());
-            float i = Mth.lerp(partialTicks, this.oRoll, this.roll);
-            quaternion.mul(Axis.ZP.rotation(i));
-        }
-
-        Vector3f[] quadPos = new Vector3f[]{
-                new Vector3f(-1.0F, -1.0F, 0.0F),
-                new Vector3f(-1.0F, 1.0F, 0.0F),
-                new Vector3f(1.0F, 1.0F, 0.0F),
-                new Vector3f(1.0F, -1.0F, 0.0F)
-        };
-        for (var v : quadPos) {
-            v.rotate(quaternion);
-        }
-
         float size = this.getQuadSize(partialTicks);
 
         int mode = ClientConfigs.PARTICLE_MODE.get() - 1;
 
+        PoseStack poseStack = new PoseStack();
+        poseStack.translate(x, y, z);
+        poseStack.mulPose(quaternionf);
+        Matrix4f matrix4f = poseStack.last().pose();
+
         if (mode == 0) {
-            renderQuad(sprite, buffer, x, y, z, lightColor, quadPos, size,
+            renderQuad(sprite, buffer, lightColor, matrix4f, size,
                     rCol, gCol, bCol, alpha * .4f);
 
             this.setSprite(sprites.get(2, 3));
-            renderQuad(sprite, buffer, x, y, z, lightColor, quadPos, size,
+            renderQuad(sprite, buffer, lightColor, matrix4f, size,
                     0.5f + rCol / 2f, 0.5f + gCol / 2f, 0.5f + bCol / 2f, alpha * 0.6f);
         } else if (mode == 1) {
-            renderQuad(sprite, buffer, x, y, z, lightColor, quadPos, size * 1.5f,
+            renderQuad(sprite, buffer, lightColor, matrix4f, size * 1.5f,
                     rCol, gCol, bCol, alpha * .3f);
 
-            renderQuad(sprite, buffer, x, y, z, lightColor, quadPos, size,
+            renderQuad(sprite, buffer, lightColor, matrix4f, size,
                     0.5f + rCol / 2f, 0.5f + gCol / 2f, 0.5f + bCol / 2f, alpha * .4f);
 
             this.setSprite(sprites.get(2, 3));
-            renderQuad(sprite, buffer, x, y, z, lightColor, quadPos, size,
+            renderQuad(sprite, buffer, lightColor, matrix4f, size,
                     1, 1, 1, alpha * 0.3f);
         } else if (mode == 2) {
-            renderQuad(sprite, buffer, x, y, z, lightColor, quadPos, size,
+            renderQuad(sprite, buffer, lightColor, matrix4f, size,
                     rCol, gCol, bCol, alpha * .8f);
 
             this.setSprite(sprites.get(2, 3));
-            renderQuad(sprite, buffer, x, y, z, lightColor, quadPos, size,
+            renderQuad(sprite, buffer, lightColor, matrix4f, size,
                     1, 1, 1, alpha * 0.3f);
         }
 
 
         this.setSprite(sprites.get(3, 3));
-        renderQuad(sprite, buffer, x, y, z, lightColor, quadPos, size,
+        renderQuad(sprite, buffer, lightColor, matrix4f, size,
                 1, 1, 1, alpha * 0.5f);
-
 
     }
 
-    private static void renderQuad(TextureAtlasSprite sprite, VertexConsumer buffer, float x, float y, float z,
-                                   int lightColor, Vector3f[] quadPos, float size,
+    private static void renderQuad(TextureAtlasSprite sprite, VertexConsumer buffer,
+                                   int lightColor, Matrix4f pose, float size,
                                    float rCol, float gCol, float bCol, float alpha) {
         float u0 = sprite.getU0();
         float u1 = sprite.getU1();
@@ -120,19 +97,19 @@ public class GlowLightParticle extends TextureSheetParticle {
         u1 = u0 + (u1 - u0) * 7 / 8f;
         v1 = v0 + (v1 - v0) * 7 / 8f;
 
-        buffer.addVertex(x + (quadPos[0].x() * size), y + (quadPos[0].y() * size), z + (quadPos[0].z() * size))
+        buffer.addVertex(pose,  (1 * size),  (-1 * size), 0)
                 .setUv(u1, v1)
                 .setColor(rCol, gCol, bCol, alpha)
                 .setLight(lightColor);
-        buffer.addVertex(x + (quadPos[1].x() * size), y + (quadPos[1].y() * size), z + (quadPos[1].z() * size))
+        buffer.addVertex(pose, (1 * size),  (1 * size), 0)
                 .setUv(u1, v0)
                 .setColor(rCol, gCol, bCol, alpha)
                 .setLight(lightColor);
-        buffer.addVertex(x + quadPos[2].x() * size, y + quadPos[2].y() * size, z + quadPos[2].z() * size)
+        buffer.addVertex(pose, (-1 * size),  (1 * size), 0)
                 .setUv(u0, v0)
                 .setColor(rCol, gCol, bCol, alpha)
                 .setLight(lightColor);
-        buffer.addVertex(x + quadPos[3].x() * size, y + quadPos[3].y() * size, z + quadPos[3].z() * size)
+        buffer.addVertex(pose, (-1 * size),  (-1 * size), 0)
                 .setUv(u0, v1)
                 .setColor(rCol, gCol, bCol, alpha)
                 .setLight(lightColor);
@@ -140,7 +117,7 @@ public class GlowLightParticle extends TextureSheetParticle {
 
     @Override
     public ParticleRenderType getRenderType() {
-        return MLRenderTypes.PARTICLE_ADDITIVE_TRANSLUCENCY_RENDER_TYPE;
+         return MLRenderTypes.PARTICLE_ADDITIVE_TRANSLUCENCY_RENDER_TYPE;
     }
 
     @Override

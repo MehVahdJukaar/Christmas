@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.mehvahdjukaar.moonlight.api.client.util.RenderUtil;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,6 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
 
 public class ClientEvents {
 
@@ -28,13 +30,15 @@ public class ClientEvents {
     public static void renderWreaths(PoseStack poseStack) {
         Minecraft mc = Minecraft.getInstance();
         Level level = mc.player.level();
-        Vec3 cameraPos = mc.gameRenderer.getMainCamera().getPosition();
+        Camera camera = mc.gameRenderer.getMainCamera();
+        Vec3 cameraPos = camera.getPosition();
         WreathSavedData wreathData = WreathSavedData.get(level);
         if (wreathData != null) {
             float dist = mc.gameRenderer.getRenderDistance();
             dist *= dist;
 
             poseStack.pushPose();
+            poseStack.mulPose(new Quaternionf(camera.rotation()).invert());
 
             MultiBufferSource.BufferSource bufferSource = mc.renderBuffers().bufferSource();
             RenderSystem.enableDepthTest();

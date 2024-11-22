@@ -20,6 +20,7 @@ dependencies {
 
     modCompileOnly("curse.maven:farmers-delight-398521:5772720")
     modImplementation("curse.maven:entity-model-features-844662:5722728")
+    modImplementation("curse.maven:entity-texture-features-fabric-568563:5000985")
 
     if(isMyPc) {
         //modImplementation("net.mehvahdjukaar:supplementaries:${project.supplementaries_version}")

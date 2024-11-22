@@ -24,7 +24,8 @@ public class GlowLightsBlockTile extends MimicBlockTile {
         if (b instanceof EntityBlock) {
             return false;
         }
-        return state.is(ModTags.ACCEPTS_GLOW_LIGHTS) && Block.isShapeFullBlock(state.getCollisionShape(world, pos));
+        return state.is(ModTags.ACCEPTS_GLOW_LIGHTS);
+                //&& Block.isShapeFullBlock(state.getCollisionShape(world, pos));
     }
 
 

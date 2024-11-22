@@ -1,19 +1,28 @@
 package net.mehvahdjukaar.snowyspirit.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
+import net.mehvahdjukaar.moonlight.api.client.CoreShaderContainer;
+import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.util.math.MthUtils;
 import net.mehvahdjukaar.moonlight.core.client.MLRenderTypes;
 import net.mehvahdjukaar.snowyspirit.configs.ClientConfigs;
 import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
+
+import java.util.Objects;
 
 public class GlowLightParticle extends TextureSheetParticle {
 
@@ -115,15 +124,20 @@ public class GlowLightParticle extends TextureSheetParticle {
                 .setLight(lightColor);
     }
 
+    private static final ParticleRenderType RT =
+            PlatHelper.getPlatform().isFabric() ? ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT :
+            MLRenderTypes.PARTICLE_ADDITIVE_TRANSLUCENCY_RENDER_TYPE;
+
     @Override
     public ParticleRenderType getRenderType() {
-         return MLRenderTypes.PARTICLE_ADDITIVE_TRANSLUCENCY_RENDER_TYPE;
+        return RT;
     }
 
     @Override
     public float getQuadSize(float partialTicks) {
         return Mth.lerp(partialTicks, oldQuadSize, quadSize);
     }
+
 
     @Override
     public void tick() {

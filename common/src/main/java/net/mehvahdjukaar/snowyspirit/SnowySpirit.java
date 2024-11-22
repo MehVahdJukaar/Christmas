@@ -60,6 +60,9 @@ public class SnowySpirit {
         //TODO: check wolf height
         // add item burntime
         // add block burn time
+        // shear sound
+        // sled offset
+        //gingy offset
 
         CommonConfigs.init();
 

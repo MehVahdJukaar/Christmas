@@ -1146,7 +1146,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
             return pullerPos;
         } else {
             float zPos = 0.0F;
-            float yPos = 8 / 16f + this.getAdditionalY() + (this.getSeatType() != null ? 0.0615f : 0);
+            float yPos = 0.45f + this.getAdditionalY() + (this.getSeatType() != null ? 0.0615f : 0);
 
             boolean isMoreThanOneOnBoard;
             if (this.isChestEntity(passenger)) {
@@ -1159,7 +1159,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
             } else {
 
                 //this is an utter mess
-                isMoreThanOneOnBoard = !hasExactlyOnePlayerPassenger();
+                isMoreThanOneOnBoard = this.getPassengers().size() > this.getMaxPassengersSize() - 1;
                 if (isMoreThanOneOnBoard) {
                     int i = 0;
                     for (Entity p : this.getPassengers()) {
@@ -1219,7 +1219,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
                     //passenger.yRotO = this.yRotO;
                 } else {
                     //this is an utter mess
-                    isMoreThanOneOnBoard = !hasExactlyOnePlayerPassenger();
+                    isMoreThanOneOnBoard = this.getPassengers().size() > this.getMaxPassengersSize() - 1;
 
                     passenger.setYRot(passenger.getYRot() + this.deltaRotation);
                     passenger.setYHeadRot(passenger.getYHeadRot() + this.deltaRotation);

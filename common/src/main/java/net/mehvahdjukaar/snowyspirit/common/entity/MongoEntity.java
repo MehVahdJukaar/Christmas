@@ -63,9 +63,7 @@ public class MongoEntity extends GingyEntity implements PlayerRideableJumping {
     @Override
     public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
         return false;
-        //return super.causeFallDamage(fallDistance, multiplier, source);
-    }
-
+   }
 
     @Nullable
     public LivingEntity getControllingPassenger() {
@@ -95,16 +93,9 @@ public class MongoEntity extends GingyEntity implements PlayerRideableJumping {
         return 0.1f;
     }
 
-    //TODO:fix
-/*
     @Override
-    public double getPassengersRidingOffset() {
-        return this.getBbHeight() * 0.95;
-    }
-*/
+    protected Vec3 getPassengerAttachmentPoint(Entity entity, EntityDimensions dimensions, float partialTick) {
 
-    @Override
-    protected void positionRider(Entity passenger, MoveFunction callback) {
         if (level().isClientSide) {
             float scale = 10;
             float period = 2.5f * Mth.PI * scale;
@@ -138,9 +129,11 @@ public class MongoEntity extends GingyEntity implements PlayerRideableJumping {
 
             v = v.yRot(-this.getYRot() * Mth.DEG_TO_RAD);
 
-            callback.accept(passenger, this.getX() + v.x, this.getY() + v.y - 0.4, this.getZ() + v.z);
-        } else super.positionRider(passenger, callback);
+            return new Vec3(v.x, v.y - 0.4, v.z);
+        }
+        return super.getPassengerAttachmentPoint(entity, dimensions, partialTick);
     }
+
 
     @Override
     public void aiStep() {

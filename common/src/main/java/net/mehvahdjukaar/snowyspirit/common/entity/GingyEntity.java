@@ -239,7 +239,6 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
         }
     }
 
-
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);

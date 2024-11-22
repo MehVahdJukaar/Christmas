@@ -4,20 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.common.entity.GingyEntity;
-import net.mehvahdjukaar.snowyspirit.common.entity.MongoEntity;
 import net.mehvahdjukaar.snowyspirit.reg.ClientRegistry;
-import net.minecraft.client.model.GiantZombieModel;
-import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
-import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
-import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.monster.Giant;
 import net.minecraft.world.item.DyeColor;
 
 import java.util.Arrays;
@@ -54,9 +45,9 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
     }
 
     @Override
-    protected void setupRotations(GingyEntity entity, PoseStack matrixStack, float bob, float yBodyRot,
-                                  float partialTicks, float scale) {
-        super.setupRotations(entity, matrixStack, bob, yBodyRot, partialTicks, scale);
+    protected void setupRotations(GingyEntity entity, PoseStack poseStack, float bob,
+                                  float yBodyRot, float partialTicks, float scale) {
+        super.setupRotations(entity, poseStack, bob, yBodyRot, partialTicks, scale);
 
         // dealth anim
         if (entity.deathTime > 0) {
@@ -66,7 +57,7 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
                 f = 1.0F;
             }
             int deg = entity.isForwardDeathAnim() ? -90 : 90;
-            matrixStack.mulPose(Axis.XP.rotationDegrees(f * deg));
+            poseStack.mulPose(Axis.XP.rotationDegrees(f * deg));
         }
 
         float period = 2.5f * Mth.PI * scale;
@@ -74,7 +65,7 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
         float walkAnim = 0.0F;
         boolean orderedToSit = entity.isOrderedToSit();
         if (orderedToSit) {
-            matrixStack.translate(0, -0.25, 0);
+            poseStack.translate(0, -0.25, 0);
         }
         if (!orderedToSit && entity.isAlive()) {
             limbSwingAmount = entity.walkAnimation.speed(partialTicks);
@@ -83,9 +74,6 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
                 walkAnim *= 3.0F;
             }
 
-            if(entity instanceof MongoEntity) {
-                walkAnim *= 0.1f;
-            }
             // cap limb swing
             // this looks wonky at higher values and can grow a lot, so we just use for smooth in and out of anim
             float maxLimbSwing = 1;
@@ -96,8 +84,8 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
 
         if (limbSwingAmount > 0.001) {
             float angle = walkAnim * (Mth.TWO_PI / period);
-            float sideSwayPower = 20/scale;
-            matrixStack.mulPose(Axis.ZP.rotationDegrees(Mth.cos(angle) * sideSwayPower * limbSwingAmount));
+            float sideSwayPower = 20 / scale;
+            poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.cos(angle) * sideSwayPower * limbSwingAmount));
         }
     }
 }

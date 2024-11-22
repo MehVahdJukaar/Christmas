@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.common.entity.GingyEntity;
+import net.mehvahdjukaar.snowyspirit.common.entity.MongoEntity;
 import net.mehvahdjukaar.snowyspirit.reg.ClientRegistry;
 import net.minecraft.client.model.GiantZombieModel;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -80,6 +81,10 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
             walkAnim = entity.walkAnimation.position(partialTicks);
             if (entity.isBaby()) {
                 walkAnim *= 3.0F;
+            }
+
+            if(entity instanceof MongoEntity) {
+                walkAnim *= 0.1f;
             }
             // cap limb swing
             // this looks wonky at higher values and can grow a lot, so we just use for smooth in and out of anim

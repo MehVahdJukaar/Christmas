@@ -247,7 +247,7 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
 
 
         if (this.isOwnedBy(player)) {
-            if (itemStack.has(DataComponents.FOOD) && this.isFood(itemStack) && this.getHealth() < this.getMaxHealth()) {
+            if (!player.isSecondaryUseActive() && itemStack.has(DataComponents.FOOD) && this.isFood(itemStack) && this.getHealth() < this.getMaxHealth()) {
                 this.usePlayerItem(player, hand, itemStack);
                 this.heal(itemStack.get(DataComponents.FOOD).nutrition());
                 return InteractionResult.sidedSuccess(level.isClientSide);

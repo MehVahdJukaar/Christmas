@@ -17,10 +17,10 @@
   "fabric:load_conditions": [
     {
       "modid": "farmersdelight",
-      "type": "fabric:mod_loaded"
+      "condition": "fabric:mod_loaded"
     },
     {
-      "type": "snowyspirit:flag",
+      "condition": "snowyspirit:flag",
       "flag": "ginger"
     }
   ]

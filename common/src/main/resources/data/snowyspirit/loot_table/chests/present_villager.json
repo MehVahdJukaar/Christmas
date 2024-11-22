@@ -2,7 +2,7 @@
   "fabric:load_conditions": [
     {
       "modid": "supplementaries",
-      "type": "fabric:mod_loaded"
+      "condition": "fabric:mod_loaded"
     }
   ],
 
@@ -67,7 +67,7 @@
         {
           "type": "minecraft:item",
           "weight": 25,
-          "name": "snowyspirit:music_disc_winter"
+          "name": "snowyspirit:music_disc_a_carol"
         },
         {
           "type": "minecraft:item",

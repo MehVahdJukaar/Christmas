@@ -1,0 +1,8 @@
+{
+  "moonlight_parse_on_fabric": true,
+  "values": {
+    "#snowy_spirit:sleds": {
+      "burn_time": 300
+    }
+  }
+}

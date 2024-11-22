@@ -16,10 +16,6 @@ public class ModSetup {
 
 
     public static void setup() {
-        ComposterBlock.COMPOSTABLES.put(ModRegistry.GINGER_FLOWER.get(), 0.3F);
-        ComposterBlock.COMPOSTABLES.put(ModRegistry.GINGER.get(), 0.65F);
-        ComposterBlock.COMPOSTABLES.put(ModRegistry.GINGER_WILD.get(), 0.65F);
-
 
         WinterVillagerAI.setup();
 

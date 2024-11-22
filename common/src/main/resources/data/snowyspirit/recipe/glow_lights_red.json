@@ -5,7 +5,7 @@
     {"item": "minecraft:glowstone_dust"},
     {"tag": "c:dyes/red"},
     {"item": "amethyst_shard"},
-    {"tag": "c:string"}
+    {"tag": "c:strings"}
   ],
   "result": {
     "id": "snowyspirit:glow_lights_red"

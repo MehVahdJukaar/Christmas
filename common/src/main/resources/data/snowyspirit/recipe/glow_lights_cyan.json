@@ -6,7 +6,7 @@
     {"tag": "c:dyes/cyan"},
     {"item": "amethyst_shard"},
     {"item": "amethyst_shard"},
-    {"tag": "c:string"}
+    {"tag": "c:strings"}
   ],
   "result": {
     "id": "snowyspirit:glow_lights_cyan"

@@ -2,6 +2,7 @@ package net.mehvahdjukaar.snowyspirit.common.block;
 
 import net.mehvahdjukaar.moonlight.api.block.MimicBlockTile;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
+import net.mehvahdjukaar.snowyspirit.reg.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
@@ -23,7 +24,7 @@ public class GlowLightsBlockTile extends MimicBlockTile {
         if (b instanceof EntityBlock) {
             return false;
         }
-        return state.is(BlockTags.LEAVES) && Block.isShapeFullBlock(state.getCollisionShape(world, pos));
+        return state.is(ModTags.ACCEPTS_GLOW_LIGHTS) && Block.isShapeFullBlock(state.getCollisionShape(world, pos));
     }
 
 

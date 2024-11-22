@@ -105,6 +105,8 @@ dependencies {
       //  modCompileOnly("curse.maven:supplementaries-412082:5923343")
     }
 
+    modImplementation("curse.maven:jei-238222:5846880")
+
     modCompileOnly("curse.maven:farmers-delight-398521:3999157")
     modCompileOnly("curse.maven:serene-seasons-291874:4577617")
     modCompileOnly("curse.maven:biomes-o-plenty-220318:4683058")

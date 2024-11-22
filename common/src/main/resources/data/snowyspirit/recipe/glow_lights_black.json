@@ -4,7 +4,7 @@
   "ingredients": [
     {"item": "minecraft:glowstone_dust"},
     {"tag": "c:dyes/black"},
-    {"tag": "c:string"},
+    {"tag": "c:strings"},
     {"item": "amethyst_shard"}
   ],
   "result": {

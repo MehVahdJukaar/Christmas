@@ -7,7 +7,7 @@
     "id": "snowyspirit:ginger",
     "count": 9
   },
-  "conditions": [
+  "fabric:load_conditions": [
     {
       "modid": "farmersdelight",
       "type": "fabric:mod_loaded"

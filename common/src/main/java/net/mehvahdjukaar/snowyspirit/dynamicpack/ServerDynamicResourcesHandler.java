@@ -46,8 +46,7 @@ public class ServerDynamicResourcesHandler extends DynServerResourcesGenerator {
         builder.addEntries(ModRegistry.SLED_ITEMS.values());
         dynamicPack.addTag(builder, Registries.ITEM);
 
-        var recipe = RPUtils.readRecipe(resourceManager,
-                ResType.RECIPES.getPath(SnowySpirit.res("sled_oak")));
+        var recipe = RPUtils.readRecipe(resourceManager, SnowySpirit.res("sled_oak"));
 
         ModRegistry.SLED_ITEMS.forEach((w, b) -> {
             if (w != WoodTypeRegistry.OAK_TYPE) {

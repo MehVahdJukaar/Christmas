@@ -4,7 +4,7 @@
     {"item": "snowyspirit:ginger_flower"}
   ],
   "result": {
-    "item": "minecraft:red_dye"
+    "id": "minecraft:red_dye"
   },
   "fabric:load_conditions": [
     {

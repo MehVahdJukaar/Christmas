@@ -14,7 +14,7 @@
     "id": "snowyspirit:ginger_crate",
     "count": 1
   },
-  "conditions": [
+  "fabric:load_conditions": [
     {
       "modid": "farmersdelight",
       "type": "fabric:mod_loaded"

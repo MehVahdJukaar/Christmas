@@ -1,4 +1,11 @@
 {
+  "fabric:load_conditions": [
+    {
+      "modid": "supplementaries",
+      "type": "fabric:mod_loaded"
+    }
+  ],
+
   "type": "minecraft:chest",
   "pools": [
     {

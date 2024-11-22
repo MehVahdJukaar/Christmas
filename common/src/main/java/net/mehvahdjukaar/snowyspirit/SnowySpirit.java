@@ -38,6 +38,11 @@ public class SnowySpirit {
 
 
     public static void commonInit() {
+
+        //TODO: check wolf height
+        // add item burntime
+        // add block burn time
+
         CommonConfigs.init();
 
         ModMessages.init();

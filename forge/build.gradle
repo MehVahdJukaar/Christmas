@@ -114,7 +114,7 @@ dependencies {
 
     implementation 'org.jetbrains:annotations:22.0.0'
 
-    modCompileOnly("com.itayfeder.tinted:Tinted:1.19.2-1.1.0")
+   // modCompileOnly("com.itayfeder.tinted:Tinted:1.19.2-1.1.0")
     modCompileOnly("curse.maven:farmers-delight-398521:3999157")
     modImplementation("curse.maven:serene-seasons-291874:4577617")
     modCompileOnly("curse.maven:biomes-o-plenty-220318:4683058")

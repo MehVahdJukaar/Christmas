@@ -1,3 +1,7 @@
-- fixed golem animation
-- fixed golem and slead offsets
-- other random fixes
+- added missing tags
+- fixed chest offset
+- fixed chest menu crash
+- buffed eggnog values
+- fixed glow light shearing
+- sniffers can sniff ginger flowers
+- ginger pig food

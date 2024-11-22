@@ -4,9 +4,6 @@ package net.mehvahdjukaar.snowyspirit;
 import net.mehvahdjukaar.moonlight.api.platform.ClientHelper;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.platform.RegHelper;
-import net.mehvahdjukaar.moonlight.api.util.math.colors.RGBColor;
-import net.mehvahdjukaar.snowyspirit.common.block.GumdropButton;
-import net.mehvahdjukaar.snowyspirit.common.entity.GingyEntity;
 import net.mehvahdjukaar.snowyspirit.common.network.ModMessages;
 import net.mehvahdjukaar.snowyspirit.configs.ClientConfigs;
 import net.mehvahdjukaar.snowyspirit.configs.CommonConfigs;
@@ -15,24 +12,10 @@ import net.mehvahdjukaar.snowyspirit.dynamicpack.ServerDynamicResourcesHandler;
 import net.mehvahdjukaar.snowyspirit.integration.FDCompat;
 import net.mehvahdjukaar.snowyspirit.integration.SeasonModCompat;
 import net.mehvahdjukaar.snowyspirit.reg.*;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.client.color.block.BlockColors;
-import net.minecraft.client.renderer.BiomeColors;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.CarvedPumpkinBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -62,6 +45,15 @@ public class SnowySpirit {
         // add block burn time
         // shear sound
         // rethink shearable stuff
+        //flute pacifies
+        //TODO: mongo screen rotation
+        //hostile gingeerbread golems
+        //mongo
+        //sleds loose their chest
+        //TODO: sync xRot, chest weight, tweak values
+        //TODO: nerf sled acceleration without wolf to make wolf more relevant. can still be used for downhill descent
+        //TODO: maybe make friction delend also on xRot to better handle slope descent
+
 
         CommonConfigs.init();
 
@@ -87,15 +79,18 @@ public class SnowySpirit {
             ClientRegistry.init();
             ClientHelper.addClientSetup(ClientRegistry::setup);
         }
+
+        RegHelper.addLootTableInjects(SnowySpirit::injectLootPools);
     }
-    //flute pacifies
-    //TODO: mongo screen rotation
-    //hostile gingeerbread golems
-    //mongo
-    //sleds loose their chest
-    //TODO: sync xRot, chest weight, tweak values
-    //TODO: nerf sled acceleration without wolf to make wolf more relevant. can still be used for downhill descent
-    //TODO: maybe make friction delend also on xRot to better handle slope descent
+
+    private static void injectLootPools(RegHelper.LootInjectEvent event) {
+        String table = event.getTable().toString();
+        if (table.equals("minecraft:gameplay/sniffer_digging")) {
+            event.addTableReference(SnowySpirit.res("injects/ginger_sniffer"));
+        }
+
+    }
+
 
     public static boolean IS_CHRISTMAS_REAL_TIME;
 

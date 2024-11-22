@@ -21,7 +21,9 @@ import java.util.Optional;
 public class EggnogItem extends Item {
 
     public static final FoodProperties EGG_NOG_FOOD = new FoodProperties(
-            4,2, false, 1.5f, Optional.empty(), List.of());
+            4, //nutrition
+            14, //saturation
+            false, 1.5f, Optional.empty(), List.of());
 
     public EggnogItem() {
         super(new Item.Properties().food(EGG_NOG_FOOD));

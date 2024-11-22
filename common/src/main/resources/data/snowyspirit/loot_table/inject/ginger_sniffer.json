@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:gift",
+  "pools": [
+    {
+      "conditions": [
+        {
+          "condition": "random_chance",
+          "chance": 0.2
+        }
+      ],
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "snowyspirit:ginger_flower"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "minecraft:gameplay/sniffer_digging_2"
+}

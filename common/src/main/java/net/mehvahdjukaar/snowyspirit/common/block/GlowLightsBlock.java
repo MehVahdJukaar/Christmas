@@ -3,6 +3,8 @@ package net.mehvahdjukaar.snowyspirit.common.block;
 import net.mehvahdjukaar.moonlight.api.block.IColored;
 import net.mehvahdjukaar.moonlight.api.block.WaterBlock;
 import net.mehvahdjukaar.moonlight.api.platform.ForgeHelper;
+import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
+import net.mehvahdjukaar.snowyspirit.PlatStuff;
 import net.mehvahdjukaar.snowyspirit.dynamicpack.ClientDynamicResourcesHandler;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
 import net.minecraft.Util;
@@ -11,6 +13,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -204,8 +208,11 @@ public class GlowLightsBlock extends WaterBlock implements EntityBlock, IColored
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
                                               Player pPlayer, InteractionHand pHand, BlockHitResult hitResult) {
-        if (stack.getItem() instanceof ShearsItem) {
+        if (PlatStuff.isShear(stack)) {
             var drops = this.shearAction(pPlayer, stack, level, pos);
+            level.playSound(pPlayer, pPlayer.getX(),
+                    pPlayer.getY(), pPlayer.getZ(),
+                    SoundEvents.BEEHIVE_SHEAR, SoundSource.BLOCKS, 1.0F, 1.0F);
             drops.forEach(d -> {
                 ItemEntity ent = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, d);
                 ent.setDefaultPickUpDelay();

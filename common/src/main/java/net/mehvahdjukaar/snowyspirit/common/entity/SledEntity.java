@@ -1152,7 +1152,6 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
             if (this.isChestEntity(passenger)) {
                 //passenger.yRotO = this.yRotO;
                 zPos = -0.4f;
-                yPos += 0.3F;
                 float cos = Mth.sin((float) (this.getXRot() * Math.PI / 180f));
                 yPos -= cos * zPos;
 

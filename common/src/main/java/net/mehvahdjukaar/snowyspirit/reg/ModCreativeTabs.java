@@ -34,8 +34,8 @@ public class ModCreativeTabs {
     public static void registerItemsToTabs(RegHelper.ItemToTabEvent e) {
 
         after(e, i -> i.getItem().components().get(DataComponents.JUKEBOX_PLAYABLE) != null, CreativeModeTabs.TOOLS_AND_UTILITIES,
-                ModRegistry.WINTER_DISC_NAME/*,
-                ModRegistry.WINTER_DISC*/); // TODO
+                ModRegistry.WINTER_DISC_NAME,
+                ModRegistry.WINTER_DISC); // TODO
 
         before(e, Items.HONEY_BOTTLE, CreativeModeTabs.FOOD_AND_DRINKS,
                 ModRegistry.EGGNOG_NAME,

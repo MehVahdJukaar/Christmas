@@ -96,6 +96,7 @@ public class ModRegistry {
     public static final Supplier<EntityType<SledEntity>> SLED = regEntity(SLED_NAME,
             () -> EntityType.Builder.<SledEntity>of(SledEntity::new, MobCategory.MISC)
                     .sized(1.375F, 0.5625F)
+                    .passengerAttachments(0.2f)
                     .clientTrackingRange(10));
 
     public static final Supplier<EntityType<ContainerHolderEntity>> CONTAINER_ENTITY = regEntity("container_entity",

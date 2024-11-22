@@ -24,7 +24,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -33,6 +32,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
@@ -338,7 +338,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
     public AABB pullerAABB = new AABB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
     private final EntityDimensions pullerDimensions = new EntityDimensions(
             0.8f, 2.1f,
-            2.1f * 0.5f , // Moved from ContainerHolderEntity to here
+            2.1f * 0.5f, // Moved from ContainerHolderEntity to here
             EntityAttachments.createDefault(0.8f, 2.1f),
             false
     );
@@ -1009,23 +1009,11 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
         return DyeColor.byId(d - 1);
     }
 
-    @Nullable
     public void setSeatType(@Nullable DyeColor seatColor) {
         this.entityData.set(DATA_SEAT_TYPE, seatColor == null ? 0 : seatColor.getId() + 1);
     }
 
     //----passenger stuff-----
-
-    //TODO: fix
-    // @Override
-    public double getPassengersRidingOffset() {
-        return 0.2D + this.getAdditionalY() + (this.getSeatType() != null ? 0.0615 : 0);
-    }
-
-    @Override
-    public Vec3 getPassengerRidingPosition(Entity entity) {
-        return super.getPassengerRidingPosition(entity);
-    }
 
     @Nullable
     public ContainerHolderEntity tryAddingChest(ItemStack stack) {
@@ -1082,7 +1070,7 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
                     if (owned && this.tryConnectingPuller(found)) {
                         this.playSound(SoundEvents.LEASH_KNOT_PLACE, 1.0F, 1.0F);
                         if (this.chest != null && player instanceof ServerPlayer sp) {
-                            Utils.awardAdvancement(sp,SnowySpirit.res( "adventure/sled_with_wolf"));
+                            Utils.awardAdvancement(sp, SnowySpirit.res("adventure/sled_with_wolf"));
                         }
                         return InteractionResult.sidedSuccess(level.isClientSide);
                     }
@@ -1151,10 +1139,59 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
         }
     }
 
-    //TODO: use attachment point
+    @Override
+    protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float partialTick) {
+
+        if (this.isMyPuller(passenger)) {
+            return pullerPos;
+        } else {
+            float zPos = 0.0F;
+            float yPos = 8 / 16f + this.getAdditionalY() + (this.getSeatType() != null ? 0.0615f : 0);
+
+            boolean isMoreThanOneOnBoard;
+            if (this.isChestEntity(passenger)) {
+                //passenger.yRotO = this.yRotO;
+                zPos = -0.4f;
+                yPos += 0.3F;
+                float cos = Mth.sin((float) (this.getXRot() * Math.PI / 180f));
+                yPos -= cos * zPos;
+
+            } else {
+
+                //this is an utter mess
+                isMoreThanOneOnBoard = !hasExactlyOnePlayerPassenger();
+                if (isMoreThanOneOnBoard) {
+                    int i = 0;
+                    for (Entity p : this.getPassengers()) {
+                        if (p == passenger) break;
+                        if (!isMyPuller(p) && !isChestEntity(p)) i++;
+                    }
+
+                    float cos = Mth.sin((float) (this.getXRot() * Math.PI / 180f));
+                    if (i == 0) {
+                        zPos = 0.1F;
+                    } else {
+                        zPos = -0.8F;
+                    }
+                    yPos -= cos * zPos;
+                }
+
+                if (passenger instanceof Animal) {
+                    if (isMoreThanOneOnBoard) {
+                        zPos += 0.2F;
+                    }
+                }
+            }
+
+            return (new Vec3(0, yPos, zPos)).yRot(-this.getYRot() * Mth.DEG_TO_RAD);
+        }
+    }
+
     @Override
     protected void positionRider(Entity passenger, MoveFunction setPos) {
-        if (this.hasPassenger(passenger)) {
+        super.positionRider(passenger, setPos);
+
+        if (!passenger.getType().is(EntityTypeTags.CAN_TURN_IN_BOATS)) {
 
             //can only have 1 chest so the rider that is chest is THE chest
             if (this.chest == null && passenger instanceof ContainerHolderEntity container) {
@@ -1168,13 +1205,9 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
                 passenger.setYBodyRot(animal.yBodyRot + this.deltaRotation * 10);
                 passenger.setYHeadRot(animal.yBodyRot);
                 //powder snow check here
-                setPos.accept(passenger, this.getX() + pullerPos.x, this.getY() + pullerPos.y, this.getZ() + pullerPos.z);
 
                 this.updatePullerAnimations();
             } else {
-                float zPos = 0.0F;
-                float yPos = (float) ((this.isRemoved() ? 0.01 : this.getPassengersRidingOffset()) + /*passenger.getMyRidingOffset()*/0);
-
                 boolean isMoreThanOneOnBoard = false;
                 if (this.isChestEntity(passenger)) {
 
@@ -1184,44 +1217,14 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
                     passenger.setYRot(this.getYRot());
 
                     //passenger.yRotO = this.yRotO;
-                    zPos = -0.4f;
-                    yPos += 0.3;
-                    float cos = Mth.sin((float) (this.getXRot() * Math.PI / 180f));
-                    yPos -= cos * zPos;
-
                 } else {
-
                     //this is an utter mess
-                    isMoreThanOneOnBoard = this.getPassengers().size() > this.getMaxPassengersSize() - 1;
-                    if (isMoreThanOneOnBoard) {
-                        int i = 0;
-                        for (Entity p : this.getPassengers()) {
-                            if (p == passenger) break;
-                            if (!isMyPuller(p) && !isChestEntity(p)) i++;
-                        }
+                    isMoreThanOneOnBoard = !hasExactlyOnePlayerPassenger();
 
-                        float cos = Mth.sin((float) (this.getXRot() * Math.PI / 180f));
-                        if (i == 0) {
-                            zPos = 0.1F;
-                        } else {
-                            zPos = -0.8F;
-                        }
-                        yPos -= cos * zPos;
-                    }
-
-                    if (passenger instanceof Animal) {
-                        if (isMoreThanOneOnBoard) {
-                            zPos += 0.2D;
-                        }
-                        yPos += 0.125;
-                    }
                     passenger.setYRot(passenger.getYRot() + this.deltaRotation);
                     passenger.setYHeadRot(passenger.getYHeadRot() + this.deltaRotation);
                     this.clampRotation(passenger);
                 }
-                Vec3 vec3 = (new Vec3(zPos, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
-                setPos.accept(passenger, this.getX() + vec3.x, this.getY() + yPos, this.getZ() + vec3.z);
-
 
                 if (passenger instanceof Animal animal && isMoreThanOneOnBoard) {
                     int yRot = passenger.getId() % 2 == 0 ? 90 : 270;

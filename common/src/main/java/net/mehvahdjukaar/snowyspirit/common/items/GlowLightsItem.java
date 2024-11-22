@@ -36,15 +36,7 @@ public class GlowLightsItem extends Item {
             if (GlowLightsBlockTile.isValidBlock(clicked, pos, level)) {
                 BlockState glowLight = this.block.getStateForPlacement(new BlockPlaceContext(context));
                 if (glowLight != null) {
-                    if (level instanceof ServerLevel sLevel) {
-                        BlockEntity blockEntity = sLevel.getBlockEntity(pos);
-                        Clearable.tryClear(blockEntity);
-                    }
-
-                    level.setBlock(pos, glowLight, 2);
-                    if (level instanceof ServerLevel sLevel) {
-                        sLevel.blockUpdated(pos, glowLight.getBlock());
-                    }
+                    level.setBlockAndUpdate(pos, glowLight);
 
                     if (level.getBlockEntity(pos) instanceof GlowLightsBlockTile tile) {
 

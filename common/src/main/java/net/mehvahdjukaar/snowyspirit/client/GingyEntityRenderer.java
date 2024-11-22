@@ -47,7 +47,7 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
     @Override
     protected void setupRotations(GingyEntity entity, PoseStack poseStack, float bob,
                                   float yBodyRot, float partialTicks, float scale) {
-        super.setupRotations(entity, poseStack, bob, yBodyRot, partialTicks, scale);
+        super.setupRotations(entity, poseStack, bob, yBodyRot, partialTicks, this.scale);
 
         // dealth anim
         if (entity.deathTime > 0) {
@@ -60,7 +60,7 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
             poseStack.mulPose(Axis.XP.rotationDegrees(f * deg));
         }
 
-        float period = 2.5f * Mth.PI * scale;
+        float period = 2.5f * Mth.PI * this.scale;
         float limbSwingAmount = 0.0F;
         float walkAnim = 0.0F;
         boolean orderedToSit = entity.isOrderedToSit();
@@ -84,7 +84,7 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
 
         if (limbSwingAmount > 0.001) {
             float angle = walkAnim * (Mth.TWO_PI / period);
-            float sideSwayPower = 20 / scale;
+            float sideSwayPower = 20 / this.scale;
             poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.cos(angle) * sideSwayPower * limbSwingAmount));
         }
     }

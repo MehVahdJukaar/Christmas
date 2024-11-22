@@ -12,7 +12,7 @@ import traben.entity_model_features.models.animation.EMFAnimationEntityContext;
 import traben.entity_model_features.utils.EMFEntity;
 
 @Pseudo
-@Mixin(EMFAnimationEntityContext.class)
+@Mixin(value = EMFAnimationEntityContext.class, remap = false)
 public abstract class CompatEMFMixin {
 
     @Shadow

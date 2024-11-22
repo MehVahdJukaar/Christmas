@@ -4,14 +4,14 @@ import net.mehvahdjukaar.moonlight.api.platform.ClientHelper;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.util.Utils;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
-import net.mehvahdjukaar.snowyspirit.common.entity.ContainerHolderEntity;
+import net.mehvahdjukaar.snowyspirit.common.entity.GolemHelper;
 import net.mehvahdjukaar.snowyspirit.common.wreath.ServerEvents;
 import net.mehvahdjukaar.snowyspirit.integration.configured.ModConfigSelectScreen;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.Container;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CarvedPumpkinBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -19,16 +19,13 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
-import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Author: MehVahdJukaar
@@ -58,7 +55,7 @@ public class SnowySpiritForge {
 
     }
 
-    public void onRegisterCapability(RegisterCapabilitiesEvent event){
+    public void onRegisterCapability(RegisterCapabilitiesEvent event) {
         event.registerEntity(Capabilities.ItemHandler.ENTITY,
                 ModRegistry.CONTAINER_ENTITY.get(),
                 (entity, object2) -> new InvWrapper(entity));
@@ -88,5 +85,12 @@ public class SnowySpiritForge {
     @SubscribeEvent
     public void onDimensionChanged(PlayerEvent.PlayerChangedDimensionEvent event) {
         ServerEvents.onDimensionChanged(event.getEntity());
+    }
+
+    @SubscribeEvent
+    public void onUseBlock(BlockEvent.EntityPlaceEvent event) {
+        if (event.getPlacedBlock().getBlock() instanceof CarvedPumpkinBlock) {
+            GolemHelper.trySpawningGingy(event.getPlacedBlock(), event.getLevel(), event.getPos(), event.getEntity());
+        }
     }
 }

@@ -53,8 +53,9 @@ public class GingyEntityRenderer extends HumanoidMobRenderer<GingyEntity, GingyM
     }
 
     @Override
-    protected void setupRotations(GingyEntity entity, PoseStack matrixStack, float ageInTicks, float rotationYaw, float partialTicks) {
-        super.setupRotations(entity, matrixStack, ageInTicks, rotationYaw, partialTicks);
+    protected void setupRotations(GingyEntity entity, PoseStack matrixStack, float bob, float yBodyRot,
+                                  float partialTicks, float scale) {
+        super.setupRotations(entity, matrixStack, bob, yBodyRot, partialTicks, scale);
 
         // dealth anim
         if (entity.deathTime > 0) {

@@ -6,6 +6,7 @@ import net.mehvahdjukaar.snowyspirit.common.ai.GingyFollowOwnerGoal;
 import net.mehvahdjukaar.snowyspirit.common.ai.GingySitWhenOrderedToGoal;
 import net.mehvahdjukaar.snowyspirit.reg.ModRegistry;
 import net.mehvahdjukaar.snowyspirit.reg.ModTags;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -69,11 +70,11 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_FLAGS, (byte) 0);
-        this.entityData.define(DATA_OWNER_UUID, Optional.empty());
-        this.entityData.define(DATA_COLOR, DyeColor.WHITE.ordinal());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_FLAGS, (byte) 0);
+        builder.define(DATA_OWNER_UUID, Optional.empty());
+        builder.define(DATA_COLOR, DyeColor.WHITE.ordinal());
     }
 
     @Override
@@ -109,16 +110,11 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
         }
     }
 
-    @Nullable
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
-        this.setColor(DyeColor.values()[level.getRandom().nextInt(DyeColor.values().length)]);
-        return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
-    }
 
     @Override
-    protected float getStandingEyeHeight(Pose pose, EntityDimensions dimensions) {
-        return super.getStandingEyeHeight(pose, dimensions);
+    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
+        this.setColor(DyeColor.values()[level.getRandom().nextInt(DyeColor.values().length)]);
+        return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
     @Override
@@ -247,14 +243,13 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-        Item item = itemStack.getItem();
         Level level = level();
 
 
         if (this.isOwnedBy(player)) {
-            if (item.isEdible() && this.isFood(itemStack) && this.getHealth() < this.getMaxHealth()) {
+            if (itemStack.has(DataComponents.FOOD) && this.isFood(itemStack) && this.getHealth() < this.getMaxHealth()) {
                 this.usePlayerItem(player, hand, itemStack);
-                this.heal(item.getFoodProperties().getNutrition());
+                this.heal(itemStack.get(DataComponents.FOOD).nutrition());
                 return InteractionResult.sidedSuccess(level.isClientSide);
             }
 
@@ -284,8 +279,8 @@ public class GingyEntity extends AbstractGolem implements OwnableEntity {
                 return InteractionResult.sidedSuccess(level.isClientSide);
             } else if (itemStack.is(ModRegistry.GINGERBREAD_COOKIE.get())) {
                 this.increaseIntegrity();
-                this.playSound(ModRegistry.GINGERBREAD_BLOCK.get()
-                        .getSoundType(ModRegistry.GINGERBREAD_BLOCK.get().defaultBlockState()).getPlaceSound(), 1, 0.2f);
+                this.playSound(ModRegistry.GINGERBREAD_BLOCK.get().defaultBlockState()
+                        .getSoundType().getPlaceSound(), 1, 0.2f);
                 itemStack.shrink(1);
                 return InteractionResult.sidedSuccess(level.isClientSide);
             } else if (player.canEat(player.isCreative())) {

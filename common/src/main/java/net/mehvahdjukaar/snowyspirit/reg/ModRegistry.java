@@ -2,14 +2,13 @@ package net.mehvahdjukaar.snowyspirit.reg;
 
 import com.google.common.collect.ImmutableMap;
 import net.mehvahdjukaar.moonlight.api.block.ModStairBlock;
-import net.mehvahdjukaar.moonlight.api.item.WoodBasedBlockItem;
-import net.mehvahdjukaar.moonlight.api.misc.ModItemListing;
 import net.mehvahdjukaar.moonlight.api.misc.Registrator;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.platform.RegHelper;
 import net.mehvahdjukaar.moonlight.api.set.BlockSetAPI;
 import net.mehvahdjukaar.moonlight.api.set.BlocksColorAPI;
 import net.mehvahdjukaar.moonlight.api.set.wood.WoodType;
+import net.mehvahdjukaar.moonlight.api.trades.ModItemListing;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.common.block.*;
 import net.mehvahdjukaar.snowyspirit.common.entity.ContainerHolderEntity;
@@ -56,13 +55,6 @@ public class ModRegistry {
     public static void init() {
         BlockSetAPI.addDynamicItemRegistration(ModRegistry::registerSledItems, WoodType.class);
         RegHelper.addAttributeRegistration(ModRegistry::registerAttributes);
-        RegHelper.registerWanderingTraderTrades(0, ModRegistry::addTrades);
-    }
-
-    private static void addTrades(List<VillagerTrades.ItemListing> itemListings) {
-        if (CommonConfigs.GINGER.get()) {
-            itemListings.add(new ModItemListing(2, ModRegistry.GINGER_FLOWER.get().getDefaultInstance(), 12, 1));
-        }
     }
 
     private static void registerAttributes(RegHelper.AttributeEvent event) {

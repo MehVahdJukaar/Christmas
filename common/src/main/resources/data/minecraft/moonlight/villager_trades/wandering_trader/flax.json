@@ -1,0 +1,19 @@
+{
+  "fabric:load_conditions": [
+    {
+      "flag": "ginger",
+      "condition": "snowyspirit:flag"
+    }
+  ],
+  "type": "simple",
+  "max_trades": 12,
+  "price": {
+    "id": "minecraft:emerald",
+    "Count": 2
+  },
+  "offer": {
+    "id": "snowyspirit:ginger_flower",
+    "Count": 1
+  },
+  "level": 2
+}

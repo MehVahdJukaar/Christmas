@@ -1,4 +1,10 @@
 {
+  "advancements.adventure.ride_sled_fast.description": "Ride a sled down a slope",
+  "advancements.adventure.ride_sled_fast.title": "It's All Downhill From Here",
+  "advancements.adventure.sled_with_wolf.description": "The Wolf of Haul Street",
+  "advancements.adventure.sled_with_wolf.title": "Let a wolf pull a sled with chest",
+  "advancements.husbandry.eat_gingerbread_golem.description": "Take a bite off a Gingerbread Golem",
+  "advancements.husbandry.eat_gingerbread_golem.title": "You're a Monster!",
   "block.snowyspirit.candy_cane_block": "Candy Cane Block",
   "block.snowyspirit.ginger": "Ginger",
   "block.snowyspirit.ginger_crate": "Ginger Crate",
@@ -45,17 +51,16 @@
   "block.snowyspirit.wild_ginger": "Wild Ginger",
   "block.snowyspirit.wreath": "Wreath",
   "block_type.snowyspirit.sled": "Sled",
-
   "entity.snowyspirit.container_entity": "Sled Chest",
+  "entity.snowyspirit.gingerbread_golem": "Gingerbread Golem",
   "entity.snowyspirit.sled": "Sled",
-
   "gui.snowyspirit.snow_season_on": "Snow Season On",
-
   "item.snowyspirit.candy_cane": "Candy Cane",
   "item.snowyspirit.eggnog": "Eggnog",
   "item.snowyspirit.ginger": "Ginger",
   "item.snowyspirit.ginger_flower": "Ginger Flower",
   "item.snowyspirit.gingerbread_cookie": "Gingerbread Cookie",
+  "item.snowyspirit.gingerbread_golem_spawn_egg": "Gingerbread Golem Spawn Egg",
   "item.snowyspirit.glow_lights_black": "Black Glow Lights",
   "item.snowyspirit.glow_lights_blue": "Blue Glow Lights",
   "item.snowyspirit.glow_lights_brown": "Brown Glow Lights",
@@ -81,34 +86,9 @@
   "item.snowyspirit.sled_jungle": "Jungle Sled",
   "item.snowyspirit.sled_oak": "Oak Sled",
   "item.snowyspirit.sled_spruce": "Spruce Sled",
-
-  "tab.snowyspirit": "Snowy Spirit",
-
   "jukebox_song.snowyspirit.a_carol": "Hlzfss - A Carol",
-
-  "entity.snowyspirit.gingerbread_golem": "Gingerbread Golem",
-  "item.snowyspirit.gingerbread_golem_spawn_egg": "Gingerbread Golem Spawn Egg",
-  "advancements.husbandry.eat_gingerbread_golem.description": "Take a bite off a Gingerbread Golem",
-  "advancements.husbandry.eat_gingerbread_golem.title": "You're a Monster!",
   "message.snowyspirit.container_entity_name": "Sled %s",
-  "advancements.husbandry.eat_gingerbread_golem.description": "Take a bite off a Gingerbread Golem",
-  "advancements.husbandry.eat_gingerbread_golem.title": "You're a Monster!",
-  "advancements.adventure.ride_sled_fast.description": "Ride a sled down a slope",
-  "advancements.adventure.ride_sled_fast.title": "It's All Downhill From Here",
-  "advancements.adventure.sled_with_wolf.description": "The Wolf of Haul Street",
-  "advancements.adventure.sled_with_wolf.title": "Let a wolf pull a sled with chest",
-  "block_type.snowyspirit.sled": "Sled",
-
   "subtitle.snowyspirit.music_disc.a_carol": "A Carol",
-  "subtitle.snowyspirit.sled": "Sled sliding"
-}
-
-
-
-@SubscribeEvent
-public void onUseBlock(BlockEvent.EntityPlaceEvent event){
-if(event.getPlacedBlock().getBlock() instanceof CarvedPumpkinBlock){
-SnowySpirit.trySpawningGingy(event.getPlacedBlock(), event.getLevel(), event.getPos(), event.getEntity());
-}
-
+  "subtitle.snowyspirit.sled": "Sled sliding",
+  "tab.snowyspirit": "Snowy Spirit"
 }

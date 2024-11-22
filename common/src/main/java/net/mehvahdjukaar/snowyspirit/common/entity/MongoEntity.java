@@ -22,7 +22,6 @@ public class MongoEntity extends GingyEntity implements PlayerRideableJumping {
 
     public MongoEntity(EntityType<? extends AbstractGolem> entityType, Level level) {
         super(entityType, level);
-        this.setMaxUpStep(2);
     }
 
     @Override
@@ -96,10 +95,13 @@ public class MongoEntity extends GingyEntity implements PlayerRideableJumping {
         return 0.1f;
     }
 
+    //TODO:fix
+/*
     @Override
     public double getPassengersRidingOffset() {
         return this.getBbHeight() * 0.95;
     }
+*/
 
     @Override
     protected void positionRider(Entity passenger, MoveFunction callback) {
@@ -176,7 +178,9 @@ public class MongoEntity extends GingyEntity implements PlayerRideableJumping {
     }
 
     public static AttributeSupplier.Builder createGiantAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 50.0)
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 50.0)
+                .add(Attributes.STEP_HEIGHT, 2)
                 .add(Attributes.MOVEMENT_SPEED, 0.5);
     }
 

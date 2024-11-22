@@ -23,6 +23,7 @@ public class ClientConfigs {
         builder.pop();
 
         SPEC = builder.build();
+        SPEC.forceLoad();
     }
 
     public static final Supplier<Integer> PARTICLE_MODE;

@@ -80,6 +80,7 @@ public class ModRegistry {
             () -> EntityType.Builder.of(GingyEntity::new, MobCategory.MISC)
                     .immuneTo(Blocks.POWDER_SNOW)
                     .sized(6 / 16F, 1)
+                    .ridingOffset( -6 / 16f)
                     .clientTrackingRange(8));
 
     public static final Supplier<EntityType<MongoEntity>> GINGERBREAD_GIANT = regEntity("gingerbread_giant",
@@ -96,7 +97,7 @@ public class ModRegistry {
     public static final Supplier<EntityType<SledEntity>> SLED = regEntity(SLED_NAME,
             () -> EntityType.Builder.<SledEntity>of(SledEntity::new, MobCategory.MISC)
                     .sized(1.375F, 0.5625F)
-                    .passengerAttachments(0.2f)
+                    .passengerAttachments(0.45f)
                     .clientTrackingRange(10));
 
     public static final Supplier<EntityType<ContainerHolderEntity>> CONTAINER_ENTITY = regEntity("container_entity",

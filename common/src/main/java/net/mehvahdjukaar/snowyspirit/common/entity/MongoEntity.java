@@ -97,13 +97,14 @@ public class MongoEntity extends GingyEntity implements PlayerRideableJumping {
     protected Vec3 getPassengerAttachmentPoint(Entity entity, EntityDimensions dimensions, float partialTick) {
 
         if (level().isClientSide) {
+            //needs to match the renderer
             float scale = 10;
             float period = 2.5f * Mth.PI * scale;
             float limbSwingAmount = 0.0F;
             float walkAnim = 0.0F;
             if (this.isAlive()) {
-                limbSwingAmount = this.walkAnimation.speed(0);
-                walkAnim = this.walkAnimation.position(0);
+                limbSwingAmount = this.walkAnimation.speed(partialTick);
+                walkAnim = this.walkAnimation.position(partialTick);
                 // cap limb swing
                 // this looks wonky at higher values and can grow a lot, so we just use for smooth in and out of anim
                 float maxLimbSwing = 1;
@@ -129,7 +130,7 @@ public class MongoEntity extends GingyEntity implements PlayerRideableJumping {
 
             v = v.yRot(-this.getYRot() * Mth.DEG_TO_RAD);
 
-            return new Vec3(v.x, v.y - 0.4, v.z);
+            return new Vec3(v.x, v.y + 4/16f, v.z);
         }
         return super.getPassengerAttachmentPoint(entity, dimensions, partialTick);
     }

@@ -61,8 +61,7 @@ public class SnowySpirit {
         // add item burntime
         // add block burn time
         // shear sound
-        // sled offset
-        //gingy offset
+        // rethink shearable stuff
 
         CommonConfigs.init();
 

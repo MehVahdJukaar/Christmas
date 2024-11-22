@@ -99,7 +99,7 @@ public class ModRegistry {
     public static final String EGGNOG_NAME = "eggnog";
     public static final Supplier<Item> EGGNOG = regItem(EGGNOG_NAME, EggnogItem::new);
 
-    public static final String WINTER_DISC_NAME = "music_disc_winter";
+    public static final String WINTER_DISC_NAME = "music_disc_a_carol";
       public static final Supplier<Item> WINTER_DISC = regItem(WINTER_DISC_NAME,
             () -> new Item(new Item.Properties()
                     .rarity(Rarity.RARE)

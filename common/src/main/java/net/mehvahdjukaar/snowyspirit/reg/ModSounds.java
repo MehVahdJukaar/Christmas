@@ -20,7 +20,7 @@ public class ModSounds {
     public static final ResourceKey<JukeboxSong> WINTER_DISC_JUKEBOX = ResourceKey.create(Registries.JUKEBOX_SONG,
             SnowySpirit.res("a_carol"));
 
-    public static final Supplier<SoundEvent> WINTER_MUSIC = RegHelper.registerSound(SnowySpirit.res("music.a_carol"));
+    public static final Supplier<SoundEvent> WINTER_MUSIC = RegHelper.registerSound(SnowySpirit.res("music_disc.a_carol"));
     public static final Supplier<SoundEvent> SLED_SOUND = RegHelper.registerSound(SnowySpirit.res("entity.sled"));
     public static final Supplier<SoundEvent> SLED_SOUND_SNOW = RegHelper.registerSound(SnowySpirit.res("entity.sled_snow"));
 

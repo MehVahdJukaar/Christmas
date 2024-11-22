@@ -28,7 +28,8 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
     if (isMyPc) {
-        modImplementation("net.mehvahdjukaar:moonlight-fabric:${moonlight_version}")
+        //modImplementation("net.mehvahdjukaar:moonlight-fabric:${moonlight_version}")
+        modImplementation("curse.maven:selene-499980:5913547")
     } else {
         modImplementation("curse.maven:selene-499980:5913547")
     }

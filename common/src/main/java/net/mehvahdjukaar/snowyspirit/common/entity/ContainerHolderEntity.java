@@ -323,8 +323,10 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
         if (ret.consumesAction()) return ret;
         if (!pPlayer.level().isClientSide) {
             PlatHelper.openCustomMenu((ServerPlayer) pPlayer, this, b -> {
+                //just for sack
                 b.writeBoolean(false);
                 b.writeVarInt(this.getId());
+                b.writeInt(this.getContainerSize());
             });
             this.gameEvent(GameEvent.CONTAINER_OPEN, pPlayer);
             PiglinAi.angerNearbyPiglins(pPlayer, true);

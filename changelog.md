@@ -1,5 +1,1 @@
-- fixed wreath render on fabric
-- fixed snow globe loot
-- fixed sleds recipes
-- made some blocks flammable
-- sled chest will now wobble along with the sled
+- fixed serene seasons compat being broken on neoforge

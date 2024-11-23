@@ -1,4 +1,4 @@
-package net.mehvahdjukaar.snowyspirit.integration.forge;
+package net.mehvahdjukaar.snowyspirit.integration.neoforge;
 
 import net.mehvahdjukaar.moonlight.api.platform.configs.ConfigBuilder;
 import net.minecraft.world.level.Level;

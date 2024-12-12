@@ -8,17 +8,17 @@
         {
           "type": "minecraft:loot_table",
           "weight": 40,
-          "name": "snowyspirit:entities/gingerbread_golem_loot/gingerbread_cookie"
+          "value": "snowyspirit:entities/gingerbread_golem_loot/gingerbread_cookie"
         },
         {
           "type": "minecraft:loot_table",
           "weight": 30,
-          "name": "snowyspirit:entities/gingerbread_golem_loot/gingerbread"
+          "value": "snowyspirit:entities/gingerbread_golem_loot/gingerbread"
         },
         {
           "type": "minecraft:loot_table",
           "weight": 30,
-          "name": "snowyspirit:entities/gingerbread_golem_loot/gingerbread_frosted"
+          "value": "snowyspirit:entities/gingerbread_golem_loot/gingerbread_frosted"
         }
       ]
     }

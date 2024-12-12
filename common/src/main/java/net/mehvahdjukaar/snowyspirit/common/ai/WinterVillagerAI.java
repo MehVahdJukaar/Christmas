@@ -1,11 +1,11 @@
 package net.mehvahdjukaar.snowyspirit.common.ai;
 
 import com.mojang.datafixers.util.Pair;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.mehvahdjukaar.moonlight.api.entity.VillagerAIHooks;
 import net.mehvahdjukaar.moonlight.api.events.IVillagerBrainEvent;
 import net.mehvahdjukaar.moonlight.api.events.MoonlightEventsHelper;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
+import net.mehvahdjukaar.snowyspirit.configs.CommonConfigs;
 import net.mehvahdjukaar.snowyspirit.integration.supp.PlacePresentTask;
 import net.mehvahdjukaar.snowyspirit.reg.ModMemoryModules;
 import net.minecraft.world.entity.npc.Villager;
@@ -37,7 +37,9 @@ public class WinterVillagerAI {
                 if (PRESENTS_ENABLED) {
                     event.addTaskToActivity(Activity.MEET, Pair.of(3, new PlacePresentTask(0.5f)));
                 }
-                addPlaceWreath(event);
+                if (CommonConfigs.WREATH.get()) {
+                    addPlaceWreath(event);
+                }
 
             }
         } else {

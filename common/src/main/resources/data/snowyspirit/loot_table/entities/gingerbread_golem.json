@@ -15,7 +15,7 @@
           "type": "minecraft:loot_table",
           "weight": 40,
           "quality": -2,
-          "name": "snowyspirit:entities/gingerbread_golem_loot/gingerbread_golem_loot"
+          "value": "snowyspirit:entities/gingerbread_golem_loot/gingerbread_golem_loot"
         }
       ]
     }

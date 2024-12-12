@@ -2,8 +2,6 @@ package net.mehvahdjukaar.snowyspirit.common.entity;
 
 import com.google.common.collect.Lists;
 import net.mehvahdjukaar.moonlight.api.entity.IControllableVehicle;
-import net.mehvahdjukaar.moonlight.api.entity.IExtraClientSpawnData;
-import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.platform.network.NetworkHelper;
 import net.mehvahdjukaar.moonlight.api.set.BlocksColorAPI;
 import net.mehvahdjukaar.moonlight.api.set.wood.WoodType;
@@ -23,13 +21,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.EntityTypeTags;
@@ -65,14 +59,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class SledEntity extends Entity implements IControllableVehicle, IExtraClientSpawnData {
+public class SledEntity extends Entity implements IControllableVehicle {
 
     //all these 3 just for hurt animation. thx boat code...
     private static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(SledEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_ID_HURT_DIR = SynchedEntityData.defineId(SledEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(SledEntity.class, EntityDataSerializers.FLOAT);
 
-    private static final EntityDataAccessor<String> DATA_ID_TYPE = SynchedEntityData.defineId(SledEntity.class, EntityDataSerializers.STRING);
+    //sub optimal
+    private static final EntityDataAccessor<WoodType> DATA_WOOD_TYPE = SynchedEntityData.defineId(SledEntity.class, ModRegistry.WOOD_TYPE_SERIALIZER.get());
     private static final EntityDataAccessor<Integer> DATA_SEAT_TYPE = SynchedEntityData.defineId(SledEntity.class, EntityDataSerializers.INT);
 
     //varInt is as efficient as byte
@@ -111,6 +106,10 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
     public SledEntity(EntityType<? extends SledEntity> entityType, Level level) {
         super(entityType, level);
         this.blocksBuilding = true;
+
+        if (level().isClientSide) {
+            SledSoundInstance.playAt(this);
+        }
     }
 
     @Override
@@ -125,12 +124,6 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
         this.yo = y;
         this.zo = z;
     }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity sEntity) {
-        return PlatHelper.getEntitySpawnPacket(this, sEntity);
-    }
-
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
@@ -157,23 +150,8 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
     }
 
     @Override
-    public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
-        //fabric is having issues for some reason... sometimes wood is set sometimes not
-        buffer.writeUtf(this.getWoodType().toString());
-    }
-
-    //all of this to sync that damn wolf
-    @Override
-    public void readSpawnData(RegistryFriendlyByteBuf additionalData) {
-        if (level().isClientSide) {
-            SledSoundInstance.playAt(this);
-        }
-        this.setWoodType(WoodTypeRegistry.fromNBT(additionalData.readUtf()));
-    }
-
-    @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        builder.define(DATA_ID_TYPE, WoodTypeRegistry.OAK_TYPE.toString());
+        builder.define(DATA_WOOD_TYPE, WoodTypeRegistry.OAK_TYPE);
         builder.define(DATA_SEAT_TYPE, 0);
         builder.define(DATA_ID_HURT, 0);
         builder.define(DATA_ID_HURT_DIR, 1);
@@ -995,11 +973,11 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
     }
 
     public void setWoodType(WoodType type) {
-        this.entityData.set(DATA_ID_TYPE, type.toString());
+        this.entityData.set(DATA_WOOD_TYPE, type);
     }
 
     public WoodType getWoodType() {
-        return WoodTypeRegistry.fromNBT(this.entityData.get(DATA_ID_TYPE));
+        return entityData.get(DATA_WOOD_TYPE);
     }
 
     @Nullable
@@ -1017,11 +995,11 @@ public class SledEntity extends Entity implements IControllableVehicle, IExtraCl
 
     @Nullable
     public ContainerHolderEntity tryAddingChest(ItemStack stack) {
-        if (ContainerHolderEntity.isValidContainer(stack) && this.canAddChest()) {
+        if (ContainerHolderEntity.isValidContainer(stack) && this.canAddChest() && !level().isClientSide) {
             Level level = level();
             stack = stack.split(1);
             ContainerHolderEntity container = new ContainerHolderEntity(level, this, stack);
-            level.addFreshEntity(container);
+            if (!level.isClientSide) level.addFreshEntity(container);
             Block b = ((BlockItem) stack.getItem()).getBlock();
             this.playSound(b.defaultBlockState().getSoundType().getPlaceSound());
             return container;

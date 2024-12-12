@@ -55,6 +55,8 @@ public class SnowySpirit {
 
         CommonConfigs.init();
 
+        ServerDynamicResourcesHandler.INSTANCE.register();
+
         ModNetworking.init();
 
         RegHelper.registerSimpleRecipeCondition(SnowySpirit.res("flag"), CommonConfigs::isEnabled);
@@ -65,7 +67,6 @@ public class SnowySpirit {
         ModCreativeTabs.init();
         if (FARMERSDELIGHT_INSTALLED) FDCompat.init();
 
-        ServerDynamicResourcesHandler.INSTANCE.register();
 
         PlatHelper.addCommonSetup(ModSetup::setup);
 

@@ -22,6 +22,8 @@ import net.minecraft.Util;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -67,7 +69,13 @@ public class ModRegistry {
         }
     }
 
+    public static final Supplier<EntityDataSerializer<WoodType>> WOOD_TYPE_SERIALIZER =
+            RegHelper.registerEntityDataSerializer(SnowySpirit.res("wood_type"),
+                    () -> EntityDataSerializer.forValueType(WoodType.STREAM_CODEC));
+
+
     public static final BlockSetType GINGER_TYPE = BlockSetType.register(new BlockSetType(SnowySpirit.res("ginger").toString()));
+
 
     public static final String GINGERBREAD_GOLEM_NAME = "gingerbread_golem";
 
@@ -75,7 +83,7 @@ public class ModRegistry {
             () -> EntityType.Builder.of(GingyEntity::new, MobCategory.MISC)
                     .immuneTo(Blocks.POWDER_SNOW)
                     .sized(6 / 16F, 1)
-                    .ridingOffset(-6 / 16f)
+                    .ridingOffset(-5 / 16f)
                     .clientTrackingRange(8));
 
     public static final Supplier<EntityType<MongoEntity>> GINGERBREAD_GIANT = regEntity("gingerbread_giant",

@@ -1,10 +1,6 @@
 package net.mehvahdjukaar.snowyspirit.common.entity;
 
-import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Dynamic;
-import com.mojang.serialization.JsonOps;
 import dev.architectury.injectables.annotations.PlatformOnly;
-import net.mehvahdjukaar.moonlight.api.entity.IExtraClientSpawnData;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.snowyspirit.SnowySpirit;
 import net.mehvahdjukaar.snowyspirit.integration.supp.SuppCompat;
@@ -15,24 +11,17 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -55,11 +44,10 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 
-public class ContainerHolderEntity extends Entity implements Container, IExtraClientSpawnData, MenuProvider {
+public class ContainerHolderEntity extends Entity implements Container, MenuProvider {
     private static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(ContainerHolderEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(ContainerHolderEntity.class, EntityDataSerializers.FLOAT);
-
-    private ItemStack containerStack = ItemStack.EMPTY;
+    private static final EntityDataAccessor<ItemStack> DATA_CONTAINER = SynchedEntityData.defineId(ContainerHolderEntity.class, EntityDataSerializers.ITEM_STACK);
 
     //for client
     private BlockState displayState = Blocks.AIR.defaultBlockState();
@@ -85,41 +73,39 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
         return displayState;
     }
 
-    public void setContainerItem(ItemStack stack) {
-        this.containerStack = stack;
-        if (this.containerStack.getItem() instanceof BlockItem blockItem) {
-            this.displayState = blockItem.getBlock().defaultBlockState();
-        }
-        if (stack.getItem() instanceof BlockItem bi) {
-            Block block = bi.getBlock();
+    @Override
+    public void onSyncedDataUpdated(EntityDataAccessor<?> dataAccessor) {
+        super.onSyncedDataUpdated(dataAccessor);
+        if (dataAccessor.equals(DATA_CONTAINER)) {
+            ItemStack stack = this.entityData.get(DATA_CONTAINER);
 
-            if (block instanceof EntityBlock eb && eb.newBlockEntity(BlockPos.ZERO, block.defaultBlockState()) instanceof BaseContainerBlockEntity c) {
-                innerBlockEntity = c;
-                innerBlockEntity.setLevel(level());
+            if (stack.getItem() instanceof BlockItem blockItem) {
+                this.displayState = blockItem.getBlock().defaultBlockState();
+            }
+            if (stack.getItem() instanceof BlockItem bi) {
+                Block block = bi.getBlock();
+
+                if (block instanceof EntityBlock eb && eb.newBlockEntity(BlockPos.ZERO, block.defaultBlockState()) instanceof BaseContainerBlockEntity c) {
+                    innerBlockEntity = c;
+                    innerBlockEntity.setLevel(level());
+                }
+            }
+            if (innerBlockEntity == null) {
+                throw new IllegalStateException("block {} does not provide a valid container block entity");
+            }
+            if (isContainerWithNBT(stack) && stack.hasFoil()) {
+                CompoundTag tag = stack.get(ModRegistry.CONTAINER_BLOCK_ENTITY_TAG.get());
+                if (tag != null) innerBlockEntity.loadWithComponents(tag, registryAccess());
             }
         }
-        if (innerBlockEntity == null) {
-            throw new IllegalStateException("block {} does not provide a valid container block entity");
-        }
-        if (isContainerWithNBT(stack) && stack.hasFoil()) {
-            CompoundTag tag = stack.get(ModRegistry.CONTAINER_BLOCK_ENTITY_TAG.get());
-            if (tag != null) innerBlockEntity.loadWithComponents(tag, registryAccess());
-        }
     }
 
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
-        return PlatHelper.getEntitySpawnPacket(this, serverEntity);
+    public void setContainerItem(ItemStack stack) {
+        this.entityData.set(DATA_CONTAINER, stack);
     }
 
-    @Override
-    public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
-        ItemStack.STREAM_CODEC.encode(buffer, this.containerStack);
-    }
-
-    @Override
-    public void readSpawnData(RegistryFriendlyByteBuf additionalData) {
-        this.setContainerItem(ItemStack.STREAM_CODEC.decode(additionalData));
+    public ItemStack getContainerItem() {
+        return this.entityData.get(DATA_CONTAINER);
     }
 
     @Override
@@ -132,7 +118,7 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
-        tag.put("ContainerItem", this.containerStack.save(this.registryAccess(), new CompoundTag()));
+        tag.put("ContainerItem", this.getContainerItem().save(this.registryAccess(), new CompoundTag()));
         tag.merge(innerBlockEntity.saveWithoutMetadata(this.registryAccess()));
     }
 
@@ -140,6 +126,7 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(DATA_ID_HURT, 0);
         builder.define(DATA_ID_DAMAGE, 0.0F);
+        builder.define(DATA_CONTAINER, ItemStack.EMPTY);
     }
 /* No longer needed, default fallback is to VEHICLE, (Entity#getVehicleAttachmentPoint)
     @Override
@@ -204,12 +191,12 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
     }
 
     public void spawnDrops() {
-        ItemStack stack = this.containerStack.copy();
+        ItemStack stack = this.getContainerItem().copy();
         if (this.hasCustomName()) {
             stack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
         //sacks and shulker. kind of ugly here
-        if (isContainerWithNBT(this.containerStack)) {
+        if (isContainerWithNBT(this.getContainerItem())) {
             stack.set(ModRegistry.CONTAINER_BLOCK_ENTITY_TAG.get(), innerBlockEntity.saveWithoutMetadata(this.registryAccess()));
         } else {
             Containers.dropContents(this.level(), this, innerBlockEntity);
@@ -239,6 +226,7 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
      */
     @Override
     public void tick() {
+
         Entity v = this.getVehicle();
         if (v != null) {
 
@@ -253,15 +241,15 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
             this.checkBelowWorld();
             this.handlePortal();
 
+            super.tick();
 
             // this.xRotO = v.xRotO;
             // this.yRotO = v.yRotO;
             //this.setYRot(v.getYRot());
-            super.tick();
             // this.xRotO = this.getXRot();
             //this.yRotO = this.getYRot();
         } else {
-            this.destroy(this.damageSources().generic());
+             if(!level().isClientSide)  this.destroy(this.damageSources().generic());
         }
     }
 
@@ -298,13 +286,13 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
     //@Override
     @PlatformOnly(PlatformOnly.FORGE)
     public ItemStack getPickedResult(HitResult target) {
-        return this.containerStack.copy();
+        return this.getContainerItem().copy();
     }
 
     @Override
     public Component getDisplayName() {
         return Component.translatable("message.snowyspirit.container_entity_name",
-                this.containerStack.getItem().getDescription().getString());
+                this.getContainerItem().getItem().getDescription().getString());
     }
 
     @Override
@@ -427,9 +415,9 @@ public class ContainerHolderEntity extends Entity implements Container, IExtraCl
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory pPlayerInventory, Player player) {
         //hardcoded since we need to pass this, not the tile...
-        if (isSack(containerStack.getItem())) {
+        if (isSack(getContainerItem().getItem())) {
             return SuppCompat.createSackMenu(id, pPlayerInventory, this);
-        } else if (!isNormalContainer(containerStack)) {
+        } else if (!isNormalContainer(getContainerItem())) {
             return new ShulkerBoxMenu(id, pPlayerInventory, this);
         }
         return ChestMenu.threeRows(id, pPlayerInventory, this);

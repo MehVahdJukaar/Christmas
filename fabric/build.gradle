@@ -28,8 +28,8 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
     if (isMyPc) {
-        //modImplementation("net.mehvahdjukaar:moonlight-fabric:${moonlight_version}")
-        modImplementation("curse.maven:selene-499980:5913547")
+        modImplementation("net.mehvahdjukaar:moonlight-fabric:${moonlight_version}")
+        //modImplementation("curse.maven:selene-499980:5913547")
     } else {
         modImplementation("curse.maven:selene-499980:5913547")
     }
@@ -43,8 +43,8 @@ dependencies {
 
     modCompileOnly ("curse.maven:fabric-seasons-413523:4576886")
     if(isMyPc) {
-       // modImplementation("net.mehvahdjukaar:supplementaries:${project.supplementaries_version}")
-       // modImplementation("curse.maven:supplementaries-412082:5923344")
+        //modImplementation("net.mehvahdjukaar:supplementaries:${project.supplementaries_version}")
+        modImplementation("curse.maven:supplementaries-412082:5981094")
     } else {
        // modImplementation("curse.maven:supplementaries-412082:5923344")
     }

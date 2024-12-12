@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -21,6 +22,7 @@ public class ModSetup {
         registerBurnTimes();
         ModRegistry.SLED_ITEMS.forEach((key, value) ->
                 DispenserBlock.registerBehavior(value, new SledDispenserBehavior(key)));
+
     }
 
 
